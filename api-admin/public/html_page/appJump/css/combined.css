@@ -1,0 +1,61 @@
+
+html, body, p, div {
+    margin: 0px;
+    padding: 0px;
+    font-family: "PingFang SC", "Droid Sans", "Droid Sans Fallback", "Microsoft Yahei UI", Helvetica, sans-serif;
+}
+
+.app-download-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    margin-top: 38px;
+    width: 112px;
+    height: 33px;
+}
+
+.text-1 {
+    margin-top: 18px;
+    font-size: 28px;
+    line-height: 32px;
+    color: rgb(60, 60, 60);
+    font-weight: bold;
+}
+
+.text-2 {
+    margin-top: 8px;
+    font-size: 28px;
+    line-height: 32px;
+    color: rgb(60, 60, 60);
+    font-weight: bold;
+}
+
+.download-gift-text {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 19px;
+    color: rgb(204, 204, 204);
+}
+
+.download-btn {
+    margin-top: 18px;
+    width: 192px;
+    height: 44px;
+    background-image: url("/static/imgs/button@3x.png");
+    background-size: 100% 100%;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.download-btn:active {
+    opacity: 0.5;
+}
+
+.main-img {
+    margin-top: 8px;
+    width: 322px;
+    height: 322px;
+}

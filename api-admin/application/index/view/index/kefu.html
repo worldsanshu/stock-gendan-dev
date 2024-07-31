@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <script src="__STATIC__/libs/jquery.min.js"></script>
+    <link href="__STATIC__/css/weui.min.css" rel="stylesheet"/>
+
+</head>
+<body>
+<style>
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+</style>
+<iframe vspace="-200" hspace="-800" scrolling="no" id="iframe1"
+        src="{$url}"></iframe>
+<script>
+    $(document).ready(function () {
+        //(function(){var c=document.createElement("script"),s=document.getElementsByTagName("script")[0];c.src="https://kefu5.cckefucloud.com/vclient/?webid=73w0mvybk9r12xb1p01yn75dpzg6j84e&wc=c3f5de32";s.parentNode.insertBefore(c,s);})();
+
+
+        var u = navigator.userAgent;
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        /*     if (isIOS) {
+                 if (screen.height == 812 && screen.width == 375){
+                     console.log("slider");
+
+                     $("body").css({"padding-top":'30px'});
+
+
+                     $("body").css("margin-bottom",'35px');
+
+                     console.log("iphoneX");
+                 }else{
+     //不是iphoneX
+                     console.log("不是iphoneX");
+                 }
+             }*/
+    });
+</script>
+<script>
+    $("iframe").css("height", $(document).height() + "px")
+
+    //根据ID获取要操控元素
+    var deptObjs = document.getElementById("iframe1").contentWindow.document.getElementsByName("header");
+    //判断此元素是否存在
+    console.log(deptObjs);
+    if (deptObjs != null) {
+
+        //设置该元素的样式或其他属性
+        //  deptObjs.setAttribute('style', ' color: red !important;'); //!important用来提升指定样式条目的应用优先权
+    }
+    var aa = $(document.getElementById('iframe1').contentWindow.document.body).html();
+    var aa = $(window.frames["iframe1"].document).find(".m_fixed_top").html();
+    console.log(aa);
+    // var test = document.getElementById('iframe1').contentWindow.document.getElementById('header');
+    // console.log(test);
+    // test.style.display = "none";
+    //
+    // var aa=$("#iframe1",document.frames('#header').document).html();
+    // console.log(aa);
+    // window.frames["iframe1"].document.html("1123");
+</script>
+</body>
+</html>

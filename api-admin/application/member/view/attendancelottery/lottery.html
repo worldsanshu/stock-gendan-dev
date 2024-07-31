@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>抽奖</title>
+    <link rel="stylesheet" href="__STATIC__/wap/cj/css/common.css">
+    <link rel="stylesheet" href="__STATIC__/wap/cj/css/index.css">
+    <!-- 移动端适配 -->
+    <link rel="stylesheet" href="__STATIC__/wap/qd/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__STATIC__/wap/css/common.css">
+
+    <script>
+        var html = document.querySelector('html');
+        changeRem();
+        window.addEventListener('resize', changeRem);
+
+        function changeRem() {
+            var width = html.getBoundingClientRect().width;
+            html.style.fontSize = width / 10 + 'px';
+        }
+    </script>
+</head>
+<style>
+    .headerbtn {
+        margin-top: -88px;
+    }
+
+    .jph2 {
+        width: 60% !important;
+        margin: 0 auto !important;
+        background: #ccc;
+        line-height: 30px;
+        margin: 0rem auto 0.4rem auto;
+        width: 4.4rem;
+        height: 0.8rem;
+        background-color: #fc8209;
+        text-align: center;
+        line-height: 0.8rem !important;
+        font-size: 0.4rem;
+        color: #ffffff;
+        border-radius: 0.34666667rem;
+        letter-spacing: 0.2rem;
+    }
+
+    .refack {
+        position: absolute;
+        z-index: 50;
+        color: #fff;
+        font-size: 35px;
+        font-weight: 100;
+        top: 10px;
+    }
+
+    .v-header-left {
+        left: 13px;
+        position: absolute;
+    }
+
+    #mask-rule .box-rule h2, #myjp .box-rule h2 {
+
+        color: #424242 !important;
+    }
+
+    #mask-rule .box-rule p {
+        text-align: left !important;
+        color: #fff !important
+    }
+
+    .box-rule p {
+        text-align: center;
+        color: #424242
+    }
+
+    .btn-default {
+
+        width: 100% !important;
+
+    }
+
+    body {
+        padding-bottom: 0em !important;
+    }
+
+
+    .left-arrow2 .left-arrow:before {
+        top: 30px !important;
+    }
+</style>
+<body>
+<div id="wrap">
+    <Div class="refack">
+        <div class="v-header-left">
+            <div class="left-arrow" onclick="javascript:window.history.go(-1);"></div>
+        </div>
+
+    </Div>
+    <div class="header clearfix">
+
+        <div class="title"></div>
+    </div>
+    <!--轮盘-->
+    <div class="rotate">
+        <div class="lunpai">
+            <ul class="prize running">
+                {volist name="list" id="vo"}
+                <li>
+                    <div style="background-image: url({$vo.icon});">
+                        <span></span>
+                        <p>{$vo.name}</p>
+                    </div>
+                </li>
+                {/volist}
+
+            </ul>
+        </div>
+        <div class="ring"></div>
+        <div id="btn"></div>
+    </div>
+
+    <div class="border">
+        您今日还有 <span id="change"> </span> 次抽奖机会
+    </div>
+
+    <div class="header clearfix headerbtn">
+        <p class="rule fl">活动规则</p>
+
+        <p class="my fr myjp">我的奖品</p>
+
+
+    </div>
+    <!--滚动信息-->
+    <div class="scroll">
+        <p></p>
+        <div class="sideBox">
+            <div class="bd" id="txtMarqueeTop">
+                <ul>
+                    {volist name="luckydraw" id="vol"}
+                    <li>
+                        恭喜{$vol.mobile}
+                        获得<span class="info">{$vol.name}</span>
+                    </li>
+                    {/volist}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--游戏规则弹窗-->
+    <div id="mask-rule">
+        <div class="box-rule">
+            <h2>活动规则说明</h2>
+            <span class="close-rule"></span>
+            <div class="con">
+                <div class="text">
+                    <p>
+
+                        {:config('web_cjgz')}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--中奖列表-->
+    <div id="address">
+        <div class="box-rule">
+            <h2>收货人信息</h2>
+            <p>您抽到的是实物，请输入收货人信息</p>
+            <span class="close-rule"></span>
+            <div class="con">
+                <div class="text">
+
+
+                    <div class="input-group" style="margin-bottom: 10px">
+                        <span class="input-group-addon">收&nbsp;&nbsp;货&nbsp;&nbsp;人</span>
+                        <input type="text" class="form-control" id="sname" aria-describedby="basic-addon3">
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 10px">
+                        <span class="input-group-addon">收货电话</span>
+                        <input type="text" class="form-control" id="sphone" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 10px">
+                        <span class="input-group-addon">收货地址</span>
+                        <input type="text" class="form-control" id="saddress" aria-describedby="basic-addon3">
+                    </div>
+
+                    <button type="button" id="sendajax" class="btn btn-default">提 交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--中奖列表-->
+    <div id="myjp">
+        <div class="box-rule">
+            <h2 class="jph2">我的奖品</h2>
+            <span class="close-rule"></span>
+            <div class="con">
+                <div class="text">
+                    <table class="tb0">
+                        <tbody>
+                        <tr>
+                            <th>中奖时间</th>
+                            <th>中奖奖品</th>
+                            <th>受理结果</th>
+                        </tr>
+                        {volist name="luckydrawlist" id="jpl"}
+                        <tr>
+                            <td>{$jpl.addtime}</td>
+                            <td>{$jpl.name}</td>
+                            <td>{$jpl.status}</td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--中奖提示-->
+    <div id="mask">
+        <div class="blin"></div>
+        <div class="caidai"></div>
+        <div class="winning">
+            <p><b>恭喜您</b><br/>抽中了<span id="text1"></span></p>
+            <a href="javascript:void(0);" target="_self" class="maskbtn">确定</a>
+
+        </div>
+    </div>
+    <!--中奖提示-->
+    <div id="mask2">
+        <div class="blin"></div>
+        <div class="caidai"></div>
+        <div class="winning">
+            <p><br/><b>谢谢参与</b></p>
+            <a href="javascript:void(0);" target="_self" class="maskbtn">确定</a>
+
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    var shopname = {$shopname};
+    var prizecount = {$prizecount};
+    var winningprobability = {$winningratejson};
+
+</script>
+
+<script src="__STATIC__/wap/cj/js/jquery-1.11.3.min.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/jquery.rotate.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/h5_game_common.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/index.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/jquery.SuperSlide.2.1.1.js?v={$v}"></script>
+<script type="text/javascript">
+    jQuery("#txtMarqueeTop").slide({
+        mainCell: "ul",
+        autoPlay: true,
+        effect: "topMarquee",
+        interTime: 50,
+        vis: {$rows}
+    });
+    $("#change").text(prizecount);
+</script>
+<script>
+    $(document).ready(function () {
+        var u = navigator.userAgent;
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        /*   if (isIOS) {
+               if (screen.height == 812 && screen.width == 375){
+                   console.log("slider");
+
+
+                   $(".refack").addClass("left-arrow2");
+
+
+
+                   console.log("iphoneX");
+               }else{
+   //不是iphoneX
+                   console.log("不是iphoneX");
+               }
+           }*/
+    });</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

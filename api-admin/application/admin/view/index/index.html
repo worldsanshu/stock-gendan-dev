@@ -1,0 +1,45 @@
+
+
+{extend name="layout" /}
+
+{block name="page-header"}{/block}
+
+{block name="content"}
+<iframe id="frame-content" scrolling="auto" width="100%"  src="{:url('/admin/index/indexdata')}" style="height: 1100px" frameborder="0"></iframe>
+
+<script>
+    // // iframe自适应会用到
+    // function calcPageHeight(doc) {
+    //     var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+    //     var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+    //     var height = Math.max(cHeight, sHeight)
+    //     return height
+    // }
+    // var iframe = document.getElementById('frame-content');
+    // var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    // var iframeHeight = iframeDoc.body.scrollHeight;
+    // console.log('Iframe document height:', iframeHeight);
+    // var ifr = document.getElementById('frame-content')
+    // ifr.onload = function () {
+    //     var iDoc = ifr.contentDocument || ifr.document || ifr.contentWindow
+    //     var height = calcPageHeight(iDoc);
+    //     ifr.style.height = height + 'px'
+    // }
+    //
+    // document.getElementById('frame-content').onload = function() {
+    //     var iframe = document.getElementById('frame-content');
+    //     var iframeContent = iframe.contentWindow.document;
+    //     var iframeHeight = iframeContent.body.scrollHeight;
+    //     console.log('Iframe document height:', iframeHeight);
+    //     iframe.style.height = iframeHeight + 'px';
+    // };
+    //
+    // function setIframeHeight(height) {
+    //     var iframe = document.getElementById('frame-content');
+    //     console.log('Iframe document height:', iframe);
+    //     iframe.style.height = height + 'px';
+    // }
+
+</script>
+{/block}
+

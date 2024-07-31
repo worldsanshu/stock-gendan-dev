@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    {block name="page-title"}<title>{$page_title|default='后台'} | {:config('web_site_title')}</title>{/block}
+
+    <meta name="description" content="{:config('web_site_description')}">
+    <meta name="author" content="caiweiming">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=0">
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-192x192.png" sizes="192x192">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="__ADMIN_IMG__/favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="__ADMIN_IMG__/favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="__ADMIN_IMG__/favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="__ADMIN_IMG__/favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="__ADMIN_IMG__/favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="__ADMIN_IMG__/favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="__ADMIN_IMG__/favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="__ADMIN_IMG__/favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="__ADMIN_IMG__/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
+
+    <!-- Stylesheets -->
+    <!-- Page JS Plugins CSS -->
+    {notempty name="_css_files"}
+        {eq name="Think.config.minify_status" value="1"}
+            <link rel="stylesheet" href="{:minify('group', $_css_files)}">
+        {else/}
+            {volist name="_css_files" id="css"}
+            {:load_assets($css)}
+            {/volist}
+        {/eq}
+    {/notempty}
+
+    {notempty name="extend_css_list"}
+        {volist name="extend_css_list" id="vo"}
+            {volist name="vo" id="v"}
+            <link rel="stylesheet" href="{$v}?v={:config('asset_version')}">
+            {/volist}
+        {/volist}
+    {/notempty}
+
+    {notempty name="_icons"}
+        {volist name="_icons" id="icon"}
+        <link rel="stylesheet" href="{$icon.url}">
+        {/volist}
+    {/notempty}
+
+    {block name="plugins-css"}{/block}
+
+    <!-- Bootstrap and OneUI CSS framework -->
+    {eq name="Think.config.minify_status" value="1"}
+    <link rel="stylesheet" id="css-main" href="{:minify('group', 'libs_css,core_css')}">
+    {else/}
+    <link rel="stylesheet" href="__LIBS__/sweetalert/sweetalert.min.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__LIBS__/magnific-popup/magnific-popup.min.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/oneui.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/dolphin.css?v={:config('asset_version')}" id="css-main">
+    <link rel="stylesheet" href="__LIBS__/viewer/viewer.min.css?v={:config('asset_version')}">
+    {/eq}
+    <link rel="stylesheet" id="css-theme" href="__ADMIN_CSS__/themes/{:config('system_color')}.min.css?v={:config('asset_version')}">
+
+    <!--页面css-->
+    {block name="style"}{/block}
+    {notempty name="_pop"}
+    <style>
+        #page-container.sidebar-l.sidebar-o {
+            padding-left: 0;
+        }
+        .header-navbar-fixed #main-container {
+            padding-top: 0;
+        }
+    </style>
+    {/notempty}
+    <!-- END Stylesheets -->
+
+    <!--插件css钩子-->
+    {:hook('page_plugin_css')}
+
+    <!--自定义css-->
+    <link rel="stylesheet" href="__ADMIN_CSS__/custom.css?v={:config('asset_version')}">
+    <link rel="stylesheet" href="__ADMIN_CSS__/new_admin.css?v={:config('asset_version')}">
+    <script>
+        // url
+        var dolphin = {
+            'top_menu_url': '{:url("admin/ajax/getSidebarMenu")}',
+            'theme_url': '{:url("admin/ajax/setTheme")}',
+            'jcrop_upload_url': '{$jcrop_upload_url ? $jcrop_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "jcrop", "module" => request()->module()])}',
+            'editormd_upload_url': '{$editormd_upload_url ? $editormd_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "editormd", "module" => request()->module()])}',
+            'editormd_mudule_path': '__LIBS__/editormd/lib/',
+            'ueditor_upload_url': '{$ueditor_upload_url ? $ueditor_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "ueditor", "module" => request()->module()])}',
+            'wangeditor_upload_url': '{$wangeditor_upload_url ? $wangeditor_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "wangeditor", "module" => request()->module()])}',
+            'wangeditor_emotions': "__LIBS__/wang-editor/emotions.data",
+            'ckeditor_img_upload_url': '{$ckeditor_img_upload_url ? $ckeditor_img_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "ckeditor", "module" => request()->module()])}',
+            'WebUploader_swf': '__LIBS__/webuploader/Uploader.swf',
+            'file_upload_url': '{$file_upload_url ? $file_upload_url : url("admin/attachment/upload", ["dir" => "files", "module" => request()->module()])}',
+            'image_upload_url': '{$image_upload_url ? $image_upload_url : url("admin/attachment/upload", ["dir" => "images", "module" => request()->module()])}',
+            'upload_check_url': '{$upload_check_url ? $upload_check_url : url("admin/ajax/check")}',
+            'get_level_data': '{:url("admin/ajax/getLevelData")}',
+            'quick_edit_url': '{$quick_edit_url ? $quick_edit_url : url("quickEdit")}',
+            'aside_edit_url': '{$aside_edit_url ? $aside_edit_url : url("admin/system/quickEdit")}',
+            'triggers': {:json_encode(isset($field_triggers) ? $field_triggers : [])}, // 触发器集合
+            'field_hide': '{$field_hide|default=""}', // 需要隐藏的字段
+            'field_values': '{$field_values|default=""}',
+            'validate': '{$validate|default=""}', // 验证器
+            'validate_fields': '{$validate_fields|default=""}', // 验证字段
+            'search_field': '{:input("param.search_field", "")}', // 搜索字段
+            // 字段过滤
+            '_filter': '{$Request.param._filter ? $Request.param._filter : (isset($_filter) ? $_filter : "")}',
+            '_filter_content': '{$Request.param._filter_content == '' ? (isset($_filter_content) ? $_filter_content : "") : $Request.param._filter_content}',
+            '_field_display': '{$Request.param._field_display ? $Request.param._field_display : (isset($_field_display) ? $_field_display : "")}',
+            '_field_clear': {:json_encode(isset($field_clear) ? $field_clear : [])},
+            'get_filter_list': '{:url("admin/ajax/getFilterList")}',
+            'curr_url': '{:url("", $Request.route)}',
+            'curr_params': {:json_encode($Request.param)},
+            'layer': {:json_encode(config("zbuilder.pop"))}
+        };
+    </script>
+</head>
+<body>
+<style>
+    .custom-tabs {
+        display: flex;
+        align-items: center;
+        background-color: #e6e6e6;
+        border-top: 1px solid #e6e6e6;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .custom-tabs-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+    }
+
+    .custom-tab-item {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        padding: 10px;
+        background-color: #fff;
+        border-right: 1px solid #efefef;
+        font-size: 12px;
+    }
+
+    .custom-tab-item:last-child {
+        margin-right: 0;
+    }
+    .delall{
+        background-color: #d7d7d7;
+        border: none;
+        font-size: 10px;
+    }
+    .delall .tab-close {
+        transform: none !important;
+    }
+    .delall .tab-close:hover {
+        background:none !important;transform: none;
+    }
+    .custom-tab-item.active {
+        color: #fff;
+        font-weight: bold; /* 字体加粗 */
+        /* 其他选中状态样式... */
+        background-color: #6c6bed;
+
+    }
+    .custom-tab-item.active .custom-tab-link {
+        color: #fff; /* 或者你想要的其他颜色 */
+    }
+    .custom-tab-item.active .tab-close {
+        color: #fff; /* 或者你想要的其他颜色 */
+    }
+
+    .custom-tab-label,
+    .custom-tab-link {
+        display: inline-block;
+        padding: 2px 5px;
+
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    /* 选中状态的列表项样式 */
+
+
+    .tab-close {
+        transform: translateY(-50%);
+        color: #999;
+        cursor: pointer;
+        line-height: 0;
+        /*padding: 5px;*/
+    }
+
+    .tab-close:hover {
+        color: #666;
+        /*padding: 5px;*/
+        background-color: #39a020;
+    }
+
+
+
+</style>
+
+<!-- Page Container -->
+<div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed {empty name="_pop"}{$_COOKIE['sidebarMini'] ?= 'sidebar-mini'}{/empty}">
+    <!-- Side Overlay-->
+    {empty name="_pop"}
+    {block name="aside"}
+    <aside id="side-overlay">
+        <!-- Side Overlay Scroll Container -->
+        <div id="side-overlay-scroll">
+            <!-- Side Header -->
+            <div class="side-header side-content">
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
+                <button class="btn btn-default pull-right" type="button" data-toggle="layout" data-action="side_overlay_close">
+                    <i class="fa fa-times"></i>
+                </button>
+                <span>
+                    <img class="img-avatar img-avatar32" src="{$Think.session.user_auth.uid|get_avatar}" alt="">
+                    <span class="font-w600 push-10-l">{:session('user_auth.username')}</span>
+                </span>
+            </div>
+            <!-- END Side Header -->
+            <!--侧栏-->
+            {include file="../application/common/builder/aside/layout.html" /}
+        </div>
+        <!-- END Side Overlay Scroll Container -->
+    </aside>
+    {/block}
+    {/empty}
+    <!-- END Side Overlay -->
+
+    <!-- Sidebar -->
+    {empty name="_pop"}
+    {block name="sidebar"}
+    <nav id="sidebar">
+        <!-- Sidebar Scroll Container -->
+        <div id="sidebar-scroll">
+            <!-- Sidebar Content -->
+            <!-- Adding .sidebar-mini-hide to an element will hide it when the sidebar is in mini mode -->
+            <div class="sidebar-content">
+                <!-- Side Header -->
+                <div class="side-header side-content bg-white-op dolphin-header">
+                    <div class="nav-header-left">
+                        <a href="index.html" class="brand-logo">
+                            <img src="{$Think.config.web_site_logo|get_file_path}" class="logo" alt="{$Think.config.web_site_title}">
+
+                        </a>
+
+                    </div>
+                    <div class="feature-box">
+                        <div class="wallet-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" class="svg-main-icon">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <circle fill="#fff" opacity="0.3" cx="20.5" cy="12.5" r="1.5"></circle>
+                                    <rect fill="#fff" opacity="0.3" transform="translate(12.000000, 6.500000) rotate(-15.000000) translate(-12.000000, -6.500000) " x="3" y="3" width="18" height="7" rx="1"></rect>
+                                    <path d="M22,9.33681558 C21.5453723,9.12084552 21.0367986,9 20.5,9 C18.5670034,9 17,10.5670034 17,12.5 C17,14.4329966 18.5670034,16 20.5,16 C21.0367986,16 21.5453723,15.8791545 22,15.6631844 L22,18 C22,19.1045695 21.1045695,20 20,20 L4,20 C2.8954305,20 2,19.1045695 2,18 L2,6 C2,4.8954305 2.8954305,4 4,4 L20,4 C21.1045695,4 22,4.8954305 22,6 L22,9.33681558 Z" fill="#fff"></path>
+                                </g>
+                            </svg>
+                            <div class="ms-3">
+                                <h4 class="text-white mb-0 d-block">{$Deposit_Withdrawal_Difference}</h4>
+                                <small>平台充提差</small>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="item-1">
+
+                                <i class="fa fa-fw fa-clock-o"></i>
+                                <h4 class="mb-0 text-white"><span class="counter">{$AddedTime}</span></h4>
+                                <small>上线时间</small>
+                            </div>
+                            <div class="item-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 24 24" version="1.1" class="svg-main-icon">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                        <path d="M18,8 L16,8 C15.4477153,8 15,7.55228475 15,7 C15,6.44771525 15.4477153,6 16,6 L18,6 L18,4 C18,3.44771525 18.4477153,3 19,3 C19.5522847,3 20,3.44771525 20,4 L20,6 L22,6 C22.5522847,6 23,6.44771525 23,7 C23,7.55228475 22.5522847,8 22,8 L20,8 L20,10 C20,10.5522847 19.5522847,11 19,11 C18.4477153,11 18,10.5522847 18,10 L18,8 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#fff" fill-rule="nonzero" opacity="0.3"></path>
+                                        <path d="M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#fff" fill-rule="nonzero"></path>
+                                    </g>
+                                </svg>
+                                <h4 class="mb-0 text-white"><span class="counter">{$sum_member}</span></h4>
+                                <small>客户数量</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Side Header -->
+
+                <!-- Side Content -->
+                <div class="side-content" id="sidebar-menu">
+                    {notempty name="_sidebar_menus"}
+                    <ul class="nav-main" id="nav-{$_location['location'][0]['id']}">
+                        {volist name="_sidebar_menus" id="menu"}
+                        <li {$menu['id'] == $_location['location'][1]["id"]?='class="open"'}>
+                            {notempty name="menu.url_value"}
+                                <a {if($menu['id'] == $_location['location'][1]["id"])}class="active"{/if} href="{$menu.url_value}" target="{$menu.url_target}"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
+                            {else/}
+                                <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0);"><i class="{$menu.icon}"></i><span class="sidebar-mini-hide">{$menu.title}</span></a>
+                                {notempty name="menu['child']"}
+                                <ul class="Sub-menu">
+                                    {volist name="menu['child']" id="submenu"}
+                                    <li>
+                                        <a {if(isset($_location['location'][2]) && $submenu['id'] == $_location['location'][2]["id"])}class="active"{/if} href="{$submenu.url_value}" target="{$submenu.url_target}"><i class="{$submenu.icon}"></i>{$submenu.title}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                {/notempty}
+                            {/notempty}
+                        </li>
+                        {/volist}
+                    </ul>
+                    {/notempty}
+                </div>
+                <!-- END Side Content -->
+            </div>
+            <!-- Sidebar Content -->
+        </div>
+        <!-- END Sidebar Scroll Container -->
+    </nav>
+    {/block}
+    {/empty}
+    <!-- END Sidebar -->
+
+    <!-- Header -->
+    {empty name="_pop"}
+    {block name="header"}
+    <header id="header-navbar" class="content-mini content-mini-full" style='background-image: url("/static/admin_new/images/bg-1.png")'>
+
+        <div class="pull-left">
+        <ul class="nav nav-pills ">
+            <li class="hidden-md hidden-lg">
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
+                <a href="javascript:void(0)" data-toggle="layout" data-action="sidebar_toggle"><i class="fa fa-navicon"></i></a>
+            </li>
+            <li class="hidden-xs hidden-sm">
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
+                <a href="javascript:void(0)" title="打开/关闭左侧导航" data-toggle="layout" data-action="sidebar_mini_toggle"><i class="fa fa-bars"></i></a>
+            </li>
+            {notempty name="_top_menus"}
+            {volist name="_top_menus" id="menu"}
+            <li class="hidden-xs hidden-sm {$menu['id'] == $_location['location'][0]['id'] ?= 'active'}">
+                {in name="menu.url_type" value="module_admin,module_home"}
+                <a href="javascript:void(0);" data-module-id="{$menu['id']}" data-module="{$menu['module']}" data-controller="{$menu['controller']}" target="{$menu['url_target']}" class="top-menu"><i class="{$menu.icon}"></i> {$menu.title}</a>
+                {else/}
+                <a href="{$menu['url_value']}" target="{$menu['url_target']}"><i class="{$menu.icon}"></i> {$menu.title}</a>
+                {/in}
+            </li>
+            {/volist}
+            {/notempty}
+            <li>
+                <!-- Opens the Apps modal found at the bottom of the page, before including JS code -->
+                <a href="#" data-toggle="modal" data-target="#apps-modal"><i class="si si-grid"></i></a>
+            </li>
+        </ul>
+        </div>
+
+
+        <ul class="nav-header pull-right">
+            <li>
+                <div class="btn-group">
+                       <div class="username">
+                           <p>{:session('user_auth.username')} </p>
+                           <p>({:session('user_auth.role_name')}) </p>
+                       </div>
+                    <img src="{$Think.session.user_auth.uid|get_avatar}" data-toggle="dropdown" class="logobtn" alt="{:session('user_auth.username')}">
+
+                    {notempty name="_message"}
+                    {gt name="_message" value="0"}
+                    <i class="fa fa-circle text-danger notice-circle"></i>
+                    {/gt}
+                    {/notempty}
+                    <ul class="dropdown-menu dropdown-menu-right">
+
+                        <li>
+                            <a tabindex="-1" href="{:url('admin/index/profile')}">
+                                <i class="si si-settings pull-right"></i>个人设置
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" href="javascript:void(0);" id="js-change-role">
+                                <i class="si si-users pull-right"></i>切换角色
+                            </a>
+                        </li>
+
+                        <li>
+                            <a tabindex="-1" href="{:url('money/withdraw/index')}">
+                                <i class="fa fa-fw fa-share pull-right"></i><span class="badge badge-primary pull-right">{$_withdraw|default=0}</span>提现中心
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" href="{:url('money/recharge/index')}">
+                                <i class="fa fa-fw fa-reply pull-right"></i><span class="badge badge-primary pull-right">{$_recharge|default=0}</span>充值中心
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a tabindex="-1" href="{:url('user/publics/signout')}">
+                                <i class="si si-logout pull-right"></i>退出帐号
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a class="nav-link" href="{:url('admin/index/wipeCache')}" data-toggle="tooltip" data-placement="bottom" data-original-title="清空缓存">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </li>
+
+        </ul>
+    </header>
+    {/block}
+    {/empty}
+    <!-- END Header -->
+
+    <!-- Main Container -->
+    <main id="main-container">
+        <!-- Page Header -->
+        {block name="page-header"}
+        {empty name="_pop"}
+<!--        <div class="bg-gray-lighter">-->
+<!--            <ol class="breadcrumb">-->
+<!--                <li><i class="fa fa-map-marker"></i></li>-->
+<!--                {notempty name="_location['location']"}-->
+<!--                {volist name="_location['location']" id="v"}-->
+<!--                <li><a class="link-effect" href="{notempty name='$v["url_value"]'}{:url($v.url_value, $v.params)}{else/}javascript:void(0);{/notempty}">{$v.title}</a></li>-->
+<!--                {/volist}-->
+<!--                {/notempty}-->
+<!--            </ol>-->
+<!--        </div>-->
+        <div class="custom-tabs" id="tab-container">
+            <ul class="custom-tabs-list">
+                <li class="custom-tab-item {if condition="70 == $_location['location'][2]['id']"}active{/if}"">
+                    <a href="/admin.php/admin/index/index.html" class="custom-tab-link">首页</a>
+                </li>
+
+                {notempty name="_location['locationsArray']"}
+                {volist name="_location['locationsArray']" id="v" key="index"}
+                {php}
+                    $activeId = isset($_location['location'][2]['id']) ? $_location['location'][2]['id'] : (isset($_location['location'][1]['id']) ? $_location['location'][1]['id'] : null);
+                {/php}
+                <li class="custom-tab-item {if condition="$v.id == $activeId"}active{/if}">
+                    <a href="{notempty name='$v["url_value"]'}{:url($v.url_value, $v.params)}{else/}javascript:void(0);{/notempty}" class="custom-tab-link">{$v.title}</a>
+                    <i class="list-icon fa fa-times fa-fw tab-close"  data-index="{$index}" data-active-id="{$activeId}" data-val-id="{$v.id}" ></i> <!-- Font Awesome 的关闭图标 -->
+                </li>
+
+
+                {/volist}
+
+
+                <?php if (count($_location['locationsArray']) > 5): ?>
+                <li class="custom-tab-item delall">
+                    <a href="javascript:void(0);" class="custom-tab-link tab-close" data-index="" data-active-id="" data-val-id="">< 关闭全部</a>
+
+                </li>
+                <?php endif; ?>
+                {/notempty}
+            </ul>
+        </div>
+
+        {/empty}
+        {/block}
+        <!-- END Page Header -->
+
+        <!-- Page Content -->
+        <div class="content">
+            {// 页面提示钩子}
+            {:hook('page_tips')}
+            {// 主体内容}
+            {block name="content"}
+            {/block}
+        </div>
+        <!-- END Page Content -->
+    </main>
+    <!-- END Main Container -->
+
+    <!-- Footer -->
+    {empty name="_pop"}
+    <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
+
+        <div class="pull-left">
+            <a class="font-w600" href="#" target="_blank">飞云包网</a> &copy; <span class="js-year-copy"></span>
+        </div>
+    </footer>
+    {/empty}
+    <!-- END Footer -->
+</div>
+<!-- END Page Container -->
+
+<!-- Apps Modal -->
+<!-- Opens from the button in the header -->
+<div class="modal fade" id="apps-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-top">
+        <div class="modal-content">
+            <!-- Apps Block -->
+            <div class="block block-themed block-transparent">
+                <div class="block-header bg-primary-dark">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title">所有模块</h3>
+                </div>
+                <div class="block-content">
+                    <div class="row text-center">
+                        {notempty name="_top_menus_all"}
+                        {volist name="_top_menus_all" id="menu"}
+                        <div class="col-xs-6 col-sm-3">
+                            {in name="menu.url_type" value="module_admin,module_home"}
+                            <a class="block block-rounded top-menu" href="javascript:void(0);" data-module-id="{$menu['id']}" data-module="{$menu['module']}" data-controller="{$menu['controller']}" target="{$menu['url_target']}">
+                                <div class="block-content text-white {$menu['id'] == $_location['location'][0]['id'] ? 'bg-primary' : 'bg-primary-dark'}">
+                                    <i class="{$menu.icon} fa-2x"></i>
+                                    <div class="font-w600 push-15-t push-15">{$menu.title}</div>
+                                </div>
+                            </a>
+                            {else/}
+                            <a class="block block-rounded" href="{$menu['url_value']}" target="{$menu['url_target']}">
+                                <div class="block-content text-white {$menu['id'] == $_location['location'][0]['id'] ? 'bg-primary' : 'bg-primary-dark'}">
+                                    <i class="{$menu.icon} fa-2x"></i>
+                                    <div class="font-w600 push-15-t push-15">{$menu.title}</div>
+                                </div>
+                            </a>
+                            {/in}
+                        </div>
+                        {/volist}
+                        {/notempty}
+                    </div>
+                </div>
+            </div>
+            <!-- END Apps Block -->
+        </div>
+    </div>
+</div>
+<iframe src="" height="1" width="1" frameborder="0" id="ifr"></iframe>
+<!-- END Apps Modal -->
+<!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+{eq name="Think.config.minify_status" value="1"}
+<script src="{:minify('group', 'core_js,libs_js')}"></script>
+{else/}
+<script src="__ADMIN_JS__/core/jquery.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/bootstrap.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.slimscroll.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.scrollLock.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.appear.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.countTo.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/jquery.placeholder.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/core/js.cookie.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/magnific-popup/magnific-popup.min.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/app.js?v={:config('asset_version')}3e2333d3333"></script>
+<script src="__ADMIN_JS__/dolphin.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/builder/form.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/builder/aside.js?v={:config('asset_version')}"></script>
+<script src="__ADMIN_JS__/builder/table.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/bootstrap-notify/bootstrap-notify.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/sweetalert/sweetalert.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/js-xss/xss.min.js?v={:config('asset_version')}"></script>
+<script src="__LIBS__/viewer/viewer.min.js?v={:config('asset_version')}"></script>
+{/eq}
+
+<!-- Page JS Plugins -->
+<script src="__LIBS__/layer/layer.js?v={:config('asset_version')}"></script>
+{notempty name="_js_files"}
+    {eq name="Think.config.minify_status" value="1"}
+        <script src="{:minify('group', $_js_files)}"></script>
+    {else/}
+        {volist name="_js_files" id="js"}
+        {:load_assets($js, 'js')}
+        {/volist}
+    {/eq}
+{/notempty}
+
+{notempty name="extend_js_list"}
+    {volist name="extend_js_list" id="vo"}
+        {volist name="vo" id="v"}
+        <script src="{$v}?v={:config('asset_version')}"></script>
+        {/volist}
+    {/volist}
+{/notempty}
+
+<script>
+    jQuery(function () {
+        // 切换角色
+        $('#js-change-role').click(function () {
+            Dolphin.loading();
+            $.get('{:url("admin/ajax/getMyRoles")}', function (res) {
+                Dolphin.loading('hide');
+                if (res.code) {
+                    let options = '';
+                    $.each(res.data.roles, function (index, item) {
+                        options += '<option value="'+index+'" '+(res.data.curr == index ? 'selected' : '')+'>'+item+'</option>';
+                    });
+
+                    layer.open({
+                        type: 1,
+                        title: '<i class="si si-users"></i> 切换角色',
+                        area: ['300px', '180px'],
+                        btn: ['确定', '取消'],
+                        content: '<div class="form-group push-20-t">\n' +
+                            '<label class="col-xs-12" for="contact1-subject">当前角色</label>\n' +
+                            '<div class="col-xs-12">\n' +
+                            '    <select class="form-control" id="role-select" size="1">\n' + options +
+                            '    </select>\n' +
+                            '</div>\n' +
+                            '</div>',
+                        yes: function(index, layero){
+                            let role = $('#role-select').val();
+                            let loading = layer.load(2);
+                            $.post('{:url("admin/ajax/setMyRole")}', {id:role}, function (res) {
+                                layer.close(loading);
+                                if (res.code) {
+                                    layer.close(index);
+                                    layer.msg(res.msg);
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 1500);
+                                } else {
+                                    layer.msg(res.msg)
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Dolphin.notify(res.msg, 'danger');
+                }
+            });
+        });
+        App.initHelpers(['appear', 'slimscroll', 'magnific-popup', 'table-tools']);
+        {notempty name="_js_init"}
+        App.initHelpers({$_js_init|raw});
+        {/notempty}
+            $(document).ready(function() {
+
+                $('#tab-container').on('click', '.tab-close', function() {
+                // $('.tab-close').on('click', function() {
+                    var index = $(this).data('index') - 1; // 假设索引从 1 开始
+                    var activeId = $(this).data('activeId');  //选中页面的id
+
+                    var valId = $(this).data('valId');     //要删除的页面id
+                    $.ajax({
+                        url: '/admin.php/admin/admin/dellocationsarr',
+                        type: 'GET',
+                        data: {
+                            index: index,
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if ( response.locationsArray) { // 假设服务器返回了 success 字段表示操作成功
+                                // var newLocationsArr = response.location; // 假设服务器返回了更新后的 locationsArray
+                                var newLocationsArray = response.locationsArray; // 假设服务器返回了更新后的 locationsArray
+                                // 清除旧的选项卡
+                                $('.custom-tab-item').remove();
+                                // 使用新的数据构建 HTML 字符串
+                                var html = '';
+                                if (activeId == 70 || activeId == valId) {
+                                    window.location.href = '/admin.php/admin/index/index.html'; // 使用getPreviousPageUrl()或默认URL
+                                    html += '<li class="custom-tab-item active">';
+                                }else{
+                                    html += '<li class="custom-tab-item">';
+                                }
+                                html += '<a href="/admin.php/admin/index/index.html" class="custom-tab-link">'+'首页'+'</a>';
+                                html += '</li>';
+                                $.each(newLocationsArray, function(i, locationItem) { // 使用更具体的变量名
+                                    var liClass = 'custom-tab-item'; // 默认的li类
+                                    // 尝试匹配ID（这里我们假设newLocationsArr也有相同的数据结构）
+                                    if (activeId == locationItem.id) {
+                                        // 如果找到了newLocationsArr[2].id匹配的项，则标记为选中并设置flag
+                                        liClass += ' active'; // 添加'active'类来表示选中
+                                    }
+                                    html += '<li class="' + liClass + '">';
+                                    var href = '/admin.php/'+locationItem.url_value+'.html' || 'javascript:void(0);'; // 默认 href
+
+                                    html += '<a href="' + href + '" class="custom-tab-link">' + locationItem.title + '</a>';
+                                    html += '<i class="list-icon fa fa-times fa-fw tab-close" data-index="' + (i+1) + '" data-active-id="' + activeId + '"  data-val-id="' + locationItem.id + '"></i>';
+                                    html += '</li>';
+
+                                    // 最后一个显示清除按钮
+                                    if(newLocationsArray.length>5 && i==newLocationsArray.length-1){
+                                        html += '<li class="custom-tab-item delall">';
+                                        var href = '/admin.php/'+locationItem.url_value+'.html';
+
+                                        html += '<a href="' + href + '" class="custom-tab-link tab-close">< 关闭全部</a>';
+
+                                        html += '</li>';
+                                    }
+                                });
+
+
+                                // 将新的 HTML 插入到选项卡容器中
+                                $('#tab-container').html(html);
+                                // 重新绑定 .tab-close 的点击事件（使用事件委托）
+                                $('#tab-container').on('click', '.tab-close', function() {
+                                    // ... 处理点击事件的代码，注意这里使用的是事件委托，不需要再次绑定
+                                });
+                            } else {
+                                // 处理错误情况
+                                console.error('更新选项卡失败:', response.error);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            // 处理 AJAX 请求失败的情况
+                            console.error('AJAX 请求失败:', textStatus, errorThrown);
+                        }
+                    });
+                });
+            });
+    });
+
+        function updateVisibleItems() {
+            const itemList = document.querySelector('.pull-left');
+            const containerWidth =itemList.clientWidth;
+            const items = document.querySelectorAll('.pull-left li');
+            const itemWidth = 115;
+            const visibleCount = Math.floor(containerWidth / itemWidth);
+
+            items.forEach((item, index) => {
+                if (index-1 < visibleCount) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // 获取最后一个li元素
+            const lastItem = itemList.querySelector('li:last-child');
+
+            // 设置最后一个li元素为显示
+            lastItem.style.display = 'block';
+        }
+
+        window.addEventListener('resize', updateVisibleItems);
+        window.addEventListener('load', updateVisibleItems);
+
+        // 定时器播放音频
+        function seeNum() {
+            var seeNumUrl = '{:url("admin/ajax/getSeeNum")}'; // 替换为服务器端生成的URL
+            var rechargeState = 1; // 充值声音开关，1开/0关
+            $.ajax({
+                type: "POST",
+                url: seeNumUrl,
+                data: { rechargeState: rechargeState },
+                dataType: "json",
+                success: function(result) {
+                    console.log(result);
+                    if (result.code == "1") {
+                        $("#ifr").attr("src", result.data);
+
+                    } else {
+                        $("#ifr").attr("src", "");
+                    }
+                },
+                error: function() {
+                    // 错误处理代码
+                }
+            });
+        }
+        setInterval(seeNum, 15000); // 每15秒调用一次 seeNum 函数
+        // 首次调用 seeNum 函数（如果需要）
+        seeNum();
+</script>
+
+<!--页面js-->
+{block name="script"}{/block}
+
+<!--插件js钩子-->
+{:hook('page_plugin_js')}
+
+{// 额外HTML代码 }
+{$extra_html|raw|default=''}
+</body>
+</html>

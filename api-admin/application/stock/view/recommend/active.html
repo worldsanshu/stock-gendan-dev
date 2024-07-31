@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>活动中心</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="__STATIC__/css/weui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="__STATIC__/wap/css/common.css">
+    <script src="__STATIC__/libs/jquery.min.js"></script>
+</head>
+<style>
+    .entry-tip .img-tip {
+        margin-top: -30px;
+        overflow: auto;
+    }
+
+    .img-tip a {
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .entry-tip {
+        padding-top: 93px;
+        margin-bottom: 119px;
+    }
+
+    .left-arrow2 .left-arrow:before {
+        top: 30px !important;
+    }
+
+    .v-header {
+        position: fixed;
+        padding: 3px 0;
+        box-sizing: border-box;
+        background-color: #FF4B2B;
+        display: block;
+        width: 100%;
+    }
+</style>
+<body>
+<div class=" ">
+    <div class="v-header">
+        <div class="v-header-left">
+            <a href="javascript:;" class="left-arrow" onclick="window.history.go(-1);"></a>
+        </div>
+        <h1 class="v-header-title">活动中心</h1>
+    </div>
+
+    <div class="entry-tip">
+        <div class="img-tip">
+            <p title="新手礼包" onclick="openurl('/stock/recommend/task')" class="">
+                <img class="" src="__STATIC__/wap/img/active4.png" width="100%">
+            </p>
+        </div>
+        <div class="img-tip">
+
+            <p title="签到" onclick="openurl('/member/attendancelottery/index')" class="">
+                <img class="" src="__STATIC__/wap/images/active1.png" width="100%">
+            </p>
+        </div>
+        <div class="img-tip">
+            <p title="抽奖零钱" onclick="openurl('/member/attendancelottery/lottery')" class="">
+                <img class="" src="__STATIC__/wap/img/active2.png" width="100%">
+            </p>
+        </div>
+        <div class="img-tip">
+            <p title="今日推荐" onclick="openurl('/stock/recommend/index')" class="">
+                <img class="" src="__STATIC__/wap/img/active3.png" width="100%">
+            </p>
+        </div>
+        <div class="img-tip">
+            <p title="好友推荐" onclick="openurl('/wap/member/customer/index')" class="">
+                <img class="" src="__STATIC__/wap/img/active5.png" width="100%">
+            </p>
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function () {
+        var u = navigator.userAgent;
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        /*   if (isIOS) {
+               if (screen.height == 812 && screen.width == 375){
+                   console.log("slider");
+
+                   $(".v-header").css({"padding-top":'30px'});
+                   $(".v-header-left").addClass("left-arrow2");
+
+                   $("body").css("margin-bottom",'35px');
+                   $("#root .weui-tabbar").css("padding-bottom",'20px');
+                   console.log("iphoneX");
+               }else{
+   //不是iphoneX
+                   console.log("不是iphoneX");
+               }
+           }*/
+    });
+
+    function openurl(url) {
+        var sessionstr2 = JSON.parse(
+            sessionStorage.getItem('persist:root')
+        );
+
+        var exp = sessionstr2;
+        if (emptyempty_v2(exp)) {
+            location.href = '/wap/login';
+        }
+        console.log(sessionstr2);
+        var token = sessionstr2.token;
+        var token = token.replace('"', '');
+        var token = token.replace('"', '');
+        var token = token.replace('""', '');
+        if (token == '""' || emptyempty_v2(token)) {
+            location.href = '/wap/login';
+        } else {
+            console.log(token);
+            var url = url + '?token=' + token;
+            console.log(url);
+            location.href = url;
+        }
+
+    }
+
+    function emptyempty_v2(mixed_var) {
+        var key;
+        if (mixed_var == "" || mixed_var == 0 || mixed_var == "0" || mixed_var == null || mixed_var == false || mixed_var == '' || typeof (mixed_var) == "undefined" || typeof (mixed_var) == NaN) {
+            return true;
+        }
+        if (typeof mixed_var == 'object') {
+            for (key in mixed_var) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+</script>
+</html>

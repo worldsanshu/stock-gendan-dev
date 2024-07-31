@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)https://www.htep1.com/#/noviceTask -->
+<html style="font-size: 23.4375px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <title>新手任务</title>
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all">
+    <link href="__STATIC__/layui/css/task.css" rel="stylesheet">
+</head>
+<style>
+    .left-arrow2 .left-arrow:before {
+        top: 30px !important;
+    }
+
+    .v-header {
+        position: relative;
+        padding: 3px 0;
+        box-sizing: border-box;
+        background-color: #FF4B2B;
+    }
+
+    .v-header .v-header-title,
+    .v-header h1 {
+        margin: 0 88px;
+        line-height: 40px;
+        text-align: center;
+        height: 40px;
+        font-size: 18px;
+        font-weight: 400;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #fff;
+    }
+
+    .v-header .v-header-title > span {
+        display: inline-block
+    }
+
+    .v-header .v-header-left,
+    .v-header .v-header-right {
+        position: absolute;
+        top: 14px;
+        display: block;
+        font-size: 16px;
+        line-height: 21px;
+        color: #ccc;
+    }
+
+    .v-header .v-header-left .left-arrow {
+        width: 20px;
+        height: 20px;
+    }
+
+    .v-header-left a,
+    .v-header-left button,
+    .v-header-right a,
+    .v-header-right button {
+        float: left;
+        margin-right: 8px;
+        color: #ffffff;
+    }
+
+    .v-header-left a:active,
+    .v-header-left button:active,
+    .v-header-right a:active,
+    .v-header-right button:active {
+        opacity: .5
+    }
+
+    .v-header-left {
+        left: 18px
+    }
+
+    .v-header .v-header-left .v-header-back {
+        padding-left: 16px
+    }
+
+    .left-arrow:before {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border: 1px solid #ffffff;
+        border-width: 1px 0 0 1px;
+        -webkit-transform: rotate(315deg);
+        transform: rotate(315deg);
+        top: 4px;
+        left: 7px;
+    }
+
+    .v-header .v-header-right {
+        right: 15px
+    }
+
+    .v-header .v-header-right a,
+    .v-header .v-header-right button {
+        margin-left: 8px;
+        margin-right: 0
+    }
+
+    .v-header .v-header-right .v-header-more:after {
+        content: "\2022   \2022   \2022   ";
+        font-size: 16px
+    }
+
+    /* v-header end*/
+
+</style>
+<body>
+<div>
+    <!---->
+    <div data-v-e58a5d40="" class="novice-task">
+        <div class="v-header">
+            <div class="v-header-left">
+                <a href="javascript:;" class="left-arrow" onclick="window.history.go(-1);"></a>
+            </div>
+            <h1 class="v-header-title">新手任务</h1>
+        </div>
+        <div data-v-e58a5d40="" style="margin-top: 1.6rem;">
+            <div data-v-e58a5d40="" class="van-row">
+                <img data-v-e58a5d40="" src="__STATIC__/wap/images/novice_task.png" alt=""
+                     width="100%">
+            </div>
+            <div data-v-e58a5d40="" class="content">
+                <div data-v-e58a5d40="" style="height: 10px; line-height: 10px;"></div>
+                <div data-v-e58a5d40="" class="van-row">
+                    <div data-v-e58a5d40="" class="van-row">
+                        <div data-v-e58a5d40="" class="van-col van-col--1">&nbsp;</div>
+                        <div data-v-e58a5d40="" class="item  van-col van-col--10">
+                            <div data-v-e58a5d40="" class="van-cell">
+                                <div data-v-e58a5d40="" class="van-cell__value van-cell__value--alone">
+                                    <div data-v-e58a5d40="" class="van-row" style="text-align: center;">
+                                        <h4 data-v-e58a5d40="">完成注册</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <p data-v-e58a5d40="">打开配资新体验</p>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">+188元</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">
+                                            {eq name="state[0]" value='0'}
+                                            <a href="/wap/register">
+                                                <button data-v-e58a5d40=""
+                                                        class="van-button van-button--danger van-button--small">
+                                                    <span data-v-e58a5d40="" class="van-button__text">前往注册</span>
+                                                </button>
+                                            </a>
+                                            {/eq}
+                                            {eq name="state[0]" value='1'}
+                                            <button onclick="recGift('0')" data-v-e58a5d40=""
+                                                    class="van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text">领取奖励</span>
+                                            </button>
+                                            {/eq}
+                                            {eq name="state[0]" value='2'}
+                                            <button data-v-e58a5d40=""
+                                                    class="text-g van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text ">已领取</span>
+                                            </button>
+                                            {/eq}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-e58a5d40="" class="van-col van-col--2">&nbsp;</div>
+                        <div data-v-e58a5d40="" class="item  van-col van-col--10">
+                            <div data-v-e58a5d40="" click="right" class="van-cell">
+                                <div data-v-e58a5d40="" class="van-cell__value van-cell__value--alone">
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">实名认证</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <p data-v-e58a5d40="">真实身份信息认证</p>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">+100元</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">
+                                            {eq name="state[1]" value='0'}
+                                            <a href="/wap/member/profile/realname">
+                                                <button data-v-e58a5d40=""
+                                                        class="van-button van-button--danger van-button--small">
+                                                    <span data-v-e58a5d40="" class="van-button__text">前往认证</span>
+                                                </button>
+                                            </a>
+                                            {/eq}
+                                            {eq name="state[1]" value='1'}
+                                            <button onclick="recGift('1')" data-v-e58a5d40=""
+                                                    class="van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text">领取奖励</span>
+                                            </button>
+                                            {/eq}
+                                            {eq name="state[1]" value='2'}
+                                            <button data-v-e58a5d40=""
+                                                    class="text-g van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text text-g">已领取</span>
+                                            </button>
+                                            {/eq}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-e58a5d40="" class="van-col van-col--1">&nbsp;</div>
+                    </div>
+                    <div data-v-e58a5d40="" class="down"></div>
+                </div>
+                <div data-v-e58a5d40="" class="van-row">
+                    <div data-v-e58a5d40="" class="van-row">
+                        <div data-v-e58a5d40="" class="van-col van-col--1">&nbsp;</div>
+                        <div data-v-e58a5d40="" class="item  van-col van-col--10">
+                            <div data-v-e58a5d40="" class="van-cell">
+                                <div data-v-e58a5d40="" class="van-cell__value van-cell__value--alone">
+                                    <div data-v-e58a5d40="" class="van-row" style="text-align: center;">
+                                        <h4 data-v-e58a5d40="">首次充值</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <p data-v-e58a5d40="">首次体验充值功能</p>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">+200元</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">
+                                            {eq name="state[2]" value='0'}
+                                            <a href="/payment/members/index">
+                                                <button data-v-e58a5d40=""
+                                                        class="van-button van-button--danger van-button--small">
+                                                    <span data-v-e58a5d40="" class="van-button__text">前往充值</span>
+                                                </button>
+                                            </a>
+                                            {/eq}
+                                            {eq name="state[2]" value='1'}
+                                            <button onclick="recGift('2')" data-v-e58a5d40=""
+                                                    class="van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text">领取奖励</span>
+                                            </button>
+                                            {/eq}
+                                            {eq name="state[2]" value='2'}
+                                            <button data-v-e58a5d40=""
+                                                    class="text-g van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text text-g">已领取</span>
+                                            </button>
+                                            {/eq}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-e58a5d40="" class="van-col van-col--2">&nbsp;</div>
+                        <div data-v-e58a5d40="" class="item  van-col van-col--10">
+                            <div data-v-e58a5d40="" click="right" class="van-cell">
+                                <div data-v-e58a5d40="" class="van-cell__value van-cell__value--alone">
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">首次配资</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <p data-v-e58a5d40="">免费体验合约除外</p>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">+300元</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">
+                                            {eq name="state[3]" value='0'}
+                                            <a href="/wap/trade/account/index">
+                                                <button data-v-e58a5d40=""
+                                                        class="van-button van-button--danger van-button--small">
+                                                    <span data-v-e58a5d40="" class="van-button__text">前往操作</span>
+                                                </button>
+                                            </a>
+                                            {/eq}
+                                            {eq name="state[3]" value='1'}
+                                            <button onclick="recGift('3')" data-v-e58a5d40=""
+                                                    class="van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text">领取奖励</span>
+                                            </button>
+                                            {/eq}
+                                            {eq name="state[3]" value='2'}
+                                            <button data-v-e58a5d40=""
+                                                    class=" text-g van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text text-g">已领取</span>
+                                            </button>
+                                            {/eq}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-e58a5d40="" class="van-col van-col--1">&nbsp;</div>
+                    </div>
+                    <div data-v-e58a5d40="" class="down"></div>
+                </div>
+                <div data-v-e58a5d40="" class="van-row">
+                    <div data-v-e58a5d40="" class="van-row">
+                        <div data-v-e58a5d40="" class="van-col van-col--1">&nbsp;</div>
+                        <div data-v-e58a5d40="" class="item  van-col van-col--10">
+                            <div data-v-e58a5d40="" class="van-cell">
+                                <div data-v-e58a5d40="" class="van-cell__value van-cell__value--alone">
+                                    <div data-v-e58a5d40="" class="van-row" style="text-align: center;">
+                                        <h4 data-v-e58a5d40="">首次追加操盘金</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <p data-v-e58a5d40="">首次体验追加配资功能</p>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">+300元</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">
+                                            {eq name="state[4]" value='0'}
+                                            <a href="/wap/trade/account/index">
+                                                <button data-v-e58a5d40=""
+                                                        class="van-button van-button--danger van-button--small">
+                                                    <span data-v-e58a5d40="" class="van-button__text">前往操作</span>
+                                                </button>
+                                            </a>
+                                            {/eq}
+                                            {eq name="state[4]" value='1'}
+                                            <button onclick="recGift('4')" data-v-e58a5d40=""
+                                                    class="van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text">领取奖励</span>
+                                            </button>
+                                            {/eq}
+                                            {eq name="state[4]" value='2'}
+                                            <button data-v-e58a5d40=""
+                                                    class="text-g van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text text-g">已领取</span>
+                                            </button>
+                                            {/eq}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-e58a5d40="" class="van-col van-col--2">&nbsp;</div>
+                        <div data-v-e58a5d40="" class="item  van-col van-col--10">
+                            <div data-v-e58a5d40="" click="right" class="van-cell">
+                                <div data-v-e58a5d40="" class="van-cell__value van-cell__value--alone">
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">首次追加保证金</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <p data-v-e58a5d40="">首次体验补亏功能</p>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">+300元</h4>
+                                    </div>
+                                    <div data-v-e58a5d40="" class="van-row">
+                                        <h4 data-v-e58a5d40="">
+                                            {eq name="state[5]" value='0'}
+                                            <a href="/wap/trade/account/index">
+                                                <button data-v-e58a5d40=""
+                                                        class="van-button van-button--danger van-button--small">
+                                                    <span data-v-e58a5d40="" class="van-button__text">前往操作</span>
+                                                </button>
+                                            </a>
+                                            {/eq}
+                                            {eq name="state[5]" value='1'}
+                                            <button onclick="recGift('5')" data-v-e58a5d40=""
+                                                    class="van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text">领取奖励</span>
+                                            </button>
+                                            {/eq}
+                                            {eq name="state[5]" value='2'}
+                                            <button data-v-e58a5d40=""
+                                                    class="text-g van-button van-button--danger van-button--small">
+                                                <span data-v-e58a5d40="" class="van-button__text text-g">已领取</span>
+                                            </button>
+                                            {/eq}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-e58a5d40="" class="van-col van-col--1">&nbsp;</div>
+                    </div>
+                    <div data-v-e58a5d40="" class="down"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="__STATIC__/layui/layui.all.js?t=1"></script>
+<script type="text/javascript">
+    var $ = layui.$;
+
+    function recGift(id) {
+        var sessionstr2 = JSON.parse(
+            sessionStorage.getItem('persist:root')
+        );
+        console.log(sessionstr2);
+        var token = sessionstr2.token;
+        var token = token.replace('"', '');
+        var token = token.replace('"', '');
+        var token = token.replace('""', '');
+
+        $.post('taskGift', {id: id, token: token}, function (d) {
+            if (d.status == '200') {
+                layer.msg('领取成功')
+            } else {
+                layer.msg(d.message)
+            }
+            location.reload()
+        }, "json")
+    }
+
+
+</script>
+
+<script>
+    $(document).ready(function () {
+
+
+        var u = navigator.userAgent;
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        /*  if (isIOS) {
+              if (screen.height == 812 && screen.width == 375){
+                  console.log("slider");
+
+                  $(".v-header").css({"padding-top":'30px'});
+                  $(".v-header-left").addClass("left-arrow2");
+
+                  $("body").css("margin-bottom",'35px');
+                  $("#root .weui-tabbar").css("padding-bottom",'20px');
+                  console.log("iphoneX");
+              }else{
+  //不是iphoneX
+                  console.log("不是iphoneX");
+              }
+          }*/
+    });
+</script>
+</html>

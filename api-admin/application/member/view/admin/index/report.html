@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>报表详情</title>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="__ADMIN_JS__/core/echarts/echarts.min.js"></script>
+</head>
+<body>
+<div class=""
+     style="height: 40px;line-height: 40px;background-color: #1890ff;color: #fff;font-weight: 600;font-size: 15px; margin-bottom: 20px;padding: 10px">
+    <span class="user">会员手机号：{$user_data['mobile']} </span>
+    <span class="user">会员姓名：{$user_data['name']}</span>
+</div>
+
+<div class="user_data">
+    <p>
+        <span>会员盈亏</span>
+        <span>{$user_data['user_profit_loss']/100}元</span>
+    </p>
+    <p>
+        <span>总充值</span>
+        <span>{$user_data['user_recharge']/100}元</span>
+    </p>
+    <p>
+        <span>总充值返现</span>
+        <span>{$user_data['cashback']/100}元</span>
+    </p>
+    <p>
+        <span>合约实际盈亏</span>
+        <span>{$user_data['profit_loss']/100}元</span>
+    </p>
+    <p>
+        <span>累计利息</span>
+        <span>{$user_data['interest']/100}元</span>
+    </p>
+    <p>
+        <span>会员净资产</span>
+        <span>{$user_data['balance']/100}元</span>
+    </p>
+    <p>
+        <span>总提现</span>
+        <span>{$user_data['withdrawal']/100}元</span>
+    </p>
+    <p>
+        <span>赚取佣金</span>
+        <span>{$user_data['commission']/100}元</span>
+    </p>
+    <p>
+        <span>累计抵扣金额</span>
+        <span>{$user_data['deduction_amount']/100}元</span>
+    </p>
+    <p>
+        <span>合约穿仓资金</span>
+        <span>{$user_data['contract_closing_funds']/100}元</span>
+    </p>
+
+
+</div>
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+<div id="main" style="width: 1000px;height:600px;">
+
+</div>
+<script type="text/javascript">
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    var days = {$days};
+    var returns = {$returns}
+
+    console.log('会员数据', returns);
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: ''
+        },
+        tooltip: {
+            show: true,    // 是否显示提示框组件
+            trigger: 'axis',    // 触发类型（'item'，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用；'axis'，坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用；'none'，不触发。）
+            axisPointer: {
+                type: 'line',    // 指示器类型（'line' 直线指示器；'shadow' 阴影指示器；'none' 无指示器；'cross' 十字准星指示器。）
+                snap: false,    // 坐标轴指示器是否自动吸附到点上。默认自动判断。
+                label: {
+                    margin: 10,    // label 距离轴的距离
+                    color: '#FFF',     // 文字的颜色
+                    fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                    fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                    fontSize: '20',    // 文字字体大小
+                    lineHeight: '50',    // 行高
+                    padding: [5, 7, 5, 7],    // 内边距，单位px
+                    backgroundColor: 'auto',    // 文本标签的背景颜色
+                }
+            },
+            showContent: true,     // 是否显示提示框浮层，默认显示
+            alwaysShowContent: false,     // 是否永远显示提示框内容，默认情况下在移出可触发提示框区域后一定时间后隐藏
+            confine: true,    // 是否将 tooltip 框限制在图表的区域内
+            textStyle: {
+                color: '#FFF',     // 文字的颜色
+                fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                fontSize: '20',    // 文字字体大小
+                lineHeight: '50',    // 行高
+            },
+
+        },
+        legend: {
+            data: ['会员盈亏', '总充值', '总充值返现', '合约实际盈亏', '累计利息', '会员净资产', '总提现', '赚取佣金', '累计抵扣金额', '合约穿仓资金'],
+
+        },
+        xAxis: {
+            data: days
+        },
+        yAxis: {},
+        series: returns
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</body>
+</html>
+<style>
+    .user {
+        margin-left: 30px;
+    }
+
+    .user_data {
+        height: 100px;
+        margin-bottom: 20px;
+    }
+
+    .user_data p {
+        text-align: center;
+        float: left;
+        width: 150px;
+    }
+
+    .user_data p span {
+        text-align: center;
+        width: 100px;
+        float: left;
+        height: 20px;
+        line-height: 20px;
+    }
+</style>
+

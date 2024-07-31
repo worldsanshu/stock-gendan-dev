@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>后台管理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="/static/admin/css/statistics/layui.all.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/static/admin/css/statistics/public.css" media="all">
+    <link rel="stylesheet" href="/static/admin/css/statistics/welcome.css" media="all">
+    <link rel="stylesheet" href="/static/admin/css/statistics/laydate.css" media="all">
+    <link rel="stylesheet" href="/static/admin/css/statistics/layer.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/modules/code.css" media="all">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+
+    <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery"
+            src="/static/admin/css/statistics/jquery-3.4.1.min.js"></script>
+
+    <script type="text/javascript" src="/static/admin/js/core/echarts/echarts.min.js"></script>
+    <style>.cke {
+        visibility: hidden;
+    }</style>
+</head>
+<body>
+<!--<link rel="stylesheet" href="./welcome.css" media="all">-->
+<div class="layuimini-container" style="padding: 48px 16px 0 16px;
+    position: relative;
+    box-sizing: border-box;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;">
+    <div class="layuimini-main">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-warning icon"></i>数据统计</div>
+
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10">
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title ">
+                                                        <h5><span>平台累计盈亏</span>&nbsp;<i
+                                                                id="platformProfitLossNotice"
+                                                                class="fa fa-question-circle"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['system_profit_loss']}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>会员净资产</span>&nbsp;<i id="totalNetAssetsNotice"
+                                                                                            class="fa fa-question-circle"></i>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['user_assets']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现冻结金额</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['withdrawal_freeze']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>平台资金池</span>&nbsp;<i
+                                                                id="totalPlatformMoneyNotice"
+                                                                class="fa fa-question-circle"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['system_capital_pool']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>钱包余额</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['wallet_balance']}元</h1>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>合约净资产</span>&nbsp;<i
+                                                                id="totalConsultNetAssetsNotice"
+                                                                class="fa fa-question-circle"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['contract_assets']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>累计返佣</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['rebate']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>结算盈亏面板</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-consultProfitAndLoss"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+                                    <div style="position: absolute; display: none; border-style: solid; white-space: nowrap; z-index: 9999999; transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s, top 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s; background-color: rgba(50, 50, 50, 0.7); border-width: 0px; border-color: rgb(51, 51, 51); border-radius: 4px; color: rgb(255, 255, 255); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 5px; left: 565.462px; top: 255px;">
+                                        2023-05-28<br>
+                                        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#3fb1e3"></span>合约结算盈亏
+                                        : 0.00<br>
+                                        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#6be6c1"></span>扩大利息
+                                        : 350.00<br>
+                                        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#626c91"></span>申请利息
+                                        : 60.00<br>
+                                        <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#a0a7e6"></span>续期利息
+                                        : 35.00
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card" style="width: 100%;min-height:600px">
+                            <div class="flex-start" style="display:flex;align-items:center">
+                                <div><i class="fa fa-credit-card icon icon-blue "></i>时间：</div>
+                                <div><input type="text" class="layui-input" id="consultProfitAndLossTime" lay-key="1">
+                                </div>
+                            </div>
+                            <!--                            <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>7日数据</div>-->
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>合约结算盈亏</span>&nbsp;<i
+                                                                class="fa fa-question-circle consultSettleProfitLossNotice"></i>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="consultProfitAndLoss">
+                                                            {$profit_loss_data.profit_loss.profit_loss}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>扩大利息</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalExpandInterest">
+                                                            {$profit_loss_data.profit_loss.expand_interest}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>申请利息</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalApplyInterest">
+                                                            {$profit_loss_data.profit_loss.apply_interest}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>续期利息</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalDeferInterest">
+                                                            {$profit_loss_data.profit_loss.renewal_interest}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>今日数据
+                                </div>
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>合约结算盈亏</span>&nbsp;<i
+                                                                class="fa fa-question-circle consultSettleProfitLossNotice"></i>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todaySettleConsultProfit">
+                                                            {$profit_loss_data.profit_loss_day.profit_loss}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>扩大利息</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayExpandInterest">
+                                                            {$profit_loss_data.profit_loss_day.expand_interest}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>申请利息</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayApplyInterest">
+                                                            {$profit_loss_data.profit_loss_day.apply_interest}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>续期利息</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayDeferInterest">
+                                                            {$profit_loss_data.profit_loss_day.renewal_interest}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>用户统计</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-userStatistics"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);"
+                                     _echarts_instance_="ec_1685327502704">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+                                    <div style="position: absolute; display: none; border-style: solid; white-space: nowrap; z-index: 9999999; transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s, top 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s; background-color: rgba(50, 50, 50, 0.7); border-width: 0px; border-color: rgb(51, 51, 51); border-radius: 4px; color: rgb(255, 255, 255); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 5px; left: 751.452px; top: 334px;">
+                                        2023-05-28<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#3fb1e3"></span>活跃用户
+                                        : 1<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#6be6c1"></span>买卖股票用户
+                                        : 1<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#626c91"></span>新注册用户数
+                                        : 0<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#a0a7e6"></span>申请合约用户
+                                        : 1<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c4ebad"></span>充值提现
+                                        : 0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card" style="width: 100%;min-height:600px">
+                            <div class="flex-start" style="display:flex;align-items:center">
+                                <div><i class="fa fa-credit-card icon icon-blue "></i>时间：</div>
+                                <div><input type="text" class="layui-input" id="userStatisticsTime" lay-key="2"></div>
+                            </div>
+                            <!--                            <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>7日数据</div>-->
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>活跃用户</span>&nbsp;<i
+                                                                class="fa fa-question-circle activeUserNotice"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalActiveUser">
+                                                            {$user_statistics_data.user_data.active_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>买卖股票用户（人）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalBuySell">
+                                                            {$user_statistics_data.user_data.agiotage_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>新注册用户数</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalRegisterNum">
+                                                            {$user_statistics_data.user_data.new_reg_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>申请合约用户(人)</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalUserApplyConsult">
+                                                            {$user_statistics_data.user_data.apply_contract_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                    </div>
+                                                    <div class="panel-content">
+
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值提现（人）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalUserWithdrawRecharge">
+                                                            {$user_statistics_data.user_data.recharge_withdrawal}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>今日数据
+                                </div>
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>活跃用户</span>&nbsp;<i
+                                                                class="fa fa-question-circle activeUserNotice"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayActiveUser">
+                                                            {$user_statistics_data.user_data_day.active_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>买卖股票用户（人）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayBuySell">
+                                                            {$user_statistics_data.user_data_day.agiotage_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>新注册用户数</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayRegisterNum">
+                                                            {$user_statistics_data.user_data_day.new_reg_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>申请合约用户(人)</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayUserApplyConsult">
+                                                            {$user_statistics_data.user_data_day.apply_contract_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                    </div>
+                                                    <div class="panel-content">
+
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值提现（人）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayUserWithdrawRecharge">
+                                                            {$user_statistics_data.user_data_day.recharge_withdrawal}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>充值提现统计</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-RechargeWithdrawStatistics"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);"
+                                     _echarts_instance_="ec_1685327502703">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+                                    <div style="position: absolute; display: none; border-style: solid; white-space: nowrap; z-index: 9999999; transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s, top 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s; background-color: rgba(50, 50, 50, 0.7); border-width: 0px; border-color: rgb(51, 51, 51); border-radius: 4px; color: rgb(255, 255, 255); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 5px; left: 752.044px; top: 377px;">
+                                        2023-05-28<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#3fb1e3"></span>用户充值
+                                        : 0.00<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#6be6c1"></span>用户提现
+                                        : 0.00
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card" style="width: 100%;min-height:600px">
+                            <div class="flex-start" style="display:flex;align-items:center">
+                                <div><i class="fa fa-credit-card icon icon-blue "></i>时间：</div>
+                                <div><input type="text" class="layui-input" id="userRechargeWithdrawStatisticsTime"
+                                            lay-key="3"></div>
+                            </div>
+                            <!--                            <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>7日数据</div>-->
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值金额（元）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalRechargeAmount">
+                                                            {$recharge_withdrawal_data.user_statistics.recharge}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现金额（元）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalWithdrawalAmount">
+                                                            {$recharge_withdrawal_data.user_statistics.withdrawal}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值返现（元）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalCashBack">
+                                                            {$recharge_withdrawal_data.user_statistics.cashback}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现用户(人)</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalUserWithdrawNum">
+                                                            {$recharge_withdrawal_data.user_statistics.withdrawal_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                    </div>
+                                                    <div class="panel-content">
+
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值用户（人）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalUserRechargeNum">
+                                                            {$recharge_withdrawal_data.user_statistics.recharge_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>今日数据
+                                </div>
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值金额（元）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayRechargeAmount">
+                                                            {$recharge_withdrawal_data.user_statistics_day.recharge}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现金额（元）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayWithdrawalAmount">
+                                                            {$recharge_withdrawal_data.user_statistics_day.withdrawal}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值返现（元）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayCashBack">
+                                                            {$recharge_withdrawal_data.user_statistics_day.cashback}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现用户(人)</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayUserWithdrawNum">
+                                                            {$recharge_withdrawal_data.user_statistics_day.withdrawal_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                    </div>
+                                                    <div class="panel-content">
+
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值用户（人）</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayUserRechargeNum">
+                                                            {$recharge_withdrawal_data.user_statistics_day.recharge_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>合约统计</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-consultStatistics"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);"
+                                     _echarts_instance_="ec_1685327502705">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+                                    <div style="position: absolute; display: none; border-style: solid; white-space: nowrap; z-index: 9999999; transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s, top 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s; background-color: rgba(50, 50, 50, 0.7); border-width: 0px; border-color: rgb(51, 51, 51); border-radius: 4px; color: rgb(255, 255, 255); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 5px; left: 370.804px; top: 111px;">
+                                        2023-05-27<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#3fb1e3"></span>新开合约
+                                        : 0<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#6be6c1"></span>强平合约
+                                        : 0<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#626c91"></span>结算合约
+                                        : 0<br><span
+                                            style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#a0a7e6"></span>穿仓合约
+                                        : 0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card" style="width: 100%;min-height:600px">
+                            <div class="flex-start" style="display:flex;align-items:center">
+                                <div><i class="fa fa-credit-card icon icon-blue "></i>时间：</div>
+                                <div><input type="text" class="layui-input" id="consultStatisticsTime" lay-key="4">
+                                </div>
+                            </div>
+                            <!--                            <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>7日数据</div>-->
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>新开合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalNewConsultAmount">
+                                                            {$contract_statistics_data.contract_statistics_datas.new_contract}元/{$contract_statistics_data.contract_statistics_datas.new_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>强平合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalStrongLiquidationAmount">
+                                                            {$contract_statistics_data.contract_statistics_datas.qiangping_contract}元/{$contract_statistics_data.contract_statistics_datas.qiangping_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>结算合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalContractSettleAmount">
+                                                            {$contract_statistics_data.contract_statistics_datas.settlement_contract}元/{$contract_statistics_data.contract_statistics_datas.settlement_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>穿仓合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalContractAmount">
+                                                            {$contract_statistics_data.contract_statistics_datas.cross_warehouse_contract}元/{$contract_statistics_data.contract_statistics_datas.cross_warehouse_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>今日数据
+                                </div>
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>新开合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayNewConsultAmount">
+                                                            {$contract_statistics_data.contract_statistics_day.new_contract}元/{$contract_statistics_data.contract_statistics_day.new_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>强平合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayStrongLiquidationAmount">
+                                                            {$contract_statistics_data.contract_statistics_day.qiangping_contract}元/{$contract_statistics_data.contract_statistics_day.qiangping_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>结算合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayContractSettleAmount">
+                                                            {$contract_statistics_data.contract_statistics_day.settlement_contract}元/{$contract_statistics_data.contract_statistics_day.settlement_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>穿仓合约</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayContractAmount">
+                                                            {$contract_statistics_data.contract_statistics_day.cross_warehouse_contract}元/{$contract_statistics_data.contract_statistics_day.cross_warehouse_num}个</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<input type="hidden" class="sub_url" value="{:URL('statistics')}">
+
+<script>
+    var Format = {};
+    Format.dateFormat = function (d, format) {
+        var format = "";
+        var date = {
+            "M+": d.getMonth() + 1,
+            "D+": d.getDate(),
+            "h+": d.getHours(),
+            "m+": d.getMinutes(),
+            "s+": d.getSeconds()
+        };
+        if (/(Y+)/i.test(format)) {
+            format = format.replace(RegExp.$1, (d.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        for (var k in date) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+            }
+        }
+
+        return format;
+    }
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#consultProfitAndLossTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 1);
+                }
+            }
+        });
+    })
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#userStatisticsTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 2);
+                }
+            }
+        });
+    })
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#userRechargeWithdrawStatisticsTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 3);
+                }
+            }
+        });
+    })
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#consultStatisticsTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 4);
+                }
+            }
+        });
+    })
+
+    function submitHandler(start_time = '', end_time = '', type = 0) {
+        $.ajax({
+            url: $(".sub_url").val(),
+            type: "post",
+            data: {
+                start_time: start_time,
+                end_time: end_time,
+                type: type
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    var profit_loss_days = data.profit_loss_data.days;
+                    var profit_loss_returns = data.profit_loss_data.returns;
+
+                    var user_statistics_days = data.user_statistics_data.days;
+                    var user_statistics_returns = data.user_statistics_data.returns;
+
+                    var recharge_withdrawal_days = data.recharge_withdrawal_data.days;
+                    var recharge_withdrawal_returns = data.recharge_withdrawal_data.returns;
+
+                    var contract_statistics_days = data.contract_statistics_data.days;
+                    var contract_statistics_returns = data.contract_statistics_data.returns;
+                    // layer.msg(data.msg, function () {
+                    //     if(data.url) window.location.href = data.url
+                    // })
+                    getdatainfo(profit_loss_days, profit_loss_returns, user_statistics_days, user_statistics_returns, recharge_withdrawal_days, recharge_withdrawal_returns, contract_statistics_days, contract_statistics_returns)
+                    console.log('返回的数据', profit_loss_returns);
+                }
+            }
+        })
+    }
+
+    function getBeforeDate(day) {
+        var today = new Date();
+
+        var targetday_milliseconds = today.getTime() + 1000 * 60 * 60 * 24 * day;
+
+        today.setTime(targetday_milliseconds); //注意，这行是关键代码
+
+        var tYear = today.getFullYear();
+
+        var tMonth = today.getMonth();
+
+        var tDate = today.getDate();
+
+        tMonth = doHandleMonth(tMonth + 1);
+
+        tDate = doHandleMonth(tDate);
+
+        return tYear + "-" + tMonth + "-" + tDate;
+
+    }
+
+    function doHandleMonth(month) {
+        var m = month;
+        if (month.toString().length == 1) {
+            m = "0" + month;
+        }
+        return m;
+
+    }
+
+
+    function getdatainfo(profit_loss_days = '', profit_loss_returns = '', user_statistics_days = '', user_statistics_returns = '', recharge_withdrawal_days = '', recharge_withdrawal_returns = '', contract_statistics_days = '', contract_statistics_returns = '') {
+        // 基于准备好的dom，初始化echarts实例
+        //结算盈亏面板
+        var myChart = echarts.init(document.getElementById('echarts-consultProfitAndLoss'));
+        //用户统计
+        var myChartUserStatistics = echarts.init(document.getElementById('echarts-userStatistics'));
+
+        //充值提现
+        var myChartRechargeWithdrawStatistics = echarts.init(document.getElementById('echarts-RechargeWithdrawStatistics'));
+
+        //合约统计
+        var myChartConsultStatistics = echarts.init(document.getElementById('echarts-consultStatistics'));
+
+        // alert(myChart)
+
+        var profit_loss_days = profit_loss_days ? profit_loss_days : {$profit_loss_data.days|raw};
+        var profit_loss_returns = profit_loss_returns ? profit_loss_returns : {$profit_loss_data.returns|raw};
+
+        var user_statistics_days = user_statistics_days ? user_statistics_days : {$user_statistics_data.days|raw};
+        var user_statistics_returns = user_statistics_returns ? user_statistics_returns : {$user_statistics_data.returns|raw};
+
+        var recharge_withdrawal_days = recharge_withdrawal_days ? recharge_withdrawal_days : {$recharge_withdrawal_data.days|raw};
+        var recharge_withdrawal_returns = recharge_withdrawal_returns ? recharge_withdrawal_returns : {$recharge_withdrawal_data.returns|raw};
+
+        var contract_statistics_days = contract_statistics_days ? contract_statistics_days : {$contract_statistics_data.days|raw};
+        var contract_statistics_returns = contract_statistics_returns ? contract_statistics_returns : {$contract_statistics_data.returns|raw};
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+                show: true,    // 是否显示提示框组件
+                trigger: 'axis',    // 触发类型（'item'，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用；'axis'，坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用；'none'，不触发。）
+                axisPointer: {
+                    type: 'line',    // 指示器类型（'line' 直线指示器；'shadow' 阴影指示器；'none' 无指示器；'cross' 十字准星指示器。）
+                    snap: false,    // 坐标轴指示器是否自动吸附到点上。默认自动判断。
+                    label: {
+                        margin: 10,    // label 距离轴的距离
+                        color: '#FFF',     // 文字的颜色
+                        fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                        fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                        fontSize: '20',    // 文字字体大小
+                        lineHeight: '50',    // 行高
+                        padding: [5, 7, 5, 7],    // 内边距，单位px
+                        backgroundColor: 'auto',    // 文本标签的背景颜色
+                    }
+                },
+                showContent: true,     // 是否显示提示框浮层，默认显示
+                alwaysShowContent: false,     // 是否永远显示提示框内容，默认情况下在移出可触发提示框区域后一定时间后隐藏
+                confine: true,    // 是否将 tooltip 框限制在图表的区域内
+                textStyle: {
+                    color: '#FFF',     // 文字的颜色
+                    fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                    fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                    fontSize: '20',    // 文字字体大小
+                    lineHeight: '50',    // 行高
+                },
+
+            },
+            legend: {
+                data: ['合约结算盈亏', '扩大利息', '申请利息', '续期利息'],
+            },
+            xAxis: {
+                data: profit_loss_days,
+                axisLabel: {
+                    interval: 0,
+                }
+            },
+            yAxis: {},
+            series: profit_loss_returns
+        };
+
+        var optionUserStatistics = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+                show: true,    // 是否显示提示框组件
+                trigger: 'axis',    // 触发类型（'item'，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用；'axis'，坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用；'none'，不触发。）
+                axisPointer: {
+                    type: 'line',    // 指示器类型（'line' 直线指示器；'shadow' 阴影指示器；'none' 无指示器；'cross' 十字准星指示器。）
+                    snap: false,    // 坐标轴指示器是否自动吸附到点上。默认自动判断。
+                    label: {
+                        margin: 10,    // label 距离轴的距离
+                        color: '#FFF',     // 文字的颜色
+                        fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                        fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                        fontSize: '20',    // 文字字体大小
+                        lineHeight: '50',    // 行高
+                        padding: [5, 7, 5, 7],    // 内边距，单位px
+                        backgroundColor: 'auto',    // 文本标签的背景颜色
+                    }
+                },
+                showContent: true,     // 是否显示提示框浮层，默认显示
+                alwaysShowContent: false,     // 是否永远显示提示框内容，默认情况下在移出可触发提示框区域后一定时间后隐藏
+                confine: true,    // 是否将 tooltip 框限制在图表的区域内
+                textStyle: {
+                    color: '#FFF',     // 文字的颜色
+                    fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                    fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                    fontSize: '20',    // 文字字体大小
+                    lineHeight: '50',    // 行高
+                },
+
+            },
+            legend: {
+                data: ['活跃用户', '买卖股票用户', '新注册用户数', '申请合约用户', '充值提现'],
+
+            },
+            xAxis: {
+                rotate: 50,
+                data: user_statistics_days,
+
+                axisLabel: {
+                    interval: 0,
+                }
+
+
+            },
+
+
+            yAxis: {},
+            series: user_statistics_returns
+        };
+
+
+        var optionRechargeWithdrawStatistics = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+                show: true,    // 是否显示提示框组件
+                trigger: 'axis',    // 触发类型（'item'，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用；'axis'，坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用；'none'，不触发。）
+                axisPointer: {
+                    type: 'line',    // 指示器类型（'line' 直线指示器；'shadow' 阴影指示器；'none' 无指示器；'cross' 十字准星指示器。）
+                    snap: false,    // 坐标轴指示器是否自动吸附到点上。默认自动判断。
+                    label: {
+                        margin: 10,    // label 距离轴的距离
+                        color: '#FFF',     // 文字的颜色
+                        fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                        fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                        fontSize: '20',    // 文字字体大小
+                        lineHeight: '50',    // 行高
+                        padding: [5, 7, 5, 7],    // 内边距，单位px
+                        backgroundColor: 'auto',    // 文本标签的背景颜色
+                    }
+                },
+                showContent: true,     // 是否显示提示框浮层，默认显示
+                alwaysShowContent: false,     // 是否永远显示提示框内容，默认情况下在移出可触发提示框区域后一定时间后隐藏
+                confine: true,    // 是否将 tooltip 框限制在图表的区域内
+                textStyle: {
+                    color: '#FFF',     // 文字的颜色
+                    fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                    fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                    fontSize: '20',    // 文字字体大小
+                    lineHeight: '50',    // 行高
+                },
+
+            },
+
+            legend: {
+                data: ['充值金额', '提现金额', '充值返现', '提现用户', '充值用户'],
+
+            },
+            xAxis: {
+                data: recharge_withdrawal_days,
+                axisLabel: {
+                    interval: 0,
+                }
+            },
+            yAxis: {},
+            series: recharge_withdrawal_returns
+        };
+
+        var optionConsultStatistics = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+                show: true,    // 是否显示提示框组件
+                trigger: 'axis',    // 触发类型（'item'，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用；'axis'，坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用；'none'，不触发。）
+                axisPointer: {
+                    type: 'line',    // 指示器类型（'line' 直线指示器；'shadow' 阴影指示器；'none' 无指示器；'cross' 十字准星指示器。）
+                    snap: false,    // 坐标轴指示器是否自动吸附到点上。默认自动判断。
+                    label: {
+                        margin: 10,    // label 距离轴的距离
+                        color: '#FFF',     // 文字的颜色
+                        fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                        fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                        fontSize: '20',    // 文字字体大小
+                        lineHeight: '50',    // 行高
+                        padding: [5, 7, 5, 7],    // 内边距，单位px
+                        backgroundColor: 'auto',    // 文本标签的背景颜色
+                    }
+                },
+                showContent: true,     // 是否显示提示框浮层，默认显示
+                alwaysShowContent: false,     // 是否永远显示提示框内容，默认情况下在移出可触发提示框区域后一定时间后隐藏
+                confine: true,    // 是否将 tooltip 框限制在图表的区域内
+                textStyle: {
+                    color: '#FFF',     // 文字的颜色
+                    fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                    fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                    fontSize: '20',    // 文字字体大小
+                    lineHeight: '50',    // 行高
+                },
+
+            },
+            legend: {
+                data: ['新开合约', '强平合约', '结算合约', '穿仓合约'],
+
+            },
+            xAxis: {
+                data: contract_statistics_days,
+                axisLabel: {
+                    interval: 0,
+                }
+            },
+            yAxis: {},
+            series: contract_statistics_returns
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        myChartUserStatistics.setOption(optionUserStatistics);
+
+        myChartRechargeWithdrawStatistics.setOption(optionRechargeWithdrawStatistics);
+
+        myChartConsultStatistics.setOption(optionConsultStatistics);
+    }
+
+
+</script>
+
+</body>
+</html>

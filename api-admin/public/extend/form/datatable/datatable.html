@@ -1,0 +1,79 @@
+<div class="form-group col-lg-{$_layout[$name]['lg']|default='12'} col-md-{$_layout[$name]['md']|default='12'} col-sm-{$_layout[$name]['sm']|default='12'} col-xs-{$_layout[$name]['xs']|default='12'} {$extra_class|default=''}"
+     id="form_group_{$name}">
+    <label class="col-xs-12" for="{$name}">{$title|htmlspecialchars}</label>
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped" id="table-{$name}">
+            <thead>
+            <tr>
+                {volist name="fields" id="vo"}
+                <th>{$vo.title}</th>
+                {/volist}
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {empty name="data"}
+            <tr class="empty">
+                <td colspan="{:count($fields)+1}" class="text-center text-muted">暂无数据</td>
+            </tr>
+            {else/}
+            {volist name="data" id="vo"}
+            {php}$k0 = $key+1;{/php}
+            <tr id="table-{$name}-tr-{$key}">
+                {volist name="fields" id="field"}
+                {php}$k = $key;{/php}
+
+                {switch name="field.type"}
+                {case value="text"}
+                <td><input class="form-control" type="text" name="{$name}[{$key}][]" value="{$vo[$k]}"
+                           placeholder="请填写..."></td>
+                {/case}
+
+                {case value="select"}
+
+                <td>
+                    <select class="form-control" name="{$name}[{$key}][]">
+                        <option value="">请选择...</option>
+                        {volist name="field.options" id="option"}
+                        <option value="{$key}" {$key== $vo[$k] ?="selected" }>{$option|default=''}</option>
+                        {/volist}
+                    </select>
+                </td>
+                {/case}
+                {case value="checkbox"}
+                <td>
+
+                    {volist name="field.options" id="option"}
+
+
+                    <label class="css-input css-checkbox css-checkbox-primary css-checkbox-sm css-checkbox-rounded">
+                        <input type="checkbox" name="{$name}[{$k}][{$k0}][{$key}]"
+                               id="{$name}{$key}"
+                               value="{$key}"
+                               {if in_array($key,$vo[$k])}checked{/if}
+                        >
+                        <span></span> {$option|raw|htmlspecialchars}
+                    </label>
+
+                    {/volist}
+                </td>
+                {/case}
+                {/switch}
+                {/volist}
+                <td>
+                    <button class="btn btn-sm btn-danger js-delete-line" type="button"><i class="fa fa-times"></i> 删除
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {/empty}
+            </tbody>
+        </table>
+        <div class="push-10-t">
+            <button class="btn btn-xs btn-info push-5-r push-10 js-add-new" type="button" data-table="{$name}"
+                    data-fields='{:json_encode($fields)}'><i class="fa fa-plus"></i> 添加新行
+            </button>
+        </div>
+        <div class="help-block">{$tips|raw|default=''}</div>
+    </div>
+</div>

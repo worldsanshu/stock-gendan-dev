@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+
+        <title>{:config('web_site_title')}-管理</title>
+
+        <meta name="description" content="">
+        <meta name="robots" content="noindex, nofollow">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="/favicon.ico">
+
+        <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-16x16.png" sizes="16x16">
+        <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-96x96.png" sizes="96x96">
+        <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-160x160.png" sizes="160x160">
+        <link rel="icon" type="image/png" href="__ADMIN_IMG__/favicons/favicon-192x192.png" sizes="192x192">
+
+        <link rel="apple-touch-icon" sizes="57x57" href="__ADMIN_IMG__/favicons/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="__ADMIN_IMG__/favicons/apple-touch-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="__ADMIN_IMG__/favicons/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="__ADMIN_IMG__/favicons/apple-touch-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="__ADMIN_IMG__/favicons/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="__ADMIN_IMG__/favicons/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="__ADMIN_IMG__/favicons/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="__ADMIN_IMG__/favicons/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="__ADMIN_IMG__/favicons/apple-touch-icon-180x180.png">
+        <!-- END Icons -->
+
+
+        <!-- Stylesheets -->
+
+        <!-- Page JS Plugins CSS -->
+        <link rel="stylesheet" href="__STATIC__/libs/sweetalert/sweetalert.min.css">
+
+        <!-- Bootstrap and OneUI CSS framework -->
+        <link rel="stylesheet" href="__ADMIN_CSS__/bootstrap.min.css">
+        <link rel="stylesheet" id="css-main" href="__ADMIN_CSS__/oneui.css">
+        <link rel="stylesheet" href="__ADMIN_CSS__/dolphin.css">
+
+        <!-- END Stylesheets -->
+
+        <script src="https://cdn.vaptcha.com/v2.js"></script>
+    </head>
+    <body>
+    <style type="text/css">
+        .code form{margin:200px auto;width:500px;}
+        .code  label{font-size:14px;color:#555;line-height:40px;margin-right:10px;}
+        .code  input{width:212px;height:38px;border-style:none;padding:0 4px;border:1px solid #C8C8C8;margin-right:10px;outline:none;}
+        .code   .msgs{display:inline-block;width:104px;color:#fff;font-size:12px;border:1px solid #0697DA;text-align:center;height:30px;line-height:30px;background:#0697DA;cursor:pointer;}
+        .code    .msgs1{background:#E6E6E6;color:#818080;border:1px solid #CCCCCC;}
+        .text-center img{
+            width: 320px;
+        }
+    </style>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModalLabel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title" id="myModalLabel2">
+                       输入谷歌验证码
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <div class="form-group code">
+
+                        <label for="phone">登录账号</label>
+                        <input type="text" id="phone" name="phone" class="c_code_msg" readonly unselectable="on" style="margin-right: 10px;">
+
+                    </div>
+                    <div class="form-group code">
+                        <label >验&nbsp;&nbsp;证&nbsp;码</label>
+                        <input type="text" id="code" name="code" class="c_code_msg" style="margin-right: 10px;">
+
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="codeid" name="codeid" class="c_code_msg" style="margin-right: 10px;">
+                    <button type="button" id="wtmc" disabled="disabled" class="btn btn-primary">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+    <!-- Login Content -->
+        <div class="bg-white">
+            <div class="content content-boxed overflow-hidden">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+                        <div class="push-30-t push-50 animated fadeIn">
+                            <!-- Login Title -->
+                            <div class="text-center">
+                                <img src="{:get_files_path(config('web_site_logo_text'))}" >
+                                <p class="text-muted push-15-t">策略系统</p>
+                            </div>
+                            <!-- END Login Title -->
+
+                            <!-- Login Form -->
+                            <form class="js-validation-login form-horizontal push-30-t signin-form" name="signin-form" action="/admin_user" method="post">
+                                <div class="form-group">
+                                    <label class="col-xs-12" for="login-username">用户名</label>
+                                    <div class="col-xs-12">
+                                        <input class="form-control" type="text" id="login-username" name="username"  onblur="ckeiu()"  placeholder="请输入您的用户名">
+                                    </div>
+                                </div>
+                               <div class="form-group">
+                                    <label class="col-xs-12" for="login-password">密码</label>
+                                    <div class="col-xs-12">
+                                        <input class="form-control" type="password" id="login-password" name="password"   onblur="ckeiu()"  placeholder="请输入您的密码">
+                                    </div>
+                                </div>
+
+                          {notempty name="Think.config.captcha_signin"}
+                                <div class="form-group">
+                                    <label class="col-xs-12" for="login-password">验证码</label>
+                                    <div class="col-xs-7">
+                                        <input class="form-control" type="text" name="captcha" placeholder="请输入验证码">
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <img src="{:captcha_src()}" class="pull-right" id="captcha" style="cursor: pointer;" onclick="this.src='{:captcha_src()}?d='+Math.random();" title="点击刷新" alt="captcha" />
+                                    </div>
+                                </div>
+
+                                {/notempty}
+
+
+
+                                <script>
+                                    //验证是否为空  v2   返回 空为true  不为空着false
+                                    function emptyempty_v2(mixed_var) {
+                                        var key;
+                                        if (mixed_var == "" || mixed_var == 0 || mixed_var == "0" || mixed_var == null || mixed_var == false || mixed_var == '' || typeof(mixed_var) == "undefined") {
+                                            return true;
+                                        }
+                                        if (typeof mixed_var == 'object') {
+                                            for (key in mixed_var) {
+                                                return false;
+                                            }
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+
+                                function ckeiu(){
+                                    var username=$("#login-username").val();
+                                    var password=$("#login-password").val();
+                                    var codeq=$("#codeq").val();
+
+                                    if(!emptyempty_v2(username)&&!emptyempty_v2(password)&&!emptyempty_v2(codeq)){
+                                        $("#submit").attr("disabled",false);
+
+
+                                    }
+                                }
+                                </script>
+                                {// 登录框钩子}
+                                {:hook('signin_captcha')}
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                       <label class="css-input switch switch-sm switch-primary">
+                                            <input type="checkbox" id="login-remember-me" name="remember-me"><span></span> 7天内自动登录?
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="font-s13 text-right push-5-t">
+                                            <a href="">忘记密码?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group push-30-t">
+                                    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4" id="hiddeninfo">
+                                        <button class="btn btn-block btn-primary"  id="submit" type="submit">登 录</button>
+                                        <input name="vaptcha_token" type="hidden" id="codeq" value="0" />
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END Login Form -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Login Content -->
+
+        <!-- Login Footer -->
+        <div class="pulldown push-30-t text-center animated fadeInUp">
+            <small class="text-muted"><span class="js-year-copy"></span> &copy; {:config('panel.product_version')}</small>
+        </div>
+        <!-- END Login Footer -->
+
+        <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+        <script src="__ADMIN_JS__/core/jquery.min.js"></script>
+        <script src="__ADMIN_JS__/core/bootstrap.min.js"></script>
+        <script src="__ADMIN_JS__/core/jquery.slimscroll.min.js"></script>
+        <script src="__ADMIN_JS__/core/jquery.scrollLock.min.js"></script>
+        <script src="__ADMIN_JS__/core/jquery.appear.min.js"></script>
+        <script src="__ADMIN_JS__/core/jquery.countTo.min.js"></script>
+        <script src="__ADMIN_JS__/core/jquery.placeholder.min.js"></script>
+        <script src="__ADMIN_JS__/core/js.cookie.min.js"></script>
+        <script src="__ADMIN_JS__/app.js"></script>
+
+        <!-- Page JS Plugins -->
+        <script src="__STATIC__/libs/jquery-validation/jquery.validate.min.js"></script>
+        <script src="__STATIC__/libs/bootstrap-notify/bootstrap-notify.min.js"></script>
+        <script src="__STATIC__/libs/sweetalert/sweetalert.min.js"></script>
+
+        <!-- Page JS Code -->
+        <script src="__ADMIN_JS__/dolphin.js"></script>
+        {:hook('signin_footer')}
+        <script>
+            $(document).ready(function () {
+                $('.signin-form').on('submit', function () {
+                    var $data = $(this).serialize();
+
+                    Dolphin.loading();
+                    $.post($(this).attr('action'), $data, function (res) {
+                        Dolphin.loading('hide');
+                        console.log(res.code);
+                        if (res.code) {
+                            Dolphin.notify('验证成功1', 'success');
+                            console.log(res.msg);
+                            console.log(res.data);
+                            if(res.data===1){
+
+                                // 跳转到指定URL
+                                window.location.href =  res.url;
+
+                            }
+                            else if(res.msg=='验证成功'){
+                                $('#myModalLabel').modal({ show: true, backdrop: 'static' });
+
+                                var datainfo=res.data;
+                                var result=datainfo.split("-");
+                                $("#codeid").val(result[0]);
+                                $("#phone").val($("#login-username").val());
+
+                            }
+
+
+
+                        } else {
+                            if (res.msg == '验证码错误或失效') {
+                                $('#captcha').click();
+                            }
+                            Dolphin.notify(res.msg, 'danger');
+                        }
+                    }).fail(function () {
+                        Dolphin.loading('hide');
+                        Dolphin.notify('服务器错误~', 'danger');
+                    });
+                    return false;
+                });
+            });
+        </script>
+    <script type="text/javascript">
+        $(function() {
+            //获取短信验证码
+            $("#wtmc").click(function() {
+                var phone = $("#phone").val();
+                var code = $("#code").val();
+                if (phone == '') {
+                    alert("电话不能为空");
+                    return false
+                }
+                if (code == '') {
+                    alert("验证码不能为空");
+                    return false
+                }
+
+                $.ajaxSettings.async = false;
+                Dolphin.loading();
+                $.post("{:url('inspect')}", {
+                    codeid: $("#codeid").val(),
+                    phone: phone,
+                    code: code,
+                    md: '{$token}'
+                }, function(res) {
+                    Dolphin.loading('hide');
+                    if (res.code) {
+                        Dolphin.notify('登录成功~', 'success');
+                        setTimeout(function () {
+                            console.log(res.url);
+                            location.href = res.url;
+                        }, 1500);
+
+                    }else{
+					   Dolphin.notify(res.msg, 'danger');
+					   }
+                }).fail(function() {
+                    Dolphin.loading('hide');
+                    Dolphin.notify('服务器错误~', 'danger');
+                });
+
+            })
+
+
+
+        })
+        function resmdcode() {
+            validCode=true;
+            var time=30;
+            var code=$(".msgs");
+            if (validCode) {
+                validCode=false;
+                code.addClass("msgs1");
+                var t=setInterval(function  () {
+                    time--;
+                    code.html(time+"秒");
+                    if (time==0) {
+                        clearInterval(t);
+                        code.html("重新获取");
+                        validCode=true;
+                        code.removeClass("msgs1");
+
+                    }
+                },1000)
+            }
+        }
+
+
+
+
+        $('#code').on('input propertychange', function() {
+
+            var x=$(this).val();
+            if (x.length >= 4) {
+                $("#wtmc").attr("disabled", false);
+            }
+        });
+    </script>
+    </body>
+</html>

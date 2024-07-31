@@ -1,0 +1,27 @@
+https://gendan.topic.run/stock/crond/minute	每分钟-处理平仓 任务
+https://gendan.topic.run/stock/crond/temp	每分钟-限价交易处理任务
+https://gendan.topic.run/stock/crond/day    每日-自动续期定时任务、按月配资自动扣费  2点45分
+https://gendan.topic.run/stock/crond/register  每日-股权登记
+https://gendan.topic.run/stock/crond/cb_pire	每分钟-自动重算 批量操作成本价
+https://gendan.topic.run/stock/crond/ex_dividend  每日-除权日
+https://gendan.topic.run/stock/crond/updateStockRealTime   获取行情每次更新100条 ，5分钟执行一次 (已暂停，原因：调用F10的数据源)
+https://gendan.topic.run/stock/crond/getTradeDate  获取交易日  一个月执行一次
+https://gendan.topic.run/stock/crond/updateDayData  更新日报数据 (每晚23：50更新)
+
+
+/stock/crond/autoSettlementFund 基金每天15:00点结算盈亏
+--------------------------------------
+
+/stock/crond/autobuildgsrecord 每天生成  下单任务 (每晚00：00更新)  --弃用
+/stock/Crond/getkuaixun 新闻快讯 半小时获取一次
+/stock/Crond/getnaws 每日快讯
+/stock/crond/partnerCrond 合伙人-计算业绩 每分钟
+/stock/crond/partnerTeamSharing 合伙人-团队分成 每天生成 (每晚00：00更新)
+/stock/crond/partnerWeekSalary 合伙人-周工资 每周生成 (每周一00：01更新)
+/stock/crond/autoDailyTrading  每日操盘自动自动结算  下午3点结算
+/stock/crond/endfundorder  自动检查合约到期自动结束  下午3点十分结算
+
+/stock/crond/autoYesterDailyFloat  生成昨日的收益率 (每晚00：00更新)
+/stock/crond/autoDailyRebate  每日余额宝返利 (每填10：00更新)
+
+

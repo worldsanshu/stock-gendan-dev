@@ -1,0 +1,125 @@
+<p>Hợp đồng quản lý quỹ đầu tư chứng khoán</p>
+<p><strong>Bên A (người ủy thác): Cửu Đỉnh</strong><strong><strong>Đầu tư</strong>Cổ phiếu</strong></strong></p>
+<p>Địa chỉ liên lạc:<strong><strong><strong><strong><strong><strong><strong><strong><strong></strong></p>
+<p>Số tiền ủy thác:<u>￥ [borrowMoney]</u></p>
+<p>Thời hạn ủy quyền:<u>[borrow_duration][type]</u></p>
+B5-05=giá trị thông số Kd, (cài 2)
+<p> </ p>
+<p>(Lưu ý: Có làm tròn trong tính toán.)
+<p>Bên B (người được ủy thác): [user_name]</p>
+<p> </ p>
+<table border="1px" cellspacing="0px" style="width:100%">
+<tbody>
+<tr>
+<td>Tên thật</td>
+<td>Số chứng minh thư</td>
+<td>Tên người dùng</td>
+</tr>
+<tr>
+<td>[real_name]</td>
+<td>[idcard]</td>
+<td>[user_name]</td>
+</tr>
+</tbody>
+</table>
+<p> </ p>
+<p><strong>Đầu tiên    nbsp;  Tổng quát</strong></p>
+<p>1, Bên A là một công ty trách nhiệm hữu hạn được thành lập và tồn tại hiệu quả theo quy định của pháp luật, sở hữu quyền kinh doanh của trang web (sau đây gọi là“[web_name]”), quản lý tín dụng, lợi ích xứng đáng của người dùng trang web, chịu trách nhiệm về khoản 4 Điều 9 của Thỏa thuận này; p>
+<p>2, Bên B đã đăng ký với trang web [web_name] và cam kết rằng thông tin mà Bên A cung cấp là hoàn toàn đúng sự thật; p>
+<p>3 Bên A cam kết hoàn toàn chi phối các quỹ ủy thác liên quan đến Thỏa thuận này, là các quỹ nhàn rỗi của riêng mình, thu được hợp pháp; và cam kết rằng thông tin mà họ cung cấp cho bên A là hoàn toàn đúng sự thật;</ p>
+4. Bên B có kỹ thuật giao dịch cổ phiếu có thể kiếm được lợi nhuận trên thị trường chứng khoán, bên A sẵn sàng ủy thác vốn trong tài khoản cổ phiếu cho bên B quản lý để nhận được lợi nhuận cố định, hai bên có ý định thiết lập quan hệ ủy thác quản lý vốn. p>
+<p><strong>Theo đó, các bên đã đạt được thỏa thuận sau đây, với sự đồng ý của các bên, để cùng tuân thủ:</strong></p>
+<p> </ p>
+<p><strong>Phần 2   nbsp;  Cách sử dụng</strong></p>
+<p>  1. Hai bên đồng ý ủy thác quản lý vốn theo thỏa thuận này, bên B thông qua bên A trả lãi suất cho bên A theo ngày một lần. Về số tiền ủy thác, lãi suất hàng ngày và hàng tháng của quỹ, số tiền ký quỹ, thời hạn ủy thác, ngày trả lãi, phương thức trả lãi, v.v. các bên thỏa thuận như sau:
+<p> </ p>
+<table border="0" cellpadding="0" cellspacing="0" >
+<tbody>
+<tr>
+<td>
+<p>Số tiền ủy thác</p>
+</td>
+<td>
+<p>￥[borrowMoney]</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Tiền [type] Lãi suất</p>
+</td>
+<td>
+<p><u>[rate]</u>%</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Số tiền ký quỹ</p>
+</td>
+<td>
+<p>￥ [deposit_money] Nhân dân tệ</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Thời hạn ủy quyền</p>
+</td>
+<td>
+<p><u>[borrow_duration]</u>  [type]，  [add_time] từ , đến  [end_time] kết thúc</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Ngày hết hạn</p>
+</td>
+<td>
+<p>[end_time]  (Trước 24:00, ngày lễ được hoãn lại)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Phương thức thanh toán</p>
+</td>
+<td>
+<p>Thanh toán lãi suất hàng tháng một lần tại thời điểm ủy thác Thanh toán sớm</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p> </ p>
+<p>2 Sau khi hai bên ký kết Thỏa thuận ủy thác quản lý quỹ, bên A chuyển tiền ủy thác của bên A và ký quỹ của bên B từ tài khoản ngân hàng được chỉ định vào tài khoản giao dịch chứng khoán của bên A, đồng thời thông báo cho bên B số tài khoản giao dịch chứng khoán và mật khẩu giao dịch. p>
+<p>3, Bên B có thể sử dụng tổng số tiền trong tài khoản giao dịch chứng khoán nói trên (bao gồm cả tiền ủy thác và ký quỹ) để mua cổ phiếu được giao dịch tại Sở giao dịch chứng khoán Thượng Hải hoặc Thâm Quyến, lợi nhuận thuộc sở hữu của Bên B và lỗ do Bên B chịu, tức là tất cả rủi ro và hậu quả phát sinh từ hoạt động mua bán cổ phiếu của Bên B đối với tài khoản nói trên do Bên B chịu, không liên quan đến Bên A, Bên A. p>
+Cổ phiếu mua của bên B trên nguyên tắc phải có thành tích tốt, quy mô vốn lưu thông vừa phải, tính lưu động tốt. Bên B mua cổ phiếu phải dựa theo các điều kiện sau đây:
+<p> & nbsp;& nbsp; 1) Không mua S, ST, *ST, S*ST, SST và các cổ phiếu được xử lý đặc biệt bởi sàn giao dịch; Không được mua cổ phiếu có lợi nhuận đáng kể (bao gồm nhưng không giới hạn ở việc bị SFC hoặc cơ quan công an điều tra); Không mua cổ phiếu mà hệ thống mặc định vào danh sách đen; p>
+<p> & nbsp;& nbsp; b) Không được mua cổ phiếu có giá dưới 5 tệ; Không được mua quỹ; Không mua cổ phiếu mới</ p>
+<p> & nbsp;& nbsp; c) Không được mua cổ phiếu ngày đầu tiên sau khi đình chỉ; Không được mua cổ phiếu mới niêm yết ngày đầu tiên; Không được mua cổ phiếu không có giới hạn tăng giảm; Không mua cổ phiếu đã giảm 7% trong ngày (bao gồm cả cổ phiếu đã mở bảng giảm giá trong ngày); p>
+<p> & nbsp;& nbsp; (4) Một cổ phiếu của bo mạch chủ, một cổ phiếu đầy kho.
+<p>  & nbsp; B5-05=giá trị thông số Kd, (cài 2)
+<p>  Nếu tính theo giá đóng cửa, bên B vi phạm thỏa thuận vào một ngày giao dịch nhất định, thì bên B phải tự điều chỉnh tỷ lệ đã thỏa thuận trước 10:30 sáng ngày giao dịch tiếp theo, nếu không bên A có quyền bán hoàn toàn các loại cổ phiếu vi phạm thỏa thuận này với bất kỳ giá nào có thể giao dịch. p>
+<p>5 Bên A và Bên B nhất trí ủy thác Bên A tiến hành quản lý tài khoản và kiểm soát rủi ro toàn bộ quá trình đối với Bên B, trong quá trình Bên B sử dụng tài khoản giao dịch chứng khoán để thực hiện giao dịch đầu tư, Bên B sẵn sàng chấp nhận sự giám sát của Bên A và Bên A.</p> p>
+6. Quyền giải thích quy tắc trên thuộc về bên A, bên A có thể căn cứ vào nhu cầu nghiệp vụ và kiểm soát gió, đồng thời bảo lưu sửa đổi và hoàn thiện cần thiết đối với quy tắc tham gia, nếu có điều chỉnh bên A sẽ kịp thời công bố trên trang web của mình, nếu hai bên A và B tiếp tục sử dụng dịch vụ này sau khi thay đổi thông báo nội dung của thỏa thuận này và quy tắc cụ thể, cho thấy hai bên A và B đã đọc, hiểu và chấp nhận đầy đủ nội dung thỏa thuận và quy tắc cụ thể sau khi sửa đổi, Việc sử dụng các dịch vụ của trang web này cũng sẽ tuân theo các thỏa thuận sửa đổi và các quy tắc cụ thể; Đồng thời, liên quan đến các giao dịch được thực hiện bởi các bên A và B thông qua trang web này và hiệu lực của chúng trước khi sửa đổi Thỏa thuận và Quy tắc cụ thể, được coi là bạn đã đồng ý và đã thực hiện ủy quyền và truy cứu tương ứng theo Thỏa thuận này và các quy tắc liên quan. p>
+<p> </ p>
+<p><strong>Phần 3    nbsp;  Giao thức</strong></p>
+<p>1. Các bên đồng ý và xác nhận rằng các bên xác nhận việc ký kết Thỏa thuận này bằng cách tự mình hoặc ủy quyền cho các bên liên quan thực hiện yêu cầu ủy quyền tài trợ và hoạt động đăng ký trên trang web [web_name] theo các quy tắc và mô tả liên quan của [web_name]. p>
+(2) Thỏa thuận này được thành lập ngay khi hai bên chấp nhận Thỏa thuận này thông qua các phương thức trên và khi Bên A xem xét và thông qua; Đồng thời với việc thành lập thỏa thuận, ủy quyền không thể hủy ngang của Bên A sẽ được chuyển khoản ủy thác vào tài khoản giao dịch chứng khoán do Bên B điều hành.</ p>
+<p>3. Bên A đồng ý và ủy quyền cho Bên A khấu trừ và thanh toán các khoản tiền ủy thác và các chi phí liên quan theo thỏa thuận của Thỏa thuận này và các quy tắc liên quan đến trang web [web_name] và thay mặt Bên A thu các khoản tiền liên quan do Bên B thanh toán. p>
+<p> </ p>
+<p><strong>Khoản ký quỹ và phạm vi bảo đảm</strong></p>
+1. Bên B phải thanh toán tiền ký quỹ vào tài khoản do bên A chỉ định và kịp thời bổ sung tiền ký quỹ theo thỏa thuận quản lý ủy thác. Trong trường hợp Bên B gọi ký quỹ hoặc chuyển một phần tiền thắng thành ký quỹ, Bên A phải thông báo xác nhận.</ p>
+<p>2, Phạm vi bảo đảm ký quỹ của bên B bao gồm nhưng không giới hạn: tiền gốc và lãi suất của quỹ ủy thác, tiền chậm nộp, tiền vi phạm hợp đồng, tiền bồi thường thiệt hại.</p> p>
+<p>3 Trong trường hợp Bên B không thanh toán kịp thời một trong hai khoản tiền, Bên A có quyền đóng các vị trí rút tiền hoặc sửa đổi mật khẩu hạn chế mua bán từ tài khoản giao dịch chứng khoán tương ứng với khoản tiền ủy thác đó và sau đó thu tiền còn nợ trực tiếp từ số tiền ký quỹ tương ứng với khoản tiền ủy thác đó, Bên A có quyền khấu trừ từ số tiền ký quỹ của các quỹ ủy thác khác của Bên B nếu số tiền ký quỹ của khoản tiền ủy thác đó không đủ để thanh toán. p>
+4. Bên B ủy quyền cho bên A, nếu bên B không thực hiện được bất kỳ nghĩa vụ nào đã thỏa thuận trong Hiệp định này, bên A có thể trực tiếp khấu trừ khoản nợ phải trả từ tiền ký quỹ của bên B, bất kể có thông báo trước cho bên B hay không. Ủy quyền này không thể hủy bỏ trong thời hiệu theo luật định của Hiệp định này.</ p>
+<p> </ p>
+<p><strong>Điều 5: Thời hạn ủy thác và lãi suất</strong></p>
+<p>1. Lãi suất quỹ ủy thác được tính theo thỏa thuận trong Thỏa thuận quản lý quỹ ủy thác, lãi suất được tính từ ngày bắt đầu tính từ ngày tài khoản giao dịch chứng khoán được mở và đủ điều kiện giao dịch và bắt đầu tính từ ngày tiền ủy thác của bên A được chuyển vào tài khoản đầy đủ.</p> p>
+2. Thời hạn ủy thác: Kim ngạch và thời hạn ủy thác lấy "Thỏa thuận quản lý vốn ủy thác" làm chuẩn, bên B yêu cầu thanh lý phải thông báo cho bên A trước 5 ngày. p>
+B5-03=giá trị thông số Ki, (cài 3)
+<p> & nbsp;& nbsp; Trả trước và trả sau mỗi tháng, tức là tiền lãi của tháng đầu tiên được trả vào ngày trước khi Bên B bắt đầu sử dụng tiền của Khách hàng, tiền lãi của tháng thứ hai được trả vào ngày Bên B sử dụng tiền của Khách hàng đủ một tháng, v.v. (phải trả trước vào ngày lễ), Bên B phải trả trước lãi suất hàng tháng vào tài khoản do Bên A chỉ định, do Bên A chuyển tiền lãi sang Bên A đúng hạn. p>
+<p>4 Trong trường hợp bên B hoãn thanh toán lãi suất, bên A có quyền trực tiếp đóng chuyển khoản cổ phiếu trong tài khoản giao dịch chứng khoán mà không có sự đồng ý của bên B và thu phí trễ 0,1% mỗi ngày của tổng số tiền lãi còn nợ. Trường hợp bên A sau khi bán giống cổ phiếu với lãi suất, phí trễ, tổng tài sản trong tài khoản giao dịch chứng khoán đạt đến mức cảnh báo hoặc mức đóng thì thực hiện theo mức cảnh báo, mức đóng của thỏa thuận này.</ p>
+Trong thời gian ủy thác, bất kể lý do gì, nếu bên B không sử dụng tài khoản giao dịch chứng khoán để giao dịch hoặc khiến tài khoản chứng khoán không thể giao dịch, bên B phải trả lãi cho bên A theo thỏa thuận này. p>
+<p> </ p>
+<p><strong>Điều 6: Chấm dứt ủy thác và phương thức thanh toán</strong></p>
+Khi tổng tài sản của tài khoản giao dịch chứng khoán (bao gồm cả tiền mặt và chứng khoán) lớn hơn tổng số tiền ủy thác và ký quỹ, lợi nhuận của tài khoản giao dịch chứng khoán được coi là do bên B thu được, bên B có quyền yêu cầu bên A chuyển phần lợi nhuận sang tài khoản bên B, lợi nhuận vượt quá số tiền giao dịch có thể rút, tối thiểu 1000 tệ, tối đa 1 lần mỗi 10 ngày tự nhiên, Thời gian bên A chấp nhận rút tiền có lãi là 9:30-14:30 mỗi ngày giao dịch cho khách hàng nộp đơn sau 14:30, tiền được xử lý trong ngày T+1. Bên A sẽ hoàn thành việc chuyển tiền trong vòng một ngày kể từ ngày nhận được thông báo rút tiền của Bên B, trừ trường hợp không hoàn thành việc chuyển tiền trong ngày vì lý do ngân hàng hoặc công ty chứng khoán. p>
+<p>2, xử lý cổ phiếu bị đình chỉ: sau khi tài khoản thỏa thuận xuất hiện cổ phiếu bị đình chỉ, bên A ngay lập tức đóng băng ký quỹ của bên B ở mức 30% giá trị thị trường của cổ phiếu bị đình chỉ, cho đến khi cổ phiếu bị đình chỉ đó được mở bằng tiền mặt (lợi nhuận và lỗ thuộc về bên B) trước khi phát hành, số tiền ký quỹ còn lại của bên B trên 108% giá trị thị trường của tất cả các cổ phiếu không bị đình chỉ có thể tiếp tục giao dịch, bên B không đạt được yêu cầu trên trong vòng ba ngày để bổ sung ký quỹ, không thể bổ sung ký quỹ, thỏa thuận chấm dứt, Bên A sẽ đóng tất cả các cổ phiếu chưa ngừng thanh toán theo khoản 3 Điều này.</ p>
+3. Mỗi ngày giao dịch trước khi hết hạn ủy thác, bên B phải biến toàn bộ tài sản của tài khoản giao dịch chứng khoán thành tiền tệ. Hết hạn, bên A và bên B làm thủ tục thanh toán tài sản trong tài khoản ủy thác, trong vòng ba ngày sau khi làm thủ tục thanh toán, bên A phải chuyển khoản tiền ngoài vốn gốc và lãi suất của bên A vào tài khoản bên B; Trong trường hợp cổ phiếu bị đình chỉ của bên B không thể bán được, bên B phải giữ lại mức ký quỹ rủi ro 30% vốn hóa thị trường của cổ phiếu bị đình chỉ, sau đó tiếp tục thanh toán lãi suất để tiếp tục thỏa thuận này cho đến khi chấm dứt đình chỉ, nếu không bên A sẽ tính toán khoản lỗ trên tài khoản giao dịch của bên B theo 70% giá đóng cửa cuối cùng trước khi đình chỉ để hoàn thành việc thanh toán tài khoản. p>
+<p>4 Khi hết thời hạn ủy thác hoặc chấm dứt Hợp đồng này, Bên A có quyền thu hồi lại cho Bên B nếu không thu hồi được toàn bộ số tiền ủy thác và lãi suất của mình, Bên B, ngoài việc trả lại toàn bộ số tiền ủy thác và trả lãi cho Bên A, phải trả lãi suất 0,1%/ngày vào tài khoản của Bên A kể từ ngày hết thời hạn ủy thác theo tổng số tiền ủy thác và số tiền ký quỹ. p>
+<p>5 Khi chấm dứt Hợp đồng này vì bất kỳ lý do gì, Bên B sẽ ủy thác tiền của người ủy thác

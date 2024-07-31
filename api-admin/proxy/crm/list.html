@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>信息中心</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/top_style.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/tab.js"></script>
+    <script type="text/javascript" src="./js/popups.js"></script>
+
+</head>
+
+<body>
+<section class="aui-flexView">
+    <header class="aui-navBar aui-navBar-fixed b-line">
+        <div class="aui-center">
+            <div class="aui-jop-search"><i class="icon icon-search"></i>
+                <input type="search" id="k" placeholder="匹配任意关键词"><i class="icon icon-search" id="icon"
+                                                                            onclick="getorderlist('seach')"></i>
+            </div>
+        </div>
+    </header>
+    <section class="aui-scrollView">
+        <div class="aui-tab" data-ydui-tab>
+
+
+            <ul class="tab-nav">
+                <li class="tab-nav-item tab-active">
+                    <a href="javascript:;"> <span>全部数据</span>
+                    </a>
+                </li>
+                <li class="tab-nav-item">
+                    <a href="javascript:;"> <span>话术</span>
+                    </a>
+                </li>
+                <li class="tab-nav-item">
+                    <a href="logout.php"> <span>退出登录</span>
+                    </a>
+                </li>
+            </ul>
+
+
+            <div class="tab-panel">
+                <div class="tab-panel-item tab-active">
+                    <div class="aui-tab-head investment_title"><a href="javascript:getorderlist(0);"
+                                                                  class="aui-tab-head-item on">全部数据</a>
+                        <a href="javascript:getorderlist(1);" class="aui-tab-head-item">有电话</a>
+                        <a href="javascript:getorderlist(2);" class="aui-tab-head-item">有微信</a>
+                        <a href="javascript:getorderlist(3);" class="aui-tab-head-item">有姓名</a>
+                        <a href="javascript:getorderlist(4);" class="aui-tab-head-item">有投资阶段</a>
+                        <a href="javascript:getorderlist(5);" class="aui-tab-head-item">有职位</a>
+                        <a href="javascript:getorderlist(6);" class="aui-tab-head-item">待处理</a>
+                    </div>
+                    <div class="investment_con">
+                        <div class="investment_con_list"></div>
+                    </div>
+                </div>
+
+                <div class="tab-panel-item">
+
+                    <div class="investment_con">
+                        <div class="huashu">
+
+                            <p onclick="copymsg(this);">
+                                我现在在做一款针对职场人群提升的产品，主要以提升用户岗位技能、思维启发，同时能通过数据为用户规划出不同岗位的职业成长学习路径，并提供出对应的课程，让用户变得更专业；这个产品能让用户的知识体系更系统、提升用户的学习效率、提升用户学习兴趣。
+                                <br>整个产品以流量平台形式出现在用户面前，打造网红讲师，孵化出有实力的讲师；平台的所有内容对C端免费，大力扶持B端，最大程度让B端流量变现。
+                            </p>
+                            <p onclick="copymsg(this);">
+                                现在项目产品开发已经上线，内容团队也就位，为了能更好的把我们内容特点能可复制、可延展的向其他开放讲师传递，我们内容团队也打造了几个样板产品，计划在生产3批后，全方位对外开发。商务这边也拿到十多个不同类型的讲师课程授权，其他讲师在内部邀请中。相对而言，现在基础工作已经就位，现在就是需要进步想市场拓展。</p>
+                            <p onclick="copymsg(this);">
+                                现在团队各个板块都有，一共有20多人，主要是技术和内容团队为主。项目想快速推一下，现在资金和资源方面都有一些压力。所以想通过资本融点钱并对接一些资源。</p>
+                            <p onclick="copymsg(this);">
+                                计划融500万，打开内容的口子，我这边现在需要大量有我们调性的内容，让我们的平台快速成长。</p>
+                            <p onclick="copymsg(this);">
+                                你好，我这边在做一个在线职场教育产品，想通过资本对接点资金和资源。希望加个好友跟您沟通一下我们的项目</p>
+                            <p onclick="copymsg(this);">三大特色：<br>
+                                1、交互体验：随时随地刷知识，用户可以任意刷出各种各样的知识点，也可以很系统的学习某一个放心的内容。
+                                形式对标抖音<br>
+                                2、内容特色：我们的实用、精简、有趣味性（具有娱乐属性）、场景化，我们的内容均在2-5分钟以内，每一个知识点都有讲师的人格特色、且具有代入感。<br>
+                                3、平台式：对B端我们，我们以主打内容网红讲师、超级大IP的模式去构建整个生态，通过运营策略让b端生产出各种优质的内容。<br>
+                            </p>
+                            <p onclick="copymsg(this);">产品优势：<br>
+                                1、内容优势:我们内容具有实用、精简、有趣、场景化等内容特点。提升用户的学习效率和学习兴趣。<br>
+                                2、数据优势：梯子科技旗下自建了一套知识付费领域数据中心，该数据中心涵盖了全网知识课程数据和全网讲师数据，可通过该数据中心快速导出课程销售排行榜，讲师排行榜，课程好评榜，关注热榜等具有指导决策的数据报告。该类型数据全网仅梯子唯一一家出品。<br>
+                                3、模式优势：瓶盖思维与其他各大主流平台，最大的差异在与模式，瓶盖思维走的是流量平台+打造网红讲师模式。<br>
+                                4、理念优势：我们将所有的优质课程内容，对C端将免费或趋于免费向用户开放出去。重点扶持B端,让讲师提供优质的内容换取变现权限，从而提升B端。<br>
+                                5、先发优势：全国首批把人工智能、大数据分析等技术大规模自适应教育的企业之一；<br>
+                                6、短期技术优势：两位创始人，拥有多年大数据分析和机器学习经验，并与阿里和腾讯都有过这方面技术合作经验，缩短走AI教育路线出现的坑。<br>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</section>
+<script type="text/javascript" src="./js/top.js"></script>
+<script type="text/javascript">
+
+
+    $(function () {
+        function tabs(tabTit, on, tabCon) {
+            $(tabCon).each(function () {
+                $(this).children().eq(0).show();
+            });
+            $(tabTit).each(function () {
+                $(this).children().eq(0).addClass(on);
+            });
+            $(tabTit).children().click(function () {
+                $(this).addClass(on).siblings().removeClass(on);
+                var index = $(tabTit).children().index(this);
+                $(tabCon).children().eq(index).show().siblings().hide();
+            });
+        }
+
+        tabs(".investment_title", "on", ".investment_con");
+    })
+
+    function fastinput(e) {
+
+        var value = $(".prompt-text").val();
+        $(".prompt-text").val(value + $(e).text());
+    }
+
+    function note(e, id) {
+
+        jqalert({
+            title: '提示',
+            prompt: '备注内容<span onclick="fastinput(this)">已加微信</span><span onclick="fastinput(this)">已发邮件</span><span onclick="fastinput(this)">微信不存在</span>',
+            yestext: '提交',
+            notext: '取消',
+            yesfn: function () {
+                console.log(id)
+                var vlue = $(".prompt-text").val();
+                console.log(vlue)
+                $.ajax({
+                    url: "/crm/save.php",
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        id: id,
+                        v: vlue
+                    },
+                    success: function (d) {
+                        if (d.status == 200) {
+
+
+                            notes_str = "<hr><p>备注：<em>" + vlue + "</em> </p>"
+                            $(e).closest("a").append(notes_str);
+                            jqtoast(d.msg);
+                            return true;
+                        } else {
+
+                            jqtoast(d.msg);
+                        }
+                    }
+                });
+
+
+            },
+            nofn: function () {
+                jqtoast('你点击了取消');
+            }
+        })
+    }
+
+    function exed(e, id, i) {
+
+
+        jqalert({
+            title: '提示',
+            content: '确定调整吗',
+            yestext: '提交',
+            notext: '取消',
+            yesfn: function () {
+                console.log(id)
+
+
+                $.ajax({
+                    url: "/crm/save.php",
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        id: id,
+                        s: i
+                    },
+                    success: function (d) {
+                        if (d.status == 200) {
+                            console.log(i)
+                            switch (i) {
+                                case 1:
+                                    var exebstr = ' <span class="spancolor" onclick="exed(this,' + id + ',1)">微信联系</span><span onclick="exed2(this,' + id + ',0)">重置操作</span>';
+                                    break;
+                                case 2:
+                                    var exebstr = ' <span class="spancolor" onclick="exed(this,' + id + ',2)">发BP</span><span onclick="exed2(this,' + id + ',0)">重置操作</span>';
+                                    break;
+                                case 3:
+                                    var exebstr = ' <span class="spancolor" onclick="exed(this,' + id + ',3)">稍后联系</span><span onclick="exed2(this,' + id + ',0)">重置操作</span>';
+                                    break;
+                                default:
+                                    var exebstr = ' <span onclick="exed(this,' + id + ',1)">微信联系</span><span onclick="exed(this,' + id + ',2)">发BP</span><span onclick="exed(this,' + id + ',3)">稍后联系</span>';
+                            }
+                            $(e).closest(".exeb").html(exebstr);
+                            jqtoast(d.msg);
+                            return true;
+                        } else {
+
+                            jqtoast(d.msg);
+                        }
+                    }
+                });
+
+
+            },
+            nofn: function () {
+                jqtoast('你点击了取消');
+            }
+        })
+    }
+
+    function exed2(e, id, i) {
+
+
+        jqalert({
+            title: '提示',
+            content: '确定调整吗',
+            yestext: '提交',
+            notext: '取消',
+            yesfn: function () {
+                console.log(id)
+
+
+                $.ajax({
+                    url: "/crm/save.php",
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        id: id,
+                        s: 0
+                    },
+                    success: function (d) {
+                        if (d.status == 200) {
+                            var exebstr = ' <span onclick="exed(this,' + id + ',1)">微信联系</span><span onclick="exed(this,' + id + ',2)">发BP</span><span onclick="exed(this,' + id + ',3)">稍后联系</span>';
+
+                            $(e).closest(".exeb").html(exebstr);
+                            jqtoast(d.msg);
+                            return true;
+                        } else {
+
+                            jqtoast(d.msg);
+                        }
+                    }
+                });
+
+
+            },
+            nofn: function () {
+                jqtoast('你点击了取消');
+            }
+        })
+    }
+
+    function exed3(e, id, i) {
+
+        console.log(i)
+        jqalert({
+            title: '提示',
+            content: '确定调整吗',
+            yestext: '提交',
+            notext: '取消',
+            yesfn: function () {
+                console.log(id)
+                $.ajax({
+                    url: "/crm/save.php",
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        id: id,
+                        zt: i
+                    },
+                    success: function (d) {
+                        if (d.status == 200) {
+                            switch (i) {
+                                case 1:
+                                    $(e).html("已联系");
+                                    $(e).addClass("ylx");
+                                    break;
+                                case 2:
+                                    $(e).html("数据有效");
+                                    $(e).addClass("spancolor");
+                                    break;
+                                case 3:
+                                    $(e).html("失效数据");
+                                    $(e).addClass("sx");
+                                    break;
+                            }
+                            jqtoast(d.msg);
+                            return true;
+                        } else {
+                            jqtoast(d.msg);
+                        }
+                    }
+                });
+
+
+            },
+            nofn: function () {
+                jqtoast('你点击了取消');
+            }
+        })
+    }
+
+
+    function getorderlist(e) {
+        if (e == "seach") {
+            var key = $("#k").val();
+            console.log(key)
+            var data = {k: key, s: 'search'}
+        } else {
+
+            var data = {
+                s: e
+            }
+        }
+        var url = "/crm/json.php"
+        $.ajax({
+            url: url,
+            type: "get",
+            dataType: "json",
+            data: data,
+            success: function (d) {
+                if (d.status == 200) {
+                    var list = d.list;
+                    $(".investment_con_list").html("");
+                    for (x in list) {
+                        var id = list[x]['id'];
+                        var name = list[x]['name'];
+                        var company = list[x]['company'];
+                        var gender = list[x]['gender'];
+                        var email = list[x]['email'];
+                        var city = list[x]['city'];
+                        var phone = list[x]['phone'];
+                        var fax = list[x]['fax'];
+                        var position = list[x]['position'];
+                        var wechat = list[x]['wechat'];
+                        var attention = list[x]['attention'];
+                        var other = list[x]['other'];
+                        var stage = list[x]['stage'];
+                        var phone2 = list[x]['phone2'];
+                        var website = list[x]['website'];
+                        var nature = list[x]['nature'];
+                        var address = list[x]['address'];
+                        var status = list[x]['status'];
+                        var notes = list[x]['notes'];
+                        var name_str = company_str = email_str = city_str = phone_str = phone2_str = fax_str = gender_str = position_str = wechat_str = attention_str = other_str = stage_str = website_str = nature_str = notes_str = address_str = '';
+                        if (!emptyempty_v2(name)) {
+                            name_str = name
+                        }
+                        if (!emptyempty_v2(company)) {
+                            company_str = company
+                        }
+                        if (!emptyempty_v2(fax)) {
+                            fax_str = "<p>传真：<em onclick='copymsg(this)'>" + fax + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(gender)) {
+                            gender_str = "<em>" + gender + "</em>";
+                        }
+                        if (!emptyempty_v2(position)) {
+                            position_str = "<em>" + position + "</em>";
+                        }
+                        if (!emptyempty_v2(city)) {
+                            city_str = '<div class="aui-sign"><button>' + city + '</button></div>'
+                        }
+                        if (!emptyempty_v2(email)) {
+                            email_str = "<p>邮箱：<em onclick='copymsg(this)'>" + email + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(wechat)) {
+                            wechat_str = "<p>微信：<em onclick='copymsg(this)'>" + wechat + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(phone)) {
+                            phone_str = "<p>电话：<em onclick='copymsg(this)'>" + phone + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(phone2)) {
+                            phone2_str = "<p>电话：<em onclick='copymsg(this)'>" + phone2 + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(attention)) {
+                            attention_str = "<p>关注方向：<em>" + attention + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(other)) {
+                            other_str = "<p>其他信息：<em>" + other + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(stage)) {
+                            stage_str = "<p>投资阶段：<em>" + stage + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(website)) {
+                            website_str = "<p>网站：<em>" + website + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(nature)) {
+                            nature_str = "<p>机构性质：<em>" + nature + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(address)) {
+                            address_str = "<p>地址：<em onclick='copymsg(this)'>" + address + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(notes)) {
+                            notes_str = "<hr><p>备注：<em  onclick='copymsg(this)'>" + notes + "</em> </p>"
+                        }
+                        if (!emptyempty_v2(phone)) {
+                            phone_str1 = "<button  class='yo'  onclick=\"call(this," + id + ",'" + phone + "')\">电话联系</button>"
+                        } else {
+                            phone_str1 = "<button class='my' >暂无联系方式</button>";
+                        }
+                        var exed_status = list[x]["exed_status"];
+
+                        switch (exed_status) {
+                            case '1':
+                                var exebstr = ' <span class="spancolor" onclick="exed(this,' + list[x]['id'] + ',1)">微信联系</span><span onclick="exed2(this,' + list[x]['id'] + ',0)">重置操作</span>';
+                                break;
+                            case '2':
+                                var exebstr = ' <span class="spancolor" onclick="exed(this,' + list[x]['id'] + ',2)">发BP</span><span onclick="exed2(this,' + list[x]['id'] + ',0)">重置操作</span>';
+                                break;
+                            case '3':
+                                var exebstr = ' <span class="spancolor" onclick="exed(this,' + list[x]['id'] + ',3)">稍后联系</span><span onclick="exed2(this,' + list[x]['id'] + ',0)">重置操作</span>';
+                                break;
+                            default:
+                                var exebstr = ' <span onclick="exed(this,' + list[x]['id'] + ',1)">微信联系</span><span onclick="exed(this,' + list[x]['id'] + ',2)">发BP</span><span onclick="exed(this,' + list[x]['id'] + ',3)">稍后联系</span>';
+                        }
+
+                        var status = list[x]["status"];
+                        switch (status) {
+                            case '1':
+                                var statusstr = '';
+                                phone_str1 = "<button  class='ylx'  onclick='call(this," + list[x]['id'] + phone + ")'>已联系</button>"
+                                break;
+                            case '2':
+                                var statusstr = ' <button class="spancolor" onclick="exed3(this,' + list[x]['id'] + ',2)">数据有效</button>';
+                                break;
+                            case '3':
+                                var statusstr = ' <button class="sx" onclick="exed3(this,' + list[x]['id'] + ',3)">失效数据</button>';
+                                break;
+                            default:
+                                var statusstr = ' <button onclick="exed3(this,' + list[x]['id'] + ',3)">失效</button>';
+                        }
+                        var str = '<div class="aui-flex b-line"><div class="aui-flex-box"><h2>' + company_str + '</h2></div>' + city_str + '</div><div class="aui-flex b-line">\<' +
+                            '' + 'div class="aui-flex-box"><h3>' + name_str + gender_str + '</h3><p>' + position_str + '</p></div><div class="aui-evaluate">' + statusstr + '<button onclick="note(this,' + list[x]['id'] + ')">备注</button>' + phone_str1 + '</div></div><div class="aui-flex aui-flex-top b-line"><div class="aui-flex-box"> ' + phone_str + phone2_str + email_str + wechat_str + fax_str + position_str + attention_str + other_str + stage_str + website_str + nature_str + address_str + notes_str + '</div></div><div class="exeb">' + exebstr + '</div> <div class="divHeight b-line"></div>';
+                        $(".investment_con_list").append(str);
+                    }
+                    // $("#list2").html("");
+                    //   $("#list2").append(_html);
+                    //  loading = false;
+                    return true;
+                } else {
+                    $.toast(d.msg, "forbidden");
+                    return false;
+                }
+            }
+        });
+    }
+
+    getorderlist();
+
+    function call(e, id, phone) {
+        window.location.href = 'tel:' + phone;
+        exed3(this, id, 1)
+    }
+
+    //验证是否为空  v2   返回 空为true  不为空着false
+    function emptyempty_v2(mixed_var) {
+        var key;
+        if (mixed_var == "" || mixed_var == 0 || mixed_var == "0" || mixed_var == null || mixed_var == false || mixed_var == '' || typeof (mixed_var) == "undefined") {
+            return true;
+        }
+        if (typeof mixed_var == 'object') {
+            for (key in mixed_var) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    //js部分
+    function copymsg(e) {
+        const range = document.createRange();
+        range.selectNode(e);
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+
+        document.execCommand('copy');
+        jqtoast('复制成功');
+    }
+</script>
+</body>
+
+</html>

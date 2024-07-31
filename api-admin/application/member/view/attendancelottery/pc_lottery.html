@@ -1,0 +1,151 @@
+<!--<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>抽奖系统</title>
+
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" href="__STATIC__/member/css/pc_lottery.css" type="text/css">
+    <style>
+        .tb0 {
+            width: 100%;
+        }
+
+        .tb0, .tb0 td, .tb0 th {
+            text-align: center;
+        }
+
+        .turntable {
+            position: absolute;
+            top: 2%;
+            width: 490px;
+            left: 33.96%;
+        }
+
+        .mask {
+            display: none;
+        }
+    </style>
+
+    <link rel="stylesheet" href="__STATIC__/wap/cj/css/pc_index.css?v=<?php echo rand(2323,323232323);?>">
+    <!-- 移动端适配 -->
+
+    <script>
+        var html = document.querySelector('html');
+        changeRem();
+        window.addEventListener('resize', changeRem);
+
+        function changeRem() {
+            var width = html.getBoundingClientRect().width;
+            html.style.fontSize = width / 10 + 'px';
+        }
+    </script>
+</head>
+<body>
+<div class="bg"></div>
+<div class="dog"><img src="__STATIC__/member/images/lottery/1_01.png"></div>
+<div class="reward"><img id="levelImg" src="__STATIC__/member/images/lottery/1_02.png">
+    <!-- 四等奖1_02.png;  三等奖1_02a.png;  二等奖1_02b.png;  一等奖1_02c.png --></div>
+<div class="turntable">
+    <div class="rotate">
+        <div class="lunpai">
+            <ul class="prize running">
+                {volist name="list" id="vo"}
+                <li>
+                    <div style="background-image: url({$vo.icon});">
+                        <span></span>
+                        <p>{$vo.name}</p>
+                    </div>
+                </li>
+                {/volist}
+
+            </ul>
+        </div>
+        <div class="ring"></div>
+        <div id="btn"></div>
+    </div>
+</div>
+
+
+<div class="zjmd">
+    <div class="title">获奖名单公布栏</div>
+    <div class="div1">
+        {volist name="luckydraw" id="vol"}
+        <li>
+            恭喜{$vol.mobile}
+            获得<span class="info">{$vol.name}</span>
+        </li>
+        {/volist}
+
+    </div>
+</div>
+<div class="mylotterylist">
+    <div class="title">我的奖品</div>
+    <div class="div1">
+        <table class="tb0">
+            <tbody>
+            <tr>
+                <th>中奖时间</th>
+                <th>中奖奖品</th>
+                <th>受理结果</th>
+            </tr>
+            {volist name="luckydrawlist" id="jpl"}
+            <tr>
+                <td>{$jpl.addtime}</td>
+                <td>{$jpl.name}</td>
+                <td>{$jpl.status}</td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<div id="mask">
+    <div class="blin"></div>
+    <div class="caidai"></div>
+    <div class="winning">
+        <p><b>恭喜您</b><br/>抽中了<span id="text1"></span></p>
+        <a href="javascript:void(0);" target="_self" class="maskbtn">确定</a>
+
+    </div>
+</div>
+<!--中奖提示-->
+<div id="mask2">
+    <div class="blin"></div>
+    <div class="caidai"></div>
+    <div class="winning">
+        <p><br/><b>谢谢参与</b></p>
+        <a href="javascript:void(0);" target="_self" class="maskbtn">确定</a>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var shopname = {$shopname};
+    var prizecount = {$prizecount};
+    var winningprobability = {$winningratejson};
+
+</script>
+<script src="__STATIC__/wap/cj/js/jquery-1.11.3.min.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/jquery.rotate.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/h5_game_common.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/index.js?v={$v}"></script>
+<script src="__STATIC__/wap/cj/js/jquery.SuperSlide.2.1.1.js?v={$v}"></script>
+<script type="text/javascript">jQuery("#txtMarqueeTop").slide({
+    mainCell: "ul",
+    autoPlay: true,
+    effect: "topMarquee",
+    interTime: 50,
+    vis: {$rows}
+});
+$("#change").text(prizecount);
+</script>
+</body>
+</html>

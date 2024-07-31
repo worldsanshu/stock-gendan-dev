@@ -1,0 +1,892 @@
+{extend name="$_admin_base_layout" /}
+
+{block name="content"}
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="/static/admin/css/statistics/layui.all.js" charset="utf-8"></script>
+<link rel="stylesheet" href="/static/admin/css/statistics/public.css" media="all">
+<link rel="stylesheet" href="/static/admin/css/statistics/welcome.css" media="all">
+<link rel="stylesheet" href="/static/admin/css/statistics/laydate.css" media="all">
+<link rel="stylesheet" href="/static/admin/css/statistics/layer.css" media="all">
+<link rel="stylesheet" href="/static/layui/css/modules/code.css" media="all">
+<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery"
+        src="/static/admin/css/statistics/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript" src="/static/admin/js/core/echarts/echarts.min.js"></script>
+
+<style>.cke {
+    visibility: hidden;
+}</style>
+<!--<link rel="stylesheet" href="./welcome.css" media="all">-->
+<div class="layuimini-container" >
+    <div class="layuimini-main">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-warning icon"></i>数据统计</div>
+
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10">
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title ">
+                                                        <h5><span>充值总金额</span>&nbsp;<i
+                                                                id="platformProfitLossNotice"
+                                                                class="fa fa-question-circle"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['recharge_total_amount']}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>钱包余额</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['wallet_balance']}元</h1>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title ">
+                                                        <h5><span>平台累计盈亏</span>&nbsp;<i
+                                                                class="fa fa-question-circle"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['system_profit_loss']}元</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>累计提现</span>&nbsp;<i id="totalNetAssetsNotice"
+                                                                                            class="fa fa-question-circle"></i>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['withdrawal_total_amount']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>工资累计发放</span>&nbsp;<i
+                                                                id="totalPlatformMoneyNotice"
+                                                                class="fa fa-question-circle"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">暂无</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现冻结金额</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins">{$data['withdrawal_freeze']}元</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md8">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>用户统计</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-userStatistics"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);"
+                                     _echarts_instance_="ec_1685327502704">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-card" style="width: 100%;min-height:564px">
+                            <div class="flex-start" style="display:flex;align-items:center;padding: 0 15px;">
+                                <div><i class="fa fa-credit-card icon icon-blue "></i>日期：</div>
+                                <div><input type="text" class="layui-input" id="userStatisticsTime" lay-key="2"></div>
+                            </div>
+                            <!--                            <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>7日数据</div>-->
+                            <div class="layui-card-body">
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>新注册用户数</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalRegisterNum">
+                                                            {$user_statistics_data.user_data.new_reg}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值用户</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" >
+                                                            {$user_statistics_data.user_data.recharge_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>购买优投</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" >
+                                                            {$user_statistics_data.user_data.purchase_tracking}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现用户</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalUserApplyConsult">
+                                                            {$user_statistics_data.user_data.withdrawal_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>活跃用户</span>&nbsp;<i
+                                                                class="fa fa-question-circle activeUserNotice"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="totalActiveUser">
+                                                            暂无</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                </div>
+                                <div class="layui-card-header" style="float: left;width: 100%;"><i class="fa fa-credit-card icon icon-blue"></i>今日数据
+                                </div>
+                                <div class="welcome-module">
+                                    <div class="layui-row layui-col-space10 layuimini-qiuck">
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>新注册用户数</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayRegisterNum">
+                                                            {$user_statistics_data.user_data_day.new_reg}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>充值用户</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayUserWithdrawRecharge">
+                                                            {$user_statistics_data.user_data_day.recharge_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>购买优投</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayBuySell">
+                                                            {$user_statistics_data.user_data_day.purchase_tracking}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5>提现用户</h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayUserApplyConsult">
+                                                            {$user_statistics_data.user_data_day.withdrawal_user}</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-col-xs4">
+                                            <div class="panel layui-bg-number">
+                                                <div class="panel-body">
+                                                    <div class="panel-title">
+                                                        <h5><span>活跃用户</span>&nbsp;<i
+                                                                class="fa fa-question-circle activeUserNotice"></i></h5>
+                                                    </div>
+                                                    <div class="panel-content">
+                                                        <h1 class="no-margins" id="todayActiveUser">
+                                                            暂无</h1>
+                                                        <small></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>总优投统计</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-RechargeWithdrawStatistics"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);"
+                                     _echarts_instance_="ec_1685327502703">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i>今日优投统计</div>
+                            <div class="layui-card-body">
+                                <div id="echarts-RechargeWithdrawStatistics1"
+                                     style="width: 100%; min-height: 500px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative; background: rgba(252, 252, 252, 0);"
+                                     _echarts_instance_="ec_1685327502703">
+                                    <div style="position: relative; overflow: hidden; width: 880px; height: 500px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+                                        <canvas width="880" height="500" data-zr-dom-id="zr_0"
+                                                style="position: absolute; left: 0px; top: 0px; width: 880px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<input type="hidden" class="sub_url" value="{:URL('statistics')}">
+{/block}
+{block name="script"}
+
+<script>
+    var Format = {};
+    Format.dateFormat = function (d, format) {
+        var format = "";
+        var date = {
+            "M+": d.getMonth() + 1,
+            "D+": d.getDate(),
+            "h+": d.getHours(),
+            "m+": d.getMinutes(),
+            "s+": d.getSeconds()
+        };
+        if (/(Y+)/i.test(format)) {
+            format = format.replace(RegExp.$1, (d.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        for (var k in date) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+            }
+        }
+
+        return format;
+    }
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#consultProfitAndLossTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 1);
+                }
+            }
+        });
+    })
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#userStatisticsTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 2);
+                }
+            }
+        });
+    })
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#userRechargeWithdrawStatisticsTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 3);
+                }
+            }
+        });
+    })
+
+    layui.use(['laydate', 'table'], function () {
+        var laydate = layui.laydate;
+        //日期
+        var start_time = getBeforeDate(-6);//7天前  getBeforeDate自定义一个获取几天前时间的方法
+        var end_time = getBeforeDate(0);
+        getdatainfo();
+        var ins1 = laydate.render({
+            elem: '#consultStatisticsTime',
+            type: 'date',
+            range: '至',
+            format: 'yyyy-MM-dd',
+            trigger: 'click', //呼出事件改成click
+            value: start_time + ' 至 ' + end_time,
+            max: Format.dateFormat(new Date(), 'YYYY-MM-DD'),
+            change: function (value, date, endDate) {
+
+                var d = value.split('至');
+                var s = new Date(d[0]);
+                var e = new Date(d[1]);
+                start_time = d[0];
+                end_time = d[1];
+                //计算两个时间间隔天数
+                var d = (e - s) / (1000 * 60 * 60 * 24);
+                if (d > 30) {
+                    ins1.hint('最多选择30天'); //提示弹框
+                }
+
+
+            },
+            done: function (data) {
+                if (!data) { //点清除按钮，清除文本框时间数据
+                    this.value = data;
+                    this.elem.val(data)
+                } else {
+                    var d = data.split('至');
+                    var s = new Date(d[0]);
+                    var e = new Date(d[1]);
+                    var d = (e - s) / (1000 * 60 * 60 * 24);
+
+
+                    if (d > 30) { //选择时间超过一个月时，清空文本框时间数据
+                        $('.laydate-btns-clear').click()
+                    }
+
+                    submitHandler(start_time, end_time, 4);
+                }
+            }
+        });
+    })
+
+    function submitHandler(start_time = '', end_time = '', type = 0) {
+        $.ajax({
+            url: $(".sub_url").val(),
+            type: "post",
+            data: {
+                start_time: start_time,
+                end_time: end_time,
+                type: type
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+
+                    var user_statistics_days = data.user_statistics_data.days;
+                    var user_statistics_returns = data.user_statistics_data.returns;
+
+                    var recharge_withdrawal_returns = data.recharge_withdrawal_data;
+
+                    getdatainfo(user_statistics_days, user_statistics_returns, recharge_withdrawal_returns)
+                }
+            }
+        })
+    }
+
+    function getBeforeDate(day) {
+        var today = new Date();
+
+        var targetday_milliseconds = today.getTime() + 1000 * 60 * 60 * 24 * day;
+
+        today.setTime(targetday_milliseconds); //注意，这行是关键代码
+
+        var tYear = today.getFullYear();
+
+        var tMonth = today.getMonth();
+
+        var tDate = today.getDate();
+
+        tMonth = doHandleMonth(tMonth + 1);
+
+        tDate = doHandleMonth(tDate);
+
+        return tYear + "-" + tMonth + "-" + tDate;
+
+    }
+
+    function doHandleMonth(month) {
+        var m = month;
+        if (month.toString().length == 1) {
+            m = "0" + month;
+        }
+        return m;
+
+    }
+
+
+    function getdatainfo(user_statistics_days = '', user_statistics_returns = '', recharge_withdrawal_returns = '') {
+        // 基于准备好的dom，初始化echarts实例
+        //用户统计
+        var myChartUserStatistics = echarts.init(document.getElementById('echarts-userStatistics'));
+
+        //充值提现
+        var myChartRechargeWithdrawStatistics = echarts.init(document.getElementById('echarts-RechargeWithdrawStatistics'));
+        var myChartRechargeWithdrawStatisticsDay = echarts.init(document.getElementById('echarts-RechargeWithdrawStatistics1'));
+
+        var user_statistics_days = user_statistics_days ? user_statistics_days : {$user_statistics_data.days|raw};
+        var user_statistics_returns = user_statistics_returns ? user_statistics_returns : {$user_statistics_data.returns|raw};
+
+
+        var optionUserStatistics = {
+            title: {
+                text: ''
+            },
+            tooltip: {
+                show: true,    // 是否显示提示框组件
+                trigger: 'axis',    // 触发类型（'item'，数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用；'axis'，坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用；'none'，不触发。）
+                axisPointer: {
+                    type: 'line',    // 指示器类型（'line' 直线指示器；'shadow' 阴影指示器；'none' 无指示器；'cross' 十字准星指示器。）
+                    snap: false,    // 坐标轴指示器是否自动吸附到点上。默认自动判断。
+                    label: {
+                        margin: 10,    // label 距离轴的距离
+                        color: '#FFF',     // 文字的颜色
+                        fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                        fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                        fontSize: '20',    // 文字字体大小
+                        lineHeight: '50',    // 行高
+                        padding: [5, 7, 5, 7],    // 内边距，单位px
+                        backgroundColor: 'auto',    // 文本标签的背景颜色
+                    }
+                },
+                showContent: true,     // 是否显示提示框浮层，默认显示
+                alwaysShowContent: false,     // 是否永远显示提示框内容，默认情况下在移出可触发提示框区域后一定时间后隐藏
+                confine: true,    // 是否将 tooltip 框限制在图表的区域内
+                textStyle: {
+                    color: '#FFF',     // 文字的颜色
+                    fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+                    fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                    fontSize: '20',    // 文字字体大小
+                    lineHeight: '50',    // 行高
+                },
+
+            },
+            legend: {
+                data: ['新注册用户数', '充值用户', '购买优投', '提现用户', '活跃用户'],
+
+            },
+            xAxis: {
+                rotate: 50,
+                data: user_statistics_days,
+
+                axisLabel: {
+                    interval: 0,
+                }
+
+
+            },
+
+
+            yAxis: {},
+            // color: ['#3398DB'],
+            series: [
+                {
+                    name: '新注册用户数',
+                    type: 'bar', // 设定为柱状图类型
+                    data: user_statistics_returns[0].data, // 假设user_statistics_returns数组的第一个元素是活跃用户的数据
+                },
+                {
+                    name: '充值用户',
+                    type: 'bar',
+                    data: user_statistics_returns[1].data, // 对应买卖股票用户的数据
+                },
+                {
+                    name: '购买优投',
+                    type: 'bar',
+                    data: user_statistics_returns[2].data, // 新注册用户数的数据
+                },
+                {
+                    name: '提现用户',
+                    type: 'bar',
+                    data: user_statistics_returns[3].data, // 申请合约用户的数据
+                },
+                {
+                    name: '活跃用户',
+                    type: 'bar',
+                    data: user_statistics_returns[4].data, // 充值提现的数据
+                }
+            ]
+        };
+
+
+        var optionRechargeWithdrawStatistics = {
+            title: {
+                text: '',
+                subtext: '优投总购买数: {$recharge_withdrawal_data[\'tracking_total_number\']}个\n\n总结算优投数: {$recharge_withdrawal_data[\'tracking_day_number\']}个',
+                x: 'center',
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} "
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['优投总购买数', '总结算优投数']
+            },
+            color: ['#355cf5','#e19304'],
+            series: [
+                {
+                    name: '个数',
+                    type: 'pie',
+                    radius: ['0%', '55%'],
+                    label: {
+                        normal: {
+                            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}   ',
+                            backgroundColor: '#eee',
+                            borderColor: '#aaa',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            rich: {
+                                a: {
+                                    color: '#999',
+                                    lineHeight: 22,
+                                    align: 'center'
+                                },
+                                hr: {
+                                    borderColor: '#aaa',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                b: {
+                                    fontSize: 16,
+                                    lineHeight: 33
+                                },
+                                per: {
+                                    color: '#eee',
+                                    backgroundColor: '#334455',
+                                    padding: [2, 4],
+                                    borderRadius: 2
+                                }
+                            }
+                        }
+                    },
+                    data: [
+                        {
+                            value: "{$recharge_withdrawal_data['tracking_total_number']}",
+                            name: '优投总购买数',
+
+                        },
+                        {value: "{$recharge_withdrawal_data['balance_total_number']}", name: '总结算优投数'},
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var optionRechargeWithdrawStatisticsDay = {
+            title: {
+                text: '',
+                subtext: '今日优投购买数: {$recharge_withdrawal_data[\'tracking_day_number\']}个\n\n今日结算优投数: {$recharge_withdrawal_data[\'balance_day_number\']}个',
+                x: 'center',
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} "
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['今日优投购买数', '今日结算优投数']
+            },
+            color: ['#39a020','#e05124'],
+            series: [
+                {
+                    name: '个数',
+                    type: 'pie',
+                    radius: ['0%', '55%'],
+                    label: {
+                        normal: {
+                            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}   ',
+                            backgroundColor: '#eee',
+                            borderColor: '#aaa',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            rich: {
+                                a: {
+                                    color: '#999',
+                                    lineHeight: 22,
+                                    align: 'center'
+                                },
+                                hr: {
+                                    borderColor: '#aaa',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                b: {
+                                    fontSize: 16,
+                                    lineHeight: 33
+                                },
+                                per: {
+                                    color: '#eee',
+                                    backgroundColor: '#334455',
+                                    padding: [2, 4],
+                                    borderRadius: 2
+                                }
+                            }
+                        }
+                    },
+                    data: [
+                        {value: "{$recharge_withdrawal_data['tracking_day_number']}", name: '今日优投购买数'},
+                        {value: "{$recharge_withdrawal_data['balance_day_number']}", name: '今日结算优投数'},
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+
+        myChartUserStatistics.setOption(optionUserStatistics);
+
+        myChartRechargeWithdrawStatistics.setOption(optionRechargeWithdrawStatistics);
+        myChartRechargeWithdrawStatisticsDay.setOption(optionRechargeWithdrawStatisticsDay);
+
+    }
+
+
+</script>
+
+{/block}

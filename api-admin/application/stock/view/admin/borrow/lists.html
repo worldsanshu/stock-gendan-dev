@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery"
+        src="__ADMIN_CSS__/statistics/jquery-3.4.1.min.js"></script>
+<script src="__ADMIN_CSS__/statistics/layui.all.js" charset="utf-8"></script>
+<script src="__STATIC__/stock/js/admin_borrow_test.js" charset="utf-8"></script>
+
+
+<link rel="stylesheet" href="__ADMIN_CSS__/statistics/layui.css" media="all">
+
+</head>
+<body>
+
+
+<script>
+    // url
+    var dolphin = {
+            'top_menu_url': '{:url("admin/ajax/getSidebarMenu")}',
+            'stock_operation_js': '{:url("stock_operation")}',
+            'theme_url': '{:url("admin/ajax/setTheme")}',
+            'jcrop_upload_url': '{$jcrop_upload_url ? $jcrop_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "jcrop", "module" => request()->module()])}',
+            'editormd_upload_url': '{$editormd_upload_url ? $editormd_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "editormd", "module" => request()->module()])}',
+            'editormd_mudule_path': '__STATIC__/libs/editormd/lib/',
+            'ueditor_upload_url': '{$ueditor_upload_url ? $ueditor_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "ueditor", "module" => request()->module()])}',
+            'wangeditor_upload_url': '{$wangeditor_upload_url ? $wangeditor_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "wangeditor", "module" => request()->module()])}',
+            'wangeditor_emotions': "__STATIC__/libs/wang-editor/emotions.data",
+            'ckeditor_img_upload_url': '{$ckeditor_img_upload_url ? $ckeditor_img_upload_url : url("admin/attachment/upload", ["dir" => "images", "from" => "ckeditor", "module" => request()->module()])}',
+            'WebUploader_swf': '__STATIC__/libs/webuploader/Uploader.swf',
+            'file_upload_url': '{$file_upload_url ? $file_upload_url : url("admin/attachment/upload", ["dir" => "files", "module" => request()->module()])}',
+            'image_upload_url': '{$image_upload_url ? $image_upload_url : url("admin/attachment/upload", ["dir" => "images", "module" => request()->module()])}',
+            'upload_check_url': '{$upload_check_url ? $upload_check_url : url("admin/ajax/check")}',
+            'get_level_data': '{:url("admin/ajax/getLevelData")}',
+            'quick_edit_url': '{$quick_edit_url ? $quick_edit_url : url("quickEdit")}',
+            'aside_edit_url': '{$aside_edit_url ? $aside_edit_url : url("admin/system/quickEdit")}',
+            'triggers': {$field_triggers |default = [] | json_encode
+        }, // 触发器集合
+        'field_hide'
+    :
+    '{$field_hide|default=""}', // 需要隐藏的字段
+        'field_values'
+    :
+    '{$field_values|default=""}',
+        'validate'
+    :
+    '{$validate|default=""}', // 验证器
+        'validate_fields'
+    :
+    '{$validate_fields|default=""}', // 验证字段
+        'search_field'
+    :
+    '{:input("param.search_field", "")}', // 搜索字段
+        // 字段过滤
+        '_filter'
+    :
+    '{$Request.param._filter ? $Request.param._filter : (isset($_filter) ? $_filter : "")}',
+        '_filter_content'
+    :
+    '{$Request.param._filter_content == '
+    ' ? (isset($_filter_content) ? $_filter_content : "") : $Request.param._filter_content}',
+        '_field_display'
+    :
+    '{$Request.param._field_display ? $Request.param._field_display : (isset($_field_display) ? $_field_display : "")}',
+        '_field_clear'
+    :
+    {
+        $field_clear |
+    default
+        = [] | json_encode
+    }
+    ,
+    'get_filter_list'
+    :
+    '{:url("admin/ajax/getFilterList")}',
+        'curr_url'
+    :
+    '{:url("", $Request.route)}',
+        'curr_params'
+    :
+    {
+        $Request.param | json_encode
+    }
+    ,
+    'layer'
+    :
+    {:
+        json_encode(config("zbuilder.pop"))
+    }
+    }
+    ;
+</script>
+<style>
+
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: scroll;
+    }
+
+
+    table thead,
+    tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed; /*重要  表格固定算法*/
+    }
+
+    table thead { /*留出滚动条的位置*/
+        width: calc(100% - 1em)
+    }
+
+    .table-responsive {
+        display: none
+    }
+</style>
+
+<div class='x-body'>
+    <div class="layui-row">
+        <form class="layui-form" action="{:url('index')}">
+            <div class="layui-form-item">
+            </div>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table class="layui-table layui-form js-table-checkable">
+            <thead>
+            <tr>
+                <th width="80">
+
+                    <p>子账户ID</p>
+                    <p>子账号</p>
+                </th>
+
+                <th width="150">订单号</th>
+                <!--                <th width="90">手机号</th>-->
+                <th width="140">
+                    <p>邮箱</p>
+                    <p>手机号</p>
+
+                </th>
+                <th width="70">配资人</th>
+                <th width="70">配资类型</th>
+                <th width="90">保证金</th>
+                <th width="100">
+                    <p>总操盘金额</p>
+                    <p>配资金额</p>
+                </th>
+                <th width="100">
+                    <p>距离预警线</p>
+                    <p>距离平仓线</p>
+                </th>
+                <th width="60">操盘期限</th>
+                <th width="100">配资倍数</th>
+                <th width="60">状态</th>
+                <th width="150">申请时间</th>
+                <th width="150">
+                    <p>开始时间</p>
+                    <p>终止时间</p>
+                </th>
+                <th width="90">操作</th>
+            </tr>
+
+            </thead>
+            <div class=""></div>
+            <tbody>
+            <?php foreach($data_list as $k => $v) { ?>
+            <tr>
+                <th width="80">
+
+                    <p><?php echo date('Y-m-d H:i:s',$v['stock_subaccount_id']) ?></p>
+                    <p><?php echo date('Y-m-d H:i:s',$v['sub_account']) ?></p>
+                </th>
+
+                <th width="150"> <?php echo $v['order_id']; ?></th>
+
+                <th width="140">
+                    <p><?php echo $v['email']; ?></p>
+                    <p><?php echo $v['mobile']; ?></p>
+                </th>
+                <th width="70"> <?php echo $v['name']; ?></th>
+                <th width="70"> <?php echo $v['type']; ?></th>
+                <th width="90"><?php echo $v['deposit_money']; ?></th>
+                <th width="100">
+                    <p><?php echo $v['init_money'] ?></p>
+                    <p><?php echo $v['borrow_money'] ?></p>
+                </th>
+                <th width="100">
+                    <p><?php echo $v['operation'] ?></p>
+                    <p1><?php echo $v['close'] ?></p1>
+                </th>
+                <th width="60"><?php echo $v['borrow_duration']; ?></th>
+                <th width="100"><?php echo $v['multiple']; ?></th>
+                <th width="60"><?php echo $status_arr[$v['status']]??''; ?></th>
+                <th width="150"><?php echo date('Y-m-d H:i:s',$v['create_time']); ?></th>
+                <th width="150">
+                    <p><?php echo date('Y-m-d H:i:s',$v['verify_time']) ?></p>
+                    <p><?php echo date('Y-m-d H:i:s',$v['end_time']) ?></p>
+                </th>
+                <th width="90">
+                    <a href="<?php echo url('detail',array('id'=>$v['id']) ); ?>" target="_blank"
+                       class="pear-btn pear-btn-primary pear-btn-sm ">详情</a>
+                </th>
+            </tr>
+            <?php  } ?>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

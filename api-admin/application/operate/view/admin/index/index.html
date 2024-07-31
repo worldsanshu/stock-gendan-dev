@@ -1,0 +1,361 @@
+{extend name="$_admin_base_layout_new" /} {block name="content"}
+<style>
+    .font-size-sm {
+        text-align: center !important;
+    }
+
+    .menu_head {
+        height: 47px;
+        line-height: 47px;
+        padding-left: 38px;
+        font-size: 14px;
+        color: #525252;
+        cursor: pointer;
+        border: 1px solid #e1e1e1;
+        position: relative;
+        font-weight: bold;
+        background: #fff;
+        margin: 0;
+    }
+
+    .menu_list .listcurrent {
+        background: #fff;
+    }
+
+    .menu_body {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        line-height: 38px;
+        border-left: 1px solid #e1e1e1;
+        backguound: #ccc;
+        border-right: 1px solid #e1e1e1;
+    }
+
+    .menu_body a {
+        display: block;
+        width: 100%;
+        height: 38px;
+        line-height: 38px;
+        padding-left: 40px;
+        color: #777777;
+        text-decoration: none;
+        border-bottom: 1px solid #e1e1e1;
+        display: flex;
+        align-items: center;
+    }
+
+    .menu_body a:hover {
+        text-decoration: none;
+    }
+
+    .menu_body a:nth-child(odd) {
+        background-color: #f1f1f2;
+    }
+
+    .menu_body a:nth-child(even) {
+        background-color: #fbfbf5;
+    }
+
+    .menu_body a span:first-child {
+        width: 12px;
+        height: 12px;
+        margin-right: 10px;
+    }
+
+    /**我们赚钱用红色，亏用绿色，正常数据用蓝色吧*/
+    .val_h_1 {
+        color: red
+    }
+
+    .val_h_2 {
+        color: #91c58b
+    }
+
+    .val_h_3 {
+        color: #58b3ef
+    }
+
+    .menu_head span:first-child {
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+    .color_1 {
+        background-color: #58b3ef;
+    }
+
+    .color_2 {
+        background-color: #f08570;
+    }
+
+    .color_3 {
+        background-color: #91c58b;
+    }
+
+    .color_4 {
+        background-color: #f8d566;
+    }
+
+    .name_text {
+        width: 80px;
+    }
+
+    a:focus, a:hover {
+        color: #23527c;
+        text-decoration: none !important;
+
+    }
+
+    .update-time {
+        color: #c0bfc4;
+        font-size: 10px;
+        line-height: 35px;
+    }
+</style>
+<!--时间css start-->
+<link href="__STATIC__/admin/assets/date/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<link href="__STATIC__/admin/assets/date/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="__STATIC__/admin/assets/date/css/bootstrap.min.css"/>
+<!--时间css end-->
+<div class="row">
+    <div class="col-md-3">
+        <button class="btn btn-square btn-default" type="button">昨日</button>
+        <button class="btn btn-square btn-info" type="button">今日</button>
+        <button class="btn btn-square btn-default" type="button">本周</button>
+        <button class="btn btn-square btn-default" type="button">本月</button>
+    </div>
+    <!--
+    <div class="col-md-3">
+        <div class="form-group">
+            <div class="input-daterange input-group" data-date-format="mm/dd/yyyy">
+				<input type='text' class="form-control" id='datetimepicker12' placeholder="开始时间"/>
+				<span class="input-group-addon"><i class="fa fa-chevron-right"></i></span>
+                <input class="form-control" type="text" id="example-datetimepicker13" name="example-daterange2" placeholder="结束时间">
+
+            </div>
+        </div>
+    </div>
+	-->
+    <div class="col-md-3">
+        <div class="form-group">
+            <div class="input-daterange input-group">
+                <input type='text' class="form-control" id='datetimepicker12' placeholder="开始时间"/> <span
+                    class="input-group-addon"><i class="fa fa-chevron-right"></i></span>
+                <input type='text' class="form-control" id='datetimepicker13' placeholder="结束时间"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-primary">查询</button>
+    </div>
+</div>
+<div class="update-time">数据更新于：{$data['CompleteTime']==''?"暂无数据":date("Y-m-d
+    H:m:s",$data['CompleteTime'])},该数据默认10分钟更新一次;
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-2">
+        <a class="block block-link-hover3 text-center" href="{:url('document/index')}">
+            <div class="block-content block-content-full">
+                <div class="h1 font-w700 text-primary" data-toggle="countTo"
+                     data-to="{$data['ProfitLoss']==''?0:$data['ProfitLoss']}">
+                    {$data['ProfitLoss']==''?0:$data['ProfitLoss']}
+                </div>
+            </div>
+            <div class="block-content block-content-full block-content-mini bg-gray-lighter text-muted font-w600">
+                平台总盈亏
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-2">
+        <a class="block block-link-hover3 text-center" href="{:url('column/index')}">
+            <div class="block-content block-content-full">
+                <div class="h1 font-w700 text-success" data-toggle="countTo"
+                     data-to="{$data['TotalAmountOfMoney']==''?0:$data['TotalAmountOfMoney']}">
+                    {$data['TotalAmountOfMoney']==''?0:$data['TotalAmountOfMoney']}
+                </div>
+            </div>
+            <div class="block-content block-content-full block-content-mini bg-gray-lighter text-muted font-w600">
+                入款总金额
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-2">
+        <a class="block block-link-hover3 text-center" href="{:url('page/index')}">
+            <div class="block-content block-content-full">
+                <div class="h1 font-w700 text-info" data-toggle="countTo"
+                     data-to="{$data['TotalAmountOfWithdrawal']==''?0:$data['TotalAmountOfWithdrawal']}">
+                    {$data['TotalAmountOfWithdrawal']==''?0:$data['TotalAmountOfWithdrawal']}
+                </div>
+            </div>
+            <div class="block-content block-content-full block-content-mini bg-gray-lighter text-muted font-w600">
+                出款总金额
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-2">
+        <a class="block block-link-hover3 text-center" href="{:url('model/index')}">
+            <div class="block-content block-content-full">
+                <div class="h1 font-w700 text-warning"><span data-toggle="countTo"
+                                                             data-to="{$data['NumberOfStocksToBeClosed']==''?0:$data['NumberOfStocksToBeClosed']}">{$data['NumberOfStocksToBeClosed']==''?0:$data['NumberOfStocksToBeClosed']}</span>
+                </div>
+            </div>
+            <div class="block-content block-content-full block-content-mini bg-gray-lighter text-muted font-w600">
+                待平仓股票数
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-2">
+        <a class="block block-link-hover3 text-center" href="{:url('model/index')}">
+            <div class="block-content block-content-full">
+                <div class="h1 font-w700 text-danger"><span data-toggle="countTo"
+                                                            data-to="{$data['TotalTransactionFee']==''?0:$data['TotalTransactionFee']}">{$data['TotalTransactionFee']==''?0:$data['TotalTransactionFee']}</span>
+                </div>
+            </div>
+            <div class="block-content block-content-full block-content-mini bg-gray-lighter text-muted font-w600">
+                交易总服务费
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-2">
+        <a class="block block-link-hover3 text-center" href="{:url('model/index')}">
+            <div class="block-content block-content-full">
+                <div class="h1 font-w700 text-muted"><span data-toggle="countTo"
+                                                           data-to="{$data['TotalDeferredFee']==''?0:$data['TotalDeferredFee']}">{$data['TotalDeferredFee']==''?0:$data['TotalDeferredFee']}</span>
+                </div>
+            </div>
+            <div class="block-content block-content-full block-content-mini bg-gray-lighter text-muted font-w600">总递延费
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-sm-6">
+        <!-- 代码 开始 -->
+        <div class="menu_list">
+            <div class="menu_head">用户总数 <span class="val_h_1">{$data['TotalNumberOfUsers']==''?0:$data['TotalNumberOfUsers']}人</span>
+            </div>
+            <div class="menu_head">新增用户<span class="val_h_2">{$data['NewUsers']==''?0:$data['NewUsers']}人</span>
+            </div>
+            <div class="menu_head">实名用户<span
+                    class="val_h_2">{$data['RealNameUser']==''?0:$data['RealNameUser']}人</span>
+            </div>
+            <div class="menu_head">客单消费<span
+                    class="val_h_2">{$data['CustomerPrice']==''?0:$data['CustomerPrice']}元</span>
+            </div>
+            <div class="menu_head">复购用户数<span class="val_h_2">{$data['NumberOfUsersRepurchased']==''?0:$data['NumberOfUsersRepurchased']}人</span>
+            </div>
+            <div class="menu_head">代理商<span class="val_h_2">{$data['$TotalNumberOfAgents']==''?0:$data['$TotalNumberOfAgents']}人</span>
+            </div>
+            <div style="display:block" class=menu_body>
+                <a href="javascript:void(0);"><span class="color_1"></span><span
+                        class="name_text">新增代理商</span><span
+                        class="val_h">{$data['AddAgent']==''?0:$data['AddAgent']}人</span></a>
+
+                <a href="javascript:void(0);"><span class="color_3"></span><span
+                        class="name_text">代理商分佣</span><span
+                        class="val_h">{$data['AgentCommission']==''?0:$data['AgentCommission']}元</span></a>
+                <a href="javascript:void(0);"><span class="color_4"></span><span
+                        class="name_text">代理商提现</span><span
+                        class="val_h">{$data['AgentWithdrawal']==''?0:$data['AgentWithdrawal']}元</span></a>
+            </div>
+        </div>
+        <!-- 代码 开始 -->
+    </div>
+    <div class="col-lg-4 col-sm-6">
+        <!-- 代码 开始 -->
+        <div class="menu_list">
+            <div class="menu_head listcurrent">平台总余额 <span class="val_h_1">{$data['AccountBalance']==''?0:$data['AccountBalance']}元</span>
+            </div>
+            <div class="menu_head listcurrent">平台总交易额 <span class="val_h_1">{$data['TotalTransactionVolume']==''?0:$data['TotalTransactionVolume']}元</span>
+            </div>
+            <div class="menu_head listcurrent">充值金额 <span class="val_h_1">{$data['RechargeAmount']==''?0:$data['RechargeAmount']}元/{$data['RechargeNumber']==''?0:$data['RechargeNumber']}人</span>
+            </div>
+            <div style="display:block" class=menu_body>
+                <a href="javascript:void(0);"><span class="color_1"></span><span
+                        class="name_text">支付宝充值</span><span
+                        class="val_h">{$data['RechargeOnAlipay']==''?0:$data['RechargeOnAlipay']}元/{$data['RechargeAlipayNumber']==''?0:$data['RechargeAlipayNumber']}人</span></a>
+                <a href="javascript:void(0);"><span class="color_2"></span><span class="name_text">线下充值</span><span
+                        class="val_h">{$data['OfflineRecharge']==''?0:$data['OfflineRecharge']}元/{$data['OfflineRechargeNumber']==''?0:$data['OfflineRechargeNumber']}人</span></a>
+            </div>
+            <div class="menu_head">流水总金额 <span class="val_h_1">{$data['TotalAmountOfRunningWater']==''?0:$data['TotalAmountOfRunningWater']}元</span>
+            </div>
+            <div style="display:block" class=menu_body>
+                <a href="javascript:void(0);"><span class="color_1"></span><span class="name_text">进账</span><span
+                        class="val_h">{$data['Account']==''?0:$data['Account']}元</span></a>
+                <a href="javascript:void(0);"><span class="color_2"></span><span class="name_text">出账</span><span
+                        class="val_h">{$data['Billing']==''?0:$data['Billing']}元</span></a>
+            </div>
+            <div class="menu_head">提现<span class="val_h_2">{$data['WithdrawNum']==''?0:$data['WithdrawNum']}元/{$data['WithdrawNumber']==''?0:$data['WithdrawNumber']}人</span>
+            </div>
+            <div class="menu_head">活动赠送彩金<span class="val_h_2">{$data['EventGift']==''?0:$data['EventGift']}元/{$data['EventGiftNumer']==''?0:$data['EventGiftNumer']}人</span>
+            </div>
+        </div>
+        <!-- 代码 开始 -->
+    </div>
+    <div class="col-lg-4 col-sm-6">
+        <!-- 代码 开始 -->
+        <div class="menu_list">
+            <div class="menu_head">持仓总数 <span
+                    class="val_h_1">{$data['TotalPositions']==''?0:$data['TotalPositions']}股</span>
+            </div>
+            <div class="menu_head">点买金额 <span class="val_h_1">{$data['PointPurchaseAmount']==''?0:$data['PointPurchaseAmount']}元</span>
+            </div>
+            <div class="menu_head">持仓盈亏<span class="val_h_2">{$data['PositionProfitAndLoss']==''?0:$data['PositionProfitAndLoss']}元</span>
+            </div>
+            <div class="menu_head">信用金<span class="val_h_2">{$data['Credit']==''?0:$data['Credit']}元</span>
+            </div>
+            <div class="menu_head">交易费用<span
+                    class="val_h_2">{$data['TransactionFee']==''?0:$data['TransactionFee']}元</span>
+            </div>
+            <div style="display:block" class=menu_body>
+                <a href="javascript:void(0);"><span class="color_1"></span><span class="name_text">服务费</span><span
+                        class="val_h">{$data['ServiceFee']==''?0:$data['ServiceFee']}元</span></a>
+                <a href="javascript:void(0);"><span class="color_2"></span><span class="name_text">递延费</span><span
+                        class="val_h">{$data['DeferredFee']==''?0:$data['DeferredFee']}元</span></a>
+            </div>
+        </div>
+        <!-- 代码 开始 -->
+    </div>
+</div>
+{/block}
+{block name="script"}
+<!--时间js start-->
+<script src="__STATIC__/admin/assets/date/js/moment-with-locales.js"></script>
+<script src="__STATIC__/admin/assets/date/js/bootstrap-datetimepicker.js"></script>
+<!--时间js end-->
+<script type=text/javascript>
+    $(document).ready(function () {
+        $(".menu_body:eq(0)").show();
+        $("div.menu_head").click(function () {
+            $(this).addClass("listcurrent").next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+            $(this).siblings().removeClass("listcurrent");
+        });
+        $(".menu_body:eq(0)").show();
+        $("div.menu_head").mouseover(function () {
+            $(this).addClass("listcurrent").next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+            $(this).siblings().removeClass("listcurrent");
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker12').datetimepicker({
+            locale: 'zh-cn',
+            viewMode: 'days',
+            format: 'YYYY/MM/DD'
+        });
+        $('#datetimepicker13').datetimepicker({
+            locale: 'zh-cn',
+            viewMode: 'days',
+            format: 'YYYY/MM/DD'
+        });
+        $("#datetimepicker12").on("dp.change", function (e) {
+            $('#datetimepicker13').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker13").on("dp.change", function (e) {
+            $('#datetimepicker12').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>{/block}

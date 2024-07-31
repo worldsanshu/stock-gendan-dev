@@ -1,0 +1,280 @@
+{extend name="public:layout" /}
+{block name="style"}
+<link rel="stylesheet" href="__STATIC__/public/css/animate.min.css">
+<link rel="stylesheet" href="__STATIC__/home/css/index.css">
+<link rel="stylesheet" href="__STATIC__/css/modelmain.css">
+{/block}
+{block name="main-container"}
+<div class="down-bg">
+    <div class="wrapper clearfix">
+        <div class="news-article">
+            <div class="down-right"
+                 style="width: 420px; height: 235px; left: 50%; position: absolute; margin-left: -240px; top: 220px;">
+                <!--p class="brief fadeInDown animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;"><i class="icon icon-right"></i>用户一键下单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon icon-right"></i>随时随地掌上配资</p-->
+                <div class="down-App clearfix" style="text-align:center;height: 235px;">
+                    <a href="javascript:;"><span class="down-erweima"><img
+                            src="{:get_files_path(config('home_img_01'))}" style="width:180px;"></span>安卓扫码下载</a>
+                    <a href="javascript:;"><span class="down-erweima"><img
+                            src="{:get_files_path(config('home_img_03'))}" style="width:180px;"></span>苹果扫码下载</a>
+
+                </div>
+                <!--<div class="clearfix" style="text-align: center; margin-left: 18px; margin-top: 0; width: 375px; border: 1px solid #fff; border-radius: 5px; padding: 5px; background: #f1f1f1; font-size: 20px;"><a href="/uploads/down/htyp-win32-x64.zip">电脑交易端下载</a></div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    a {
+        color: #333333;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    img {
+        border: none;
+        vertical-align: middle;
+    }
+
+    .wrapper {
+        width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .clearfix {
+        *zoom: 1;
+    }
+
+    .clearfix:before, .clearfix:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both;
+    }
+
+    a:focus {
+        outline: thin dotted #333;
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
+    }
+
+    a:hover, a:active {
+        outline: 0;
+    }
+
+    img {
+        width: auto \9;
+        height: auto;
+        max-width: 100%;
+        vertical-align: middle;
+        border: 0;
+        -ms-interpolation-mode: bicubic;
+    }
+
+    @media print {
+        * {
+            color: #000 !important;
+            text-shadow: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        a, a:visited {
+            text-decoration: underline;
+        }
+
+        a[href]:after {
+            content: " (" attr(href) ")";
+        }
+
+        a[href^="javascript:"]:after {
+            content: "";
+        }
+
+        img {
+            page-break-inside: avoid;
+        }
+
+        img {
+            max-width: 100% !important;
+        }
+    }
+
+    a {
+        color: #08c;
+        text-decoration: none;
+    }
+
+    a:hover, a:focus {
+        color: #005580;
+        text-decoration: underline;
+    }
+
+    img {
+        max-width: 100%;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: #FF8800;
+    }
+
+    a:active {
+        text-decoration: none;
+    }
+
+    /*! CSS Used from: Embedded */
+    .down-bg {
+        background: url(/uploads/images/download_b.jpg) no-repeat;
+        background-size: 100% 100%;
+        padding-top: 11px;
+        padding-bottom: 35px;
+        width: 100%;
+        position: relative;
+        z-index: 86;
+        height: 600px;
+    }
+
+    .down-bg .down-App a {
+        border-radius: 7px;
+        width: 210px;
+        height: 147px;
+        line-height: 55px;
+        text-align: center;
+        display: block;
+        font-size: 20px;
+        margin-bottom: 8px;
+        border: 0px;
+        float: left;
+        color: lightyellow;
+        text-decoration: none;
+        cursor: default;
+    }
+
+    .down-bg .down-App a .down-erweima {
+        display: block;
+    }
+</style>
+
+{/block}
+
+{block name="script"}
+
+
+<script>
+    var searchStockUrl = "{:url('market/index/search_keyword')}"; // 搜索股票接口
+</script>
+<script src="__STATIC__/common/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="__STATIC__/libs/underscore-min.js"></script>
+<script src="__STATIC__/libs/full-width-slider/full-width-slider.js"></script>
+<script src="__STATIC__/home/js/index.js"></script>
+<!-- <script language="javascript" src="http://ddt.zoosnet.net/JS/LsJS.aspx?siteid=DDT59619908&float=1&lng=cn"></script> -->
+<script>
+    // $.ajax({ url: "/index/index/startapi.html",  success: function(){}});
+    /*网站公告*/
+    jQuery(".notice-left").slide({
+        titCell: ".hd ul",
+        mainCell: ".bd ul",
+        autoPage: true,
+        effect: "left",
+        autoPlay: true,
+        vis: 2
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#goodcover').show();
+        $('#code').fadeIn();
+        //alert($(window).height());
+        $('#ClickMe').click(function () {
+            $('#code').center();
+
+            $('#code').fadeIn();
+        });
+        $('#closebt').click(function () {
+            $('#code').hide();
+            $('#goodcover').hide();
+        });
+        $('#goodcover').click(function () {
+            $('#code').hide();
+            $('#goodcover').hide();
+        });
+        //  $("#ClickMe").click();
+        // document.getElementById("ClickMe").click();
+        /*var val=$(window).height();
+        var codeheight=$("#code").height();
+        var topheight=(val-codeheight)/2;
+        $('#code').css('top',topheight);*/
+        jQuery.fn.center = function (loaded) {
+            var obj = this;
+            body_width = parseInt($(window).width());
+            body_height = parseInt($(window).height());
+            block_width = parseInt(obj.width());
+            block_height = parseInt(obj.height());
+
+            left_position = parseInt((body_width / 2) - (block_width / 2) + $(window).scrollLeft());
+            if (body_width < block_width) {
+                left_position = 0 + $(window).scrollLeft();
+            }
+            ;
+
+            top_position = parseInt((body_height / 2) - (block_height / 2) + $(window).scrollTop());
+            if (body_height < block_height) {
+                top_position = 0 + $(window).scrollTop();
+            }
+            ;
+
+            if (!loaded) {
+
+                obj.css({
+                    'position': 'absolute'
+                });
+                obj.css({
+                    'top': ($(window).height() - $('#code').height()) * 0.5,
+                    'left': left_position
+                });
+                $(window).bind('resize', function () {
+                    obj.center(!loaded);
+                });
+                $(window).bind('scroll', function () {
+                    obj.center(!loaded);
+                });
+
+            } else {
+                obj.stop();
+                obj.css({
+                    'position': 'absolute'
+                });
+                obj.animate({
+                    'top': top_position
+                }, 200, 'linear');
+            }
+        }
+
+    })
+
+</script>
+
+
+{/block}

@@ -1,0 +1,125 @@
+<p>Stock Allocation Entrustment Management Fund Agreement</p>
+<p><strong>Party A (Principal): Jiuding</strong><strong>Capital Allocation</strong><strong>- Stock Allocation</strong></p>
+<p>Contact address: 5G, Building 2, Xushida Mingyuan, Xin'an Fifth Road, Xin'an Street, Bao'an District, Shenzhen</p>
+<p>Entrusted amount: ￥ [borrowMoney]</u></p>
+<p>Entrustment period:<u>[borrow_duration] [type]</u></p>
+<p>Interest receivable per [type]:<u>¥ [investor]</u></p>
+<p>&nbsp;</ P>
+<p>(Note: There is rounding in the calculation.)</p>
+<p>Party B (trustee): [user_name]</p>
+<p>&nbsp;</ P>
+<table border="1px" cellspacing="0px" style="width: 100%">
+<tbody>
+<tr>
+<td>Real name</td>
+<td>ID No</td>
+<td>User name</td>
+</tr>
+<tr>
+<td>[real_name]</td>
+<td>[idcard]</td>
+<td>[user_name]</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</ P>
+<p><strong>First item&nbsp&nbsp; General</strong></p>
+<p>1. The first party is a legally established and validly existing limited liability company, which owns the management rights of the [WEB_URL] website (hereinafter referred to as&ldquo; [web_name]&rdquo;), manages the credit and deserved interests of website users, and assumes the responsibilities under Article 9, Paragraph 4 of this agreement</ P>
+<p>2. The second party has registered on the [web_name] website and promises that the information provided to the first party is completely true</ P>
+<p>3. The first party promises to have full control over the entrusted funds involved in this agreement, which is its own idle funds and is its legitimate income; And promise that the information provided to Party A is completely true</ P>
+<p>4. The second party has stock trading technology that can earn profits in the stock market. The first party is willing to entrust the funds in the stock account to the second party for management to obtain fixed interest income. Both parties intend to establish a fund management relationship</ P>
+<p>Based on this, all parties have reached the following agreement through consultation and agreement, in order to jointly abide by it:</p>
+<p>&nbsp;</ P>
+<p>Article 2&nbsp; Entrustment method and purpose</strong></p>
+<p>&nbsp;; 1. Both parties agree to entrust the management of funds in accordance with this agreement, and Party B shall pay interest to Party A in a lump sum of days and months through Party A. Both parties agree as follows regarding the entrusted amount, daily and monthly interest on funds, deposit amount, entrusted period, interest payment date, and interest payment method:</p>
+<p>&nbsp;</ P>
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td>
+<p>Entrusted amount</p>
+</td>
+<td>
+<p>￥ [borrowMoney]</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Fund [type] interest rate</p>
+</td>
+<td>
+<p><u> [rate]</u>%</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Deposit amount</p>
+</td>
+<td>
+<p>￥ [deposit_money] yuan</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Mandate period</p>
+</td>
+<td>
+<p><u> [borrow_duration]</u>  [type],  Starting from [add_time];, To  [end_time] End</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Entrustment expiration date</p>
+</td>
+<td>
+<p>[end_time]  (Before 24:00, holidays will be postponed accordingly)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Interest payment method</p>
+</td>
+<td>
+<p>Full payment of monthly interest in advance upon commission</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</ P>
+<p>2. After both parties sign the "Entrusted Management Fund Agreement", Party A shall transfer Party A's entrusted funds and Party B's deposit from the designated bank account to Party A's stock trading account, and inform Party B of the account number and trading password of the stock trading account</ P>
+<p>3. Party B may use the total amount of funds (including entrusted funds and deposits) in the above stock trading account to purchase stocks traded in Shanghai or Shenzhen Stock Exchange. The profits shall belong to Party B, and the losses shall be borne by Party B. That is, all risks and consequences arising from Party B's stock trading and other operations in the above account shall be borne by Party B, which has nothing to do with Party A and Party A</ P>
+<p>4. In principle, the shares purchased by Party B shall have good performance, moderate scale of circulating capital stock and good liquidity. The second party shall purchase stocks in accordance with the following conditions:</p>
+<p>&nbsp;&nbsp;&nbsp; 1) Not allowed to purchase S, ST, * ST, S * ST, SST, and stocks specially processed by the exchange; Not allowed to purchase stocks with significant negative effects (including but not limited to being investigated by the China Securities Regulatory Commission or public security organs); Do not purchase stocks that are blacklisted by default in the system</ P>
+<p>&nbsp;&nbsp;&nbsp; 2) Not allowed to purchase stocks with a stock price below 5 yuan; Not allowed to purchase funds; Not allowed to subscribe to new shares</ P>
+<p>&nbsp;&nbsp;&nbsp; 3) Not allowed to purchase stocks on the first day of resumption after suspension; Not allowed to purchase new shares listed on the first day; Not allowed to purchase stocks that do not have price limits; Do not purchase stocks with a daily drop of more than 7% (including stocks that have opened the daily limit)</ P>
+<p>&nbsp;&nbsp;&nbsp; 4) Main board single stock holding, single ticket full position</p>
+<p>&nbsp;&nbsp; 5) Daily profit withdrawal limit of 1 time, withdrawal limit of 3 times</p>
+<p>&nbsp;; If, based on the closing price, Party B violates the agreement on a certain trading day, Party B must adjust to the agreed proportion by 10:30 am on the next trading day. Otherwise, Party A has the right to completely sell the class of stocks that violate this agreement at any tradable price</ P>
+<p>5. The first party and the second party unanimously agree to entrust the first party with full account management and risk control for the second party. In the process of the second party using the stock trading account for investment trading, the second party is willing to accept the supervision of the first party and the first party</ P>
+<p>6. The right to interpret the above rules belongs to Party A. Party A may make necessary modifications and improvements to the participation rules based on business and risk control needs. If there are any adjustments, Party A will promptly publish them on its website. If both parties continue to use this service after the announcement of changes in this agreement and specific rules, it means that both parties have fully read, understood, and accepted the modified agreement and specific rules, We will also use the services of this website in accordance with the revised agreement and specific rules; At the same time, regarding the transactions and their effectiveness conducted by both parties through this website before the amendment of the agreement and specific rules, it shall be deemed that you have agreed to and have granted corresponding authorization and recognition in accordance with this agreement and relevant rules</ P>
+<p>&nbsp;</ P>
+<p><strong>Article 3&nbsp&nbsp; Conclusion of Agreement</strong></p>
+<p>1. All parties agree and confirm that they confirm the signing of this agreement by themselves or authorizing relevant parties to apply for entrusted funds and register on the [web_name] website in accordance with the relevant rules and instructions of the [web_name] website</ P>
+<p>2. When both parties accept this agreement through the above means and Party A approves it, this agreement shall be immediately established; At the same time as the agreement is established, Party A shall not revoke the authorization, and Party A shall transfer the entrusted funds to the stock trading account operated by Party B</ P>
+<p>3. The first party agrees and authorizes the first party to deduct and pay the entrusted funds and related fees in accordance with this agreement and the relevant rules of the [web_name] website, and the first party shall collect the relevant funds paid by the second party on behalf of the first party</ P>
+<p>&nbsp;</ P>
+<p>Article 4 Margin and Guarantee Scope</p>
+<p>1. The second party shall pay the deposit to the designated account of the first party in accordance with the provisions of the "Entrusted Management Fund Agreement", and timely replenish the deposit. If Party B increases the deposit or converts the profits into deposit, Party B shall notify Party A for confirmation</ P>
+<p>2. The guarantee scope of Party B's security deposit includes but is not limited to: principal and interest of entrusted funds, Late fee, liquidated damages and damages</ P>
+<p>3. If Party B fails to pay any payment in a timely manner, Party A has the right to close the position and withdraw funds from the stock trading account corresponding to the entrusted funds or modify the password to restrict trading, and then directly collect the outstanding amount from the deposit corresponding to the entrusted funds. If the deposit of the entrusted funds is insufficient to pay, Party A has the right to deduct it from the deposit of other entrusted funds of Party B</ P>
+<p>4. The second party authorizes the first party that if the second party fails to fulfill any obligations stipulated in this agreement, the first party may directly deduct the amount owed by the second party from the deposit of the second party, regardless of whether the first party has notified the second party in advance. This authorization is irrevocable within the statutory statute of limitations of this agreement</ P>
+<p>&nbsp;</ P>
+<p>Article 5 Entrustment Period and Interest</strong></p>
+<p>1. The interest rate of the entrusted funds shall be subject to the provisions of the Entrusted Management Fund Agreement. The interest shall be charged from the day when the stock trading account is opened and qualified for trading, and the entrusted funds of Party A are fully received</ P>
+<p>2. Entrustment period: The entrusted amount and term shall be subject to the Entrustment Management Fund Agreement. If Party B requests liquidation, Party A shall be notified 5 days in advance</ P>
+<p>3. The interest payment method is:</p>
+<p>&nbsp;&nbsp;&nbsp; Monthly payment before use, i.e. the interest for the first month shall be paid on the day before Party B starts using the principal's funds, and the interest for the second month shall be paid on the day after Party B has used the principal's funds for one full month, and so on (paid in advance in case of holidays). Party B shall pay the interest for the current month in advance to the account designated by Party A, and Party A shall transfer the interest to Party A on time</ P>
+<p>4. If Party B delays the payment of interest, Party A has the right to directly transfer the stock closing position in the stock trading account without the consent of Party B, and charge a Late fee of 0.1% of the total amount of interest in arrears every day. If the total assets in the stock trading account reach the warning line or position closing line after Party A collects interest and Late fee for selling the stock varieties, the warning line and position closing line of this agreement shall prevail</ P>
+<p>5. During the commission period, regardless of any reason, if Party B fails to use the stock trading account for trading or causes the stock account to be unable to trade, Party B shall pay interest to Party A in accordance with the provisions of this agreement</ P>
+<p>&nbsp;</ P>
+<p>Article 6 Termination of Mandate and Settlement Method</p>
+<p>1. When the total assets of the stock trading account (including cash and securities) exceed the total amount of entrusted funds and margin, it shall be deemed that the profits of the stock trading account belong to Party B. Party B has the right to request Party A to transfer the profits to Party B's account. The profits exceeding the trading funds can be withdrawn, with a minimum of 1000 yuan and a maximum of once every 10 natural days, The time for Party A to accept the profit payment is from 9:30 to 14:30 on each trading day. For customers who apply after 14:30, the funds will be processed on T+1 day. The first party shall complete the transfer within the day of receiving the payment notice from the second party, except for cases where the transfer cannot be completed on the same day due to bank or securities company reasons</ P>
+<p>2. Handling of suspended stocks: Upon the occurrence of suspended stocks in the agreement account, Party A shall immediately freeze Party B's deposit of 30% of the market value of the suspended stocks until the suspended stocks are opened and realized (profits and losses belong to Party B) before releasing them. The remaining Party B's deposit, which accounts for more than 108% of the market value of all non suspended stocks, may continue to trade. If Party B fails to meet the above requirements, Party B shall make up the deposit within three days. If Party B cannot make up the deposit, the agreement shall be terminated, The first party shall settle all outstanding stocks in accordance with paragraph 3 of this article</ P>
+<p>3. One trading day before the expiration of each commission, Party B shall convert all the total assets of the stock trading account into monetary funds. On the expiration date, both parties shall handle the liquidation procedures for the assets in the commission fund account. Party A shall transfer the funds other than Party A's principal and accrued interest to Party B's account within three days after completing the liquidation procedures; If there are suspended stocks in the stocks purchased by Party B that cannot be sold, Party B must retain a risk deposit of 30% of the market value of the suspended stocks, and then continue to pay interest to continue this agreement until the suspension ends. Otherwise, Party A will calculate the profit or loss of Party B's trading account based on 70% of the final closing price before the suspension to complete account settlement</ P>
+<p>4. If Party A fails to fully recover its entrusted funds and interest upon the expiration of the commission or termination of this agreement, Party A has the right to recover from Party B. In addition to returning all entrusted funds and paying interest to Party A, Party B shall also pay interest to Party A's account at a rate of 0.1% of the sum of entrusted funds and deposit per day from the date of commission expiration</ P>
+<p>5. When this agreement is terminated for any reason, Party B shall transfer the principal's entrusted capital</p>

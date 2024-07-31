@@ -1,0 +1,241 @@
+<link rel="stylesheet" href="/static/admin/css/statistics.css">
+<div class="col-md-12">
+    <div class="layui-body layui-bg-gray">
+        <div class="layui-card layui-bg-gray">
+
+            <div class="layui-card-body layui-anim layui-anim-upbit">
+                <div class="think-box-shadow store-total-container notselect">
+                    <div class="col-md-10"></div>
+                    <div class="col-md-2"><a href="/FB.php/admin/index/index.html?rq=1">今日</a> <a
+                            href="/FB.php/admin/index/index.html?rq=2">本周</a> <a
+                            href="/FB.php/admin/index/index.html?rq=3">本月</a></div>
+                    <div class="margin-bottom-15">数据统计</div>
+
+                    <div class="layui-row layui-col-space15">
+
+
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+                                <div>注册用户</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_member_num}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yestoday_member_num}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-user" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-141deg,#ecca1b,#f39526)">
+                                <div>用户充值</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_money_recharge}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_money_recharge}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-survey" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#ec4b1b,#f39526);">
+                                <div>用户提现</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_money_withdraw}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_money_withdraw}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-dollar" style="font-size: 40px;"></i>
+                        </div>
+
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-113deg,#8e8cb3,#2219d0);">
+                                <div>配资金额</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_stock_money}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_stock_money}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-113deg,#c543d8,#925cc3)">
+                                <div>追加保证金额</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$tody_jjpz}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_jjpz}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#963064,#8a0920);">
+                                <div>扩大配资</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$tody_kdpz}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_kdpz}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#963064,#8a0920);">
+                                <div>终止操盘</div>
+                                <div> &nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$tody_zz_num}个</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_zz_num}个</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+                                <div>操盘活跃用户</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$tody_cp_num}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_cp_num}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-user" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-113deg,#8e8cb3,#2219d0);">
+                                <div>平台盈利</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$tody_ptyl}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_ptyl}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-113deg,#c543d8,#925cc3)">
+                                <div>平台服务费</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$tody_ptfww}</span>
+                                </div>
+                                <p>{$rq2} <span class="num3">{$yes_ptfww}</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <!--<div class="layui-col-sm6 layui-col-md2">-->
+                        <!--<div class="store-total-item nowrap" style="background:linear-gradient(-113deg,#c543d8,#925cc3)">-->
+                        <!--<div>配资总量</div>-->
+                        <!--<div>{$stock_nums}</div>-->
+                        <!--<div>今日配资订单 <span class="num2">{$today_stock_nums}</span>-->
+                        <!--</div>-->
+                        <!--<p>昨日配资订单 <span class="num3">{$yes_stock_nums}</span>-->
+                        <!--</p>-->
+                        <!--</div><i class="store-total-icon layui-icon layui-icon-read"></i>-->
+                        <!--</div>-->
+
+
+                    </div>
+                </div>
+
+                <div class="think-box-shadow store-total-container notselect">
+                    <div class="margin-bottom-15">代理商数据统计</div>
+                    <div class="layui-row layui-col-space15">
+
+
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+                                <div>代理商总数</div>
+                                <div>{$proxy_total}</div>
+                                <div>&nbsp; <span class="num2">&nbsp;</span>
+                                </div>
+                                <p>&nbsp; <span class="num3">&nbsp;</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-user" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-141deg,#ecca1b,#f39526)">
+                                <div>{$rq1}活跃代理商</div>
+                                <div>{$proxy_users}个</div>
+                                <div>&nbsp; <span class="num2">&nbsp;</span>
+                                </div>
+                                <p>&nbsp; <span class="num3">&nbsp;</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-user" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#ec4b1b,#f39526);">
+                                <div>用户充值数</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_proxy_money_recharge_num}个</span>
+                                </div>
+                                <p>&nbsp; <span class="num3">&nbsp;</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-dollar" style="font-size: 40px;"></i>
+                        </div>
+
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-113deg,#8e8cb3,#2219d0);">
+                                <div>用户充值金额</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_proxy_money_recharge}</span>
+                                </div>
+                                <p>&nbsp; <span class="num3">&nbsp;</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-113deg,#c543d8,#925cc3)">
+                                <div>用户提现金额</div>
+                                <div>&nbsp;</div>
+                                <div>{$rq1} <span class="num2">{$today_proxy_money_withdraw}</span>
+                                </div>
+                                <p>&nbsp; <span class="num3">&nbsp;</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb" style="font-size: 40px;"></i>
+                        </div>
+
+                        <!--<div class="layui-col-sm6 layui-col-md2">-->
+                        <!--<div class="store-total-item nowrap" style="background:linear-gradient(-113deg,#c543d8,#925cc3)">-->
+                        <!--<div>配资总量</div>-->
+                        <!--<div>{$stock_nums}</div>-->
+                        <!--<div>今日配资订单 <span class="num2">{$today_stock_nums}</span>-->
+                        <!--</div>-->
+                        <!--<p>昨日配资订单 <span class="num3">{$yes_stock_nums}</span>-->
+                        <!--</p>-->
+                        <!--</div><i class="store-total-icon layui-icon layui-icon-read"></i>-->
+                        <!--</div>-->
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+</div>

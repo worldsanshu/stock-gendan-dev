@@ -1,0 +1,483 @@
+<div class="col-md-12">
+    <style>
+
+        img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .layui-body {
+            overflow: hidden;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .layui-icon {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        div, p, td {
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        a:active, a:hover {
+            outline: 0;
+        }
+
+        img {
+            border: none;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #777;
+        }
+
+        .layui-icon {
+            font-family: layui-icon !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .layui-icon-survey:before {
+            content: "\e6b2";
+        }
+
+        .layui-icon-read:before {
+            content: "\e705";
+        }
+
+        .layui-icon-dollar:before {
+            content: "\e659";
+        }
+
+        .layui-icon-rmb:before {
+            content: "\e65e";
+        }
+
+        .layui-icon-user:before {
+            content: "\e770";
+        }
+
+        .layui-icon-template-1:before {
+            content: "\e656";
+        }
+
+        .layui-body {
+            margin: 0;
+            padding: 0
+        }
+
+        .layui-layout-admin .layui-body {
+            position: fixed;
+            top: 60px;
+            bottom: 44px;
+        }
+
+        .layui-row:after, .layui-row:before {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        .layui-col-md2, .layui-col-md3, .layui-col-md6, .layui-col-sm6 {
+            position: relative;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        @media screen and (min-width: 768px) {
+            .layui-col-sm6 {
+                float: left;
+            }
+
+            .layui-col-sm6 {
+                width: 50%;
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            .layui-col-md2, .layui-col-md3, .layui-col-md6 {
+                float: left;
+            }
+
+            .layui-col-md2 {
+                width: 16.66666667%;
+            }
+
+            .layui-col-md3 {
+                width: 25%;
+            }
+
+            .layui-col-md6 {
+                width: 50%;
+            }
+        }
+
+        .layui-col-space15 {
+            margin: -7.5px;
+        }
+
+        .layui-col-space15 > * {
+            padding: 7.5px;
+        }
+
+        .layui-card {
+            margin-bottom: 15px;
+            border-radius: 2px;
+            background-color: #fff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+        }
+
+        .layui-card-body {
+            position: relative;
+            padding: 10px 15px;
+            line-height: 24px;
+        }
+
+        .layui-card-body .layui-table {
+            margin: 5px 0;
+        }
+
+        .layui-bg-gray {
+            background-color: #eee !important;
+            color: #666 !important;
+        }
+
+        .layui-table {
+            margin: 10px 0;
+        }
+
+        .layui-table {
+            width: 100%;
+            background-color: #fff;
+            color: #666;
+        }
+
+        .layui-table tr {
+            transition: all .3s;
+            -webkit-transition: all .3s;
+        }
+
+        .layui-table tbody tr:hover, .layui-table[lay-even] tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .layui-table td, .layui-table[lay-skin=line] {
+            border-width: 1px;
+            border-style: solid;
+            border-color: #e6e6e6;
+        }
+
+        .layui-table td {
+            position: relative;
+            padding: 9px 15px;
+            min-height: 20px;
+            line-height: 20px;
+            font-size: 14px;
+        }
+
+        .layui-table[lay-skin=line] td {
+            border-width: 0 0 1px;
+        }
+
+        .layui-table img {
+            max-width: 100px;
+        }
+
+        .layui-anim {
+            -webkit-animation-duration: .3s;
+            animation-duration: .3s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        .layui-anim-upbit {
+            -webkit-animation-name: layui-upbit;
+            animation-name: layui-upbit;
+        }
+
+        ::selection {
+            color: #fff !important;
+            background-color: #ec494e !important;
+        }
+
+        ::-moz-selection {
+            color: #fff !important;
+            background-color: #ec494e !important;
+        }
+
+        ::-webkit-input-placeholder {
+            color: #aaa;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #ccc !important;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #666 !important;
+        }
+
+        body a {
+            color: #06C;
+            cursor: pointer;
+        }
+
+        body a:hover {
+            color: #039;
+        }
+
+        .think-box-shadow {
+            background: #fff;
+            padding: 20px 20px !important;
+            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .layui-table td {
+            font-size: 12px;
+        }
+
+        .layui-layout > .layui-body {
+            top: 50px;
+            bottom: 0;
+            overflow: auto;
+        }
+
+        .layui-layout > .layui-body > .layui-card {
+            box-shadow: none;
+        }
+
+        .layui-layout > .layui-body > .layui-card > .layui-card-body {
+            padding: 15px 15px;
+        }
+
+        .layui-layout.layui-layout-left-hide > .layui-body {
+            left: 0 !important;
+        }
+
+        .notselect {
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .nowrap {
+            white-space: nowrap !important;
+        }
+
+        .text-left {
+            text-align: left !important;
+        }
+
+        .font-s14 {
+            font-size: 14px !important;
+        }
+
+        .margin-bottom-15 {
+            margin-bottom: 15px !important;
+        }
+
+        .store-total-container {
+            font-size: 14px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .store-total-container .store-total-icon {
+            top: 45%;
+            right: 8%;
+            font-size: 65px;
+            position: absolute;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .store-total-container .store-total-item {
+            color: #fff;
+            line-height: 4em;
+            padding: 15px 25px;
+            position: relative;
+        }
+
+        .store-total-container .store-total-item > div:nth-child(2) {
+            font-size: 46px;
+            line-height: 46px;
+        }
+
+        .num2 {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 100%;
+        }
+
+        .store-total-container .store-total-item > div:nth-child(2) {
+            font-size: 26px;
+            line-height: 36px;
+            font-weight: bold;
+        }
+
+        .store-total-container .store-total-item {
+            line-height: 2em;
+        }
+
+        @-webkit-keyframes layui-upbit {
+            from {
+                -webkit-transform: translate3d(0, 30px, 0);
+                opacity: .3;
+            }
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes layui-upbit {
+            from {
+                transform: translate3d(0, 30px, 0);
+                opacity: .3;
+            }
+            to {
+                transform: translate3d(0, 0, 0);
+                opacity: 1;
+            }
+        }
+
+        @font-face {
+            font-family: layui-icon;
+            src: url(/static/font/iconfont.eot?v=250);
+            src: url(./font/iconfont.eot?v=250#iefix) format('embedded-opentype'), url(/static/font/iconfont.woff2?v=250) format('woff2'), url(/static/font/iconfont.woff?v=250) format('woff'), url(/static/font/iconfont.ttf?v=250) format('truetype'), url(/static/font/iconfont.svg?v=250#layui-icon) format('svg');
+        }
+    </style>
+
+    <div class="layui-body layui-bg-gray">
+        <div class="layui-card layui-bg-gray">
+
+            <div class="layui-card-body layui-anim layui-anim-upbit">
+                <div class="think-box-shadow store-total-container notselect">
+                    <div class="margin-bottom-15">数据统计</div>
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#963064,#8a0920);">
+                                <div>预估佣金</div>
+                                <div>152944.73</div>
+                                <div>今日新增佣金 <span class="num2">3037.41</span>
+                                </div>
+                                <p>昨日新增佣金 <span class="num3">2915.1</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+                        </div>
+
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+                                <div>用户总量</div>
+                                <div>46103</div>
+                                <div>今日新增用户 <span class="num2">122</span>
+                                </div>
+                                <p>昨日新增用户 <span class="num3">174</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-user"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-113deg,#c543d8,#925cc3)">
+                                <div>配资总量</div>
+                                <div>108353</div>
+                                <div>今日配资订单 <span class="num2">2075</span>
+                                </div>
+                                <p>昨日配资订单 <span class="num3">2008</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-read"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-113deg,#8e8cb3,#2219d0);">
+                                <div>配资总金额</div>
+                                <div>50468039.18</div>
+                                <div>今日新增金额 <span class="num2">998352.02</span>
+                                </div>
+                                <p>昨日新增金额 <span class="num3">952495.28</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-rmb"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-141deg,#ecca1b,#f39526)">
+                                <div>用户充值</div>
+                                <div>94227.73</div>
+                                <div>今日新增充值 <span class="num2">7907.46</span>
+                                </div>
+                                <p>昨日新增充值 <span class="num3">11809.55</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md2">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#ec4b1b,#f39526);">
+                                <div>用户提现</div>
+                                <div>114149</div>
+                                <div>今日新增提现 <span class="num2">4930</span>
+                                </div>
+                                <p>昨日新增提现 <span class="num3">10061</span>
+                                </p>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-dollar"></i>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="think-box-shadow store-total-container notselect">
+                    <div class="margin-bottom-15">收入统计</div>
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-sm6 layui-col-md6">
+                            <div class="store-total-item nowrap"
+                                 style="background:linear-gradient(-141deg,#ecca1b,#f39526)">
+                                <div>累计分佣</div>
+                                <div>10523545.55</div>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-dollar"></i>
+                        </div>
+                        <div class="layui-col-sm6 layui-col-md6">
+                            <div class="store-total-item nowrap"
+                                 style="background: linear-gradient(-141deg,#ec4b1b,#f39526);">
+                                <div>分佣排名</div>
+                                <div>2977.46</div>
+                            </div>
+                            <i class="store-total-icon layui-icon layui-icon-survey"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

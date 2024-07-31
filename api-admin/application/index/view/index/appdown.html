@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html style="font-size: 125px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta name="viewport"
+          content="initial-scale=1,maximum-scale=0.5,minimum-scale=0.5,user-scalable=no,width=device-width,viewport-fit=cover">
+    <style type="text/css">
+        /* normalize */
+        a, abbr, acronym, address, applet, bdi, big, blockquote, body, caption, cite, code, dd, del, dfn, div, dl, dt, em, fieldset, font, form, h1, h2, h3, h4, h5, h6, html, iframe, ins, kbd, label, legend, li, object, ol, p, pre, q, s, samp, small, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, ul, var {
+            border: 0;
+            margin: 0;
+            outline: 0;
+            padding: 0;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0)
+        }
+
+        *, :after, :before {
+            box-sizing: border-box
+        }
+
+        img {
+            border: 0
+        }
+
+        a, li {
+            overflow: hidden
+        }
+
+        a {
+            text-decoration: none;
+            color: #333
+        }
+
+        a:hover {
+            text-decoration: none !important
+        }
+
+        li {
+            list-style-type: none;
+            float: left
+        }
+
+        i {
+            font-style: normal
+        }
+
+        html {
+            display: block;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: unset !important
+        }
+
+        body, html {
+            max-width: 100%
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #555;
+            font-family: Avenir, Helvetica, Arial, sans-serif !important
+        }
+    </style>
+    <style type="text/css">
+        @media screen and (min-device-width: 1025px) {
+            html {
+                font-size: 100px !important;
+            }
+
+            .block-call-native-container {
+                max-width: 6.4rem;
+            }
+
+            .block-call-native-container .button {
+                width: auto;
+            }
+        }
+
+        .block-call-native-container {
+            width: auto;
+            margin: 0 auto
+        }
+
+        .block-call-native-container .info-pop {
+            position: fixed;
+            width: 3.8rem;
+            background: rgba(0, 0, 0, .65);
+            top: 50%;
+            left: 50%;
+            padding: .15rem .4rem .15rem .4rem;
+            border-radius: .05rem;
+            -moz-border-radius: .05rem;
+            -webkit-border-radius: .05rem;
+            animation: fadeIn .7s linear 0s normal forwards;
+            -webkit-animation: fadeIn .7s linear 0s normal forwards;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            z-index: 999
+        }
+
+        .block-call-native-container .info-pop .info-pop-wrap {
+            width: 100%;
+            height: 100%
+        }
+
+        .block-call-native-container .info-pop .info-pop-wrap p {
+            white-space: normal;
+            font-size: .24rem;
+            color: #fff;
+            text-align: center;
+            word-break: break-all;
+            word-wrap: break-word
+        }
+
+        .block-call-native-container .call-native-container .img {
+            display: block;
+            width: 100%;
+            height: auto
+        }
+
+        .block-call-native-container .button-container {
+            width: 100%
+        }
+
+        .block-call-native-container .button-container.button-container-custome {
+            position: fixed;
+            bottom: 0;
+            max-width: 840px;
+            width: 100%;
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+            background-color: #fff
+        }
+
+        .block-call-native-container .button-container .button {
+            display: block;
+            width: 100%;
+            height: .75rem;
+            margin: .2rem auto;
+            color: #fff;
+            font-size: .3rem;
+            text-align: center;
+            line-height: .75rem;
+            background-color: #fdb338;
+            cursor: pointer;
+            border-radius: .2rem
+        }
+
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .wxtip {
+            background: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 998;
+            display: none;
+        }
+
+        .wxtip-icon {
+            width: 565px;
+            height: 411px;
+            background: url(__STATIC__/wap/newappdown/tip.png) no-repeat;
+            display: block;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+
+        .button .iconfont {
+
+            margin-right: 5px
+        }
+
+        @font-face {
+            font-family: 'iconfont';
+            src: url('__STATIC__/wap/newappdown/iconfont.eot');
+            src: url('__STATIC__/wap/newappdown/iconfont.eot?#iefix') format('embedded-opentype'),
+            url('__STATIC__/wap/newappdown/iconfont.woff2') format('woff2'),
+            url('__STATIC__/wap/newappdown/iconfont.woff') format('woff'),
+            url('__STATIC__/wap/newappdown/iconfont.ttf') format('truetype'),
+            url('__STATIC__/wap/newappdown/iconfont.svg#iconfont') format('svg');
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 46px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <title>{block name="title"}{:config('web_site_title')}{/block}客户端下载页面</title>
+</head>
+
+<body>
+<div class="wxtip" id="Tip">
+    <span class="wxtip-icon"></span>
+</div>
+<div id="app">
+    <div class="block-call-native-container">
+        <!---->
+        <div class="call-native-container">
+            <section class="img-container">
+                <img src="__STATIC__/wap/newappdown/back.png" class="img">
+            </section>
+        </div>
+        <section class="button-container button-container-custome">
+
+            <a class="button" onclick="openw('android')"> <span class="iconfont">&#xe6ce;</span>下载 安卓 客户端</a>
+            <a class="button" onclick="openw('ios')"> <span class="iconfont">&#xe81a;</span>下载 苹果 客户端</a>
+            <!--<a class="button" onclick="openw('wap')"> <span class="iconfont">&#xe608;</span>访问 手机网页版</a>-->
+        </section>
+    </div>
+</div>
+</body>
+<script>
+    function openw(strvalue) {
+
+        var ua = navigator.userAgent.toLowerCase();
+
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            document.getElementById("Tip").style.display = "block";
+        } else {
+            if (strvalue == 'android') {
+                var url = "{:config('app_down_android')}";
+            } else if (strvalue == 'ios') {
+                var url = "{:config('down_ios')}";
+            } else if (strvalue == 'wap') {
+                var url = "http://{$_SERVER['HTTP_HOST']}";
+            }
+
+
+            window.location.href = url;
+
+
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>今日推荐</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__STATIC__/layui/css/style.css" media="all">
+</head>
+<style>
+    .red-t {
+        color: red;
+    }
+
+    .left-arrow2 .left-arrow:before {
+        top: 30px !important;
+    }
+
+    .layui-table[lay-size=sm] td, .layui-table[lay-size=sm] th {
+        font-size: 12px;
+        padding: 5px 0px;
+        text-align: center;
+    }
+
+    .layui-table-cell {
+        padding: 0 0;
+    }
+
+    .layui-table-header {
+        display: none;
+    }
+
+    .tt-table {
+        display: none;
+    }
+</style>
+<body>
+<div class=" ">
+    <div class="v-header">
+        <div class="v-header-left">
+            <div class="left-arrow" onclick="javascript:window.history.go(-1);"></div>
+        </div>
+        <h1 class="v-header-title">今日推荐</h1>
+    </div>
+
+    {volist name="list" id="vo" }
+    <div class="item-list">
+        <div class="van-col-title" align="center">{$vo[0]['date_str']} 必涨推荐股实盘买卖</div>
+
+        {volist name="$vo" id="v" }
+        <table lay-filter="parse-table-demo" class="tt-table"> <!-- class="layui-table" lay-size="sm" -->
+            <thead>
+            <tr>
+                <th lay-data="{field:'sign1', minWidth: 52}"></th>
+                <th lay-data="{field:'sign2', minWidth: 52}"></th>
+                <th lay-data="{field:'sign3', minWidth: 52}"></th>
+                <th lay-data="{field:'sign4', minWidth: 52}"></th>
+                <th lay-data="{field:'sign5', minWidth: 52}"></th>
+                <th lay-data="{field:'sign6', minWidth: 52}"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                <td>证券代码</td>
+                <td><span class="red-t">{$v.gupiao_code}</span></td>
+                <td>证券名称</td>
+                <td><span class="red-t">{$v.gupiao_name}</span></td>
+                <td>状态说明</td>
+                <td><span class="red-t">{$v.state}</span></td>
+            </tr>
+            <tr>
+                <td>成交价格</td>
+                <td><span class="red-t">{$v.price}</span></td>
+                <td>成交数量</td>
+                <td><span class="red-t">{$v.volume}</span></td>
+                <td>成交总额</td>
+                <td><span class="red-t">{$v.amount}</span></td>
+            </tr>
+            </tbody>
+        </table>
+        {/volist}
+    </div>
+    {/volist}
+
+</div>
+<script src="__STATIC__/libs/jquery.min.js"></script>
+<script src="__STATIC__/layui/layui.all.js?t=1"></script>
+<script>
+    layui.table.init('parse-table-demo', { //转化静态表格
+        //height: 'full-500'
+        size: 'sm'
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        var u = navigator.userAgent;
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        /*  if (isIOS) {
+            if (screen.height == 812 && screen.width == 375){
+              console.log("slider");
+
+              $(".v-header").css({"padding-top":'30px'});
+              $(".v-header-left").addClass("left-arrow2");
+
+              $("body").css("margin-bottom",'35px');
+              $("#root .weui-tabbar").css("padding-bottom",'20px');
+              console.log("iphoneX");
+            }else{
+      //不是iphoneX
+              console.log("不是iphoneX");
+            }
+          }*/
+    });
+</script>
+</body>
+</html>

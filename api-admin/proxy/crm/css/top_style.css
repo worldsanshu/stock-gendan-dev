@@ -1,0 +1,35 @@
+
+#moquu_top, #moquu_wxin, #moquu_wshare {
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    right: 10px;
+    position: fixed;
+    cursor: pointer;
+    _position: absolute;
+    _bottom: auto;
+    _top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));
+}
+
+#moquu_wxin {
+    bottom: 130px;
+    right: 10px;
+}
+
+
+.moquu_wxin, .moquu_wshare {
+    position: relative;
+    z-index: 2;
+}
+
+.moquu_wxin a:hover .moquu_wxinh, .moquu_wshare a:hover .moquu_wshareh {
+    display: block;
+}
+
+
+#topcontrol {
+    background: #4c4c4c;
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+}

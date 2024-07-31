@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>后台管理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="__STATIC__/css/borrow_detail.css" media="all">
+    <link rel="stylesheet" href="__STATIC__/css/layui-v2.5.6.css" media="all">
+
+
+    <script src="__STATIC__/js/layui-v2.5.6.js" charset="utf-8"></script>
+
+    <script src="__STATIC__/js/plugs_require-2.3.6_require.js" charset="utf-8"></script>
+
+</head>
+<style>
+    .table-responsive .table-bordered {
+        display: none;
+    }
+</style>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <div id="refresh"><i class="fa fa-refresh"></i></div>
+
+            <ul class="layui-tab-title">
+                <li class="layui-this">基本信息</li>
+                <li>持仓信息</li>
+                <li>委托记录</li>
+                <li>资金明细</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th style="text-align:center;">订单号</th>
+                            <th style="text-align:center;">配资类型</th>
+                            <th style="text-align:center;">保证金</th>
+                            <th style="text-align:center;">总操盘资金</th>
+                            <th style="text-align:center;">手续费</th>
+                            <th style="text-align:center;">总配资金额</th>
+                            <th style="text-align:center;">距离预警线</th>
+                            <th style="text-align:center;">距离强平线</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center;">{$borrow_data['order_id']}</td>
+                            <td style="text-align:center;">{$borrow_data['type']}</td>
+                            <td style="text-align:center;">{$borrow_data['deposit_money']}</td>
+                            <td style="text-align:center;">{$borrow_data['init_money']}</td>
+                            <td style="text-align:center;">{$borrow_data['borrow_interest']}</td>
+                            <td style="text-align:center;">{$borrow_data['borrow_money']}</td>
+                            <td style="text-align:center;">{$borrow_data['losswarn']}</td>
+                            <td style="text-align:center;">{$borrow_data['lossclose']}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th style="text-align:center;">操盘期限</th>
+                            <th style="text-align:center;">杠杆倍数</th>
+                            <th style="text-align:center;">状态</th>
+                            <th style="text-align:center;">申请时间</th>
+                            <th style="text-align:center;">合约时间</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center;">{$borrow_data['borrow_duration']}</td>
+                            <td style="text-align:center;">{$borrow_data['multiple']}</td>
+                            <td style="text-align:center;"><?php echo $status_arr[$borrow_data['status']]??''; ?></td>
+                            <td style="text-align:center;"><?php echo date('Y-m-d H:i:s',$borrow_data['create_time']); ?></td>
+                            <td style="text-align:center;"><?php echo date('Y-m-d H:i:s',$borrow_data['verify_time']) ?>
+                                至 <?php echo date('Y-m-d H:i:s',$borrow_data['end_time']) ?> </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!--                持仓-->
+                <div class="layui-tab-item">
+                    <div class="layuimini-container">
+                        <div class="layuimini-main">
+                            <table id="positionTab" class="layui-table "
+                                   lay-filter="currentTable">
+
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">证券代码</th>
+                                    <th style="text-align:center;">证券名称</th>
+                                    <th style="text-align:center;">持仓数量</th>
+                                    <th style="text-align:center;">可卖数量</th>
+                                    <th style="text-align:center;">买入均价</th>
+                                    <th style="text-align:center;">当前价格</th>
+                                    <th style="text-align:center;">持仓市值</th>
+                                    <th style="text-align:center;">参考盈亏</th>
+                                    <th style="text-align:center;">强平</th>
+
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($position_list as $k => $v) { ?>
+                                <tr>
+                                    <td style="text-align:center;">{$v['gupiao_code']}</td>
+                                    <td style="text-align:center;">{$v['gupiao_name']}</td>
+                                    <td style="text-align:center;">{$v['stock_count']}</td>
+                                    <td style="text-align:center;">{$v['canbuy_count']}</td>
+                                    <td style="text-align:center;">{$v['ck_price_new']}</td>
+                                    <td style="text-align:center;">{$v['now_price']}</td>
+                                    <td style="text-align:center;">{$v['market_value']}</td>
+                                    <td style="text-align:center;">{$v['ck_profit']}</td>
+                                    <td style="text-align:center;">
+                                        <a style="background: #0a8cd2;color: #fff;border-radius: 5px;display: inline-block;padding: 5px 5px;"
+                                           href="<?php echo url('/stock/subaccount/risk',array('id'=>$v['sub_id']) ); ?>"
+                                           target="_blank" class="pear-btn pear-btn-primary pear-btn-sm ">强平</a>
+                                    </td>
+                                </tr>
+                                <?php  } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                委托记录-->
+                <div class="layui-tab-item">
+                    <div class="layuimini-container">
+                        <div class="layuimini-main">
+                            <table id="entrustTab" class="layui-table"
+                                   lay-filter="currentTable">
+
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">证券代码</th>
+                                    <th style="text-align:center;">证券名称</th>
+                                    <th style="text-align:center;">订单类型/状态</th>
+                                    <th style="text-align:center;">委托价/委托量</th>
+                                    <!--                                    <th style="text-align:center;">成交价/成交量</th>-->
+                                    <th style="text-align:center;">成交额</th>
+                                    <th style="text-align:center;">订单流水号</th>
+                                    <th style="text-align:center;">成交时间</th>
+
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($trust_list as  $v1) { ?>
+                                <tr>
+                                    <td style="text-align:center;">{$v1['gupiao_code']}</td>
+                                    <td style="text-align:center;">{$v1['gupiao_name']}</td>
+                                    <td style="text-align:center;">{$v1['flag2']} / {$v1['status']}</td>
+                                    <td style="text-align:center;">{$v1['trust_price']} / {$v1['trust_count']}</td>
+                                    <!--                                    <td style="text-align:center;">{$v1['deal_price']} / {$v1['volume']}</td>-->
+                                    <td style="text-align:center;">{$v1['amount']}</td>
+                                    <td style="text-align:center;">{$v1['trust_no']}</td>
+                                    <td style="text-align:center;"><?php echo date('Y-m-d',$v1['trust_date']); ?>
+                                        {$v1['trust_time']}
+                                    </td>
+
+                                </tr>
+                                <?php  } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                资金明细-->
+                <div class="layui-tab-item">
+                    <div class="layuimini-container">
+                        <div class="layuimini-main">
+                            <table id="recordTab" class="layui-table"
+                                   lay-filter="currentTable">
+
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">类型</th>
+                                    <th style="text-align:center;">变动金额</th>
+                                    <th style="text-align:center;">账户余额</th>
+                                    <th style="text-align:center;">时间</th>
+                                    <th style="text-align:center;">说明</th>
+
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($money_record_list as  $v2) { ?>
+                                <tr>
+                                    <td style="text-align:center;">{$v2['type']}</td>
+                                    <td style="text-align:center;">{$v2['affect']}</td>
+                                    <td style="text-align:center;">{$v2['account']}</td>
+                                    <td style="text-align:center;">{$v2['create_time']}</td>
+                                    <td style="text-align:center;">{$v2['info']}</td>
+                                </tr>
+                                <?php  } ?>
+                                </tbody>
+                            </table>
+                            {$record_page}
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

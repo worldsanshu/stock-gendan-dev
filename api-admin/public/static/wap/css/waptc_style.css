@@ -1,0 +1,717 @@
+@charset "utf-8";
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "微软雅黑"
+}
+
+a {
+    text-decoration: none
+}
+
+.tan .item {
+    width: 380px;
+    height: 364px;
+    margin-right: 20px;
+    background-color: #fff;
+    margin: 0 auto;
+    margin-top: 150px;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, .1)
+}
+
+.tan .item .logo {
+    margin-top: 40px;
+    text-align: center
+}
+
+.tan .item .logo img {
+    width: 80px;
+    height: 80px
+}
+
+.tan .item .title {
+    color: #555966;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 23px;
+    margin-bottom: 10px
+}
+
+.tan .item .desc {
+    color: #808492;
+    font-size: 14px;
+    width: 300px;
+    height: 80px;
+    margin-left: 40px;
+    line-height: 26px
+}
+
+.tan .item .opts {
+    text-align: center;
+    margin-top: 36px;
+    padding-left: 15px
+}
+
+.tan .item .opts a {
+    display: inline-block;
+    color: #396fff;
+    font-size: 14px
+}
+
+.tan .item .opts em {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    vertical-align: middle;
+    margin-left: 5px;
+    background: url(../images/arrow.png) -12px no-repeat;
+    background-size: 12px 10px;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+    opacity: 0;
+    margin-bottom: 2px
+}
+
+.tan .item .opts a:hover em {
+    background-position: 0;
+    opacity: 1
+}
+
+/*以上代码用处不大，可以删除*/
+/*弹窗*/
+.tan {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .6);
+    display: none;
+    z-index: 1000
+}
+
+.tan .box {
+    width: 380px;
+    height: auto;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tan .box .form {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 40px 50px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.tan .box .form span.close {
+    position: absolute;
+    right: 16px;
+    top: 5px;
+    font-size: 14px;
+    display: block;
+    cursor: pointer;
+    height: 8px;
+    width: 8px;
+    color: #b0b8bf;
+}
+
+.tan .box .form span:hover {
+    color: #808492;
+}
+
+.tan .box .form form input {
+    display: block;
+    width: 100%;
+    outline-style: none;
+    height: 38px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 0 10px;
+}
+
+.tan .box .form h3 {
+    font-size: 18px;
+    color: #333437;
+    font-weight: normal;
+    margin-bottom: 8px;
+}
+
+.tan .box .form p.desc {
+    color: #0074fa;
+    font-size: 12px;
+    margin-bottom: 18px;
+}
+
+.tan .box .form form input[name=valicode] {
+    padding-right: 80px;
+}
+
+.tan .box .form form input[type=submit] {
+    background-color: #1278f6;
+    color: #fff;
+    border: 0;
+    height: 40px;
+    cursor: pointer;
+}
+
+.tan .box .form form input[type=submit]:hover {
+    background-color: #3382FF;
+}
+
+.tan .box .form form input.red {
+    border-color: red;
+}
+
+.tan .box .form form .valicode {
+    position: relative;
+}
+
+.tan .box .form form .valicode img {
+    position: absolute;
+    right: 8px;
+    top: 2px;
+    height: 35px;
+}
+
+.tan .box .form p.reg {
+    margin-top: 20px;
+}
+
+.tan .box .form p.reg a {
+    color: #333;
+    font-size: 12px;
+    float: right;
+}
+
+.tan .box .form p.reg a:first-child {
+    float: left;
+}
+
+.tan .box .form form .error {
+    height: 30px;
+    line-height: 30px;
+    text-align: left;
+    color: red;
+    font-size: 12px;
+    display: none;
+}
+
+.module {
+    min-width: 320px;
+    background: rgb(242, 242, 242) none repeat scroll 0% 0% / auto padding-box border-box;
+    margin: 0px;
+    border-collapse: separate;
+    border-spacing: 0px 0px;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    text-align: start;
+    text-indent: 0px;
+    cursor: auto;
+    font: normal normal 400 normal 14px / 21px -apple-system;
+    letter-spacing: normal;
+    list-style: disc outside none;
+    visibility: visible;
+    text-decoration: none solid rgb(51, 51, 51);
+    white-space: normal;
+    word-break: normal;
+    word-wrap: normal;
+    transform-origin: 207px 79.5px;
+}
+
+.module:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div1 {
+    box-sizing: border-box;
+    text-decoration: none solid rgb(51, 51, 51);
+    transform-origin: 207px 0px;
+}
+
+.module .module-div1:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div1:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div2 {
+    z-index: 19891015;
+    width: 290px;
+    top: 25%;
+    left: calc((100% - 290px) / 2);
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box content-box;
+    border-radius: 5px;
+    transform-origin: 145px 174.5px;
+}
+
+.module .module-div2:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div2:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div3 {
+    position: relative;
+    transform-origin: 145px 147px;
+    overflow: auto;
+}
+
+.module .module-div3:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div3:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div4 {
+    box-sizing: border-box;
+    text-decoration: none solid rgb(51, 51, 51);
+    transform-origin: 145px 147px;
+}
+
+.module .module-div4:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div4:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div5 {
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: 80px;
+    background: rgb(239, 73, 73) url("https://www.qtpz666.com/appimgs/ann-phead-img.png") no-repeat scroll 0px 50% / cover padding-box border-box;
+    padding: 20px 15px;
+    border-radius: 5px 5px 0px 0px;
+    transform-origin: 145px 40.5px;
+}
+
+.module .module-div5:before {
+    display: block;
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div5:after {
+    display: block;
+    position: absolute;
+    height: 24px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0) url("https://www.qtpz666.com/appimgs/ann-wave.png") repeat-x scroll 0px 100% / 100% 24px padding-box border-box;
+    text-decoration: none solid rgb(51, 51, 51);
+    content: " ";
+    transform-origin: 145px 12px;
+}
+
+.module .module-div6 {
+    flex-grow: 1;
+    flex-basis: 0%;
+    flex: 1 1 0%;
+    margin: 0px 0px 18px;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    text-align: justify;
+    font: normal normal 700 normal 18px / 23.4px -apple-system;
+    text-decoration: none solid rgb(255, 255, 255);
+    transform-origin: 130px 11.5px;
+}
+
+.module .module-div6:before {
+    text-decoration: none solid rgb(255, 255, 255);
+    content: none;
+}
+
+.module .module-div6:after {
+    text-decoration: none solid rgb(255, 255, 255);
+    content: none;
+}
+
+.module .module-div7 {
+    padding: 3px 15px 15px;
+    transform-origin: 145px 106.5px;
+}
+
+.module .module-div7:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div7:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div8 {
+    max-height: 195px;
+    min-height: 117px;
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box;
+    box-sizing: border-box;
+    color: rgb(51, 51, 53);
+    text-align: justify;
+    font: normal normal 400 normal 13px / 19.5px -apple-system;
+    text-decoration: none solid rgb(51, 51, 53);
+    transform-origin: 130px 97.5px;
+    overflow: auto;
+}
+
+.module .module-div8:before {
+    text-decoration: none solid rgb(51, 51, 53);
+    content: none;
+}
+
+.module .module-div8:after {
+    text-decoration: none solid rgb(51, 51, 53);
+    content: none;
+}
+
+.module .module-p1 {
+    transform-origin: 130px 9.5px;
+}
+
+.module .module-p1:before {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-p1:after {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-span1 {
+    box-sizing: border-box;
+    color: rgb(255, 0, 0);
+    text-decoration: none solid rgb(255, 0, 0);
+    transform-origin: 0px 0px;
+}
+
+.module .module-span1:before {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-span1:after {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-strong1 {
+    font: normal normal 700 normal 13px / 19.5px -apple-system;
+}
+
+.module .module-strong1:before {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-strong1:after {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-p2 {
+    transform-origin: 130px 28.5px;
+}
+
+.module .module-p2:before {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-p2:after {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-strong2 {
+    box-sizing: border-box;
+    font: normal normal 700 normal 13px / 19.5px -apple-system;
+    text-decoration: none solid rgb(143, 143, 148);
+    transform-origin: 0px 0px;
+}
+
+.module .module-strong2:before {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-strong2:after {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-br1:before {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-br1:after {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-br2 {
+    box-sizing: border-box;
+    text-decoration: none solid rgb(143, 143, 148);
+    transform-origin: 0px 0px;
+}
+
+.module .module-br2:before {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-br2:after {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-p3 {
+    transform-origin: 130px 19px;
+}
+
+.module .module-p3:before {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-p3:after {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-p4 {
+    transform-origin: 130px 38px;
+}
+
+.module .module-p4:before {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-p4:after {
+    text-decoration: none solid rgb(143, 143, 148);
+    content: none;
+}
+
+.module .module-span2 {
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    font: normal normal 400 normal 13px / 19.5px "PingFang SC", "Lantinghei SC", "Microsoft YaHei", arial, 宋体, sans-serif, tahoma;
+    text-decoration: none solid rgb(51, 51, 51);
+    transform-origin: 0px 0px;
+}
+
+.module .module-span2:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-span2:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-strong3 {
+    box-sizing: border-box;
+    font: normal normal 700 normal 13px / 19.5px "PingFang SC", "Lantinghei SC", "Microsoft YaHei", arial, 宋体, sans-serif, tahoma;
+    text-decoration: none solid rgb(51, 51, 51);
+    transform-origin: 0px 0px;
+}
+
+.module .module-strong3:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-strong3:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-span3 {
+    text-align: center;
+}
+
+.module .module-span3:before {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-span3:after {
+    text-decoration: none solid rgb(255, 0, 0);
+    content: none;
+}
+
+.module .module-span4 {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font: normal normal 400 normal 0px / normal -apple-system;
+    transform-origin: 0px 0px;
+}
+
+.module .module-span4:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-span4:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-a1 {
+    display: block;
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    top: -60px;
+    right: -5px;
+    background: rgba(0, 0, 0, 0) url("https://www.qtpz666.com/appimgs/actv-close.png") no-repeat scroll 50% 50% / 100% 100% padding-box border-box;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+    text-decoration: none solid rgb(51, 51, 51);
+    transform-origin: 14px 14px;
+}
+
+.module .module-a1:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-a1:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div9 {
+    padding: 0px 15px 15px;
+    text-align: center;
+    transform-origin: 145px 27.5px;
+}
+
+.module .module-div9:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div9:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-a2 {
+    height: 40px;
+    max-width: 210px;
+    background: rgb(244, 67, 54) none repeat scroll 0px 0px / auto padding-box border-box;
+    margin: 0px auto;
+    padding: 10px 30px;
+    border-radius: 30px;
+    box-sizing: border-box;
+    color: rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 40px -apple-system;
+    text-decoration: none solid rgb(255, 255, 255);
+    transform-origin: 0px 0px;
+}
+
+.module .module-a2:before {
+    text-decoration: none solid rgb(255, 255, 255);
+    content: none;
+}
+
+.module .module-a2:after {
+    text-decoration: none solid rgb(255, 255, 255);
+    content: none;
+}
+
+.module .module-div10 {
+    z-index: 19891014;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: rgb(0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
+    opacity: 0.5;
+    transform-origin: 207px 368px;
+}
+
+.module .module-div10:before {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div10:after {
+    text-decoration: none solid rgb(51, 51, 51);
+    content: none;
+}
+
+.module .module-div1 > * {
+    position: fixed;
+    box-sizing: border-box;
+    text-decoration: none solid rgb(51, 51, 51);
+}
+
+.module .module-div2 > * {
+    box-sizing: border-box;
+    text-decoration: none solid rgb(51, 51, 51);
+}
+
+.module .module-div4 > * {
+    box-sizing: border-box;
+    text-decoration: none solid rgb(51, 51, 51);
+}
+
+.module .module-div8 > * {
+    margin: 0px;
+    box-sizing: border-box;
+    color: rgb(143, 143, 148);
+    text-decoration: none solid rgb(143, 143, 148);
+}
+
+.module .module-span1 > * {
+    box-sizing: border-box;
+    text-decoration: none solid rgb(255, 0, 0);
+    transform-origin: 0px 0px;
+}
+

@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手机验证码查询</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            background-color: #f2f2f2;
+        }
+
+        form {
+            background-color: #fff;
+            width: 500px;
+            margin: 200px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #ddd;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #eee;
+        }
+
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #2E8B57;
+        }
+
+        textarea {
+            resize: none;
+            height: 150px;
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        #showRespons {
+            background-color: #fff;
+            width: 500px;
+            height: auto;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #ddd;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form method="post" action="">
+    <label for="message">输入手机号码<span>（多个号码用&分开）</span></label>
+    <textarea id="mobile_txt" name="mobile_txt"></textarea>
+    <input type="button" value="查询" onclick="query()">
+</form>
+<div id="showRespons">
+
+</div>
+</body>
+<script src="/static/js/jquery-3.7.0.min.js"></script>
+<script>
+    function query() {
+        $('#showRespons').hide();
+        let mobile_txt = $('#mobile_txt').val();
+        if (mobile_txt.length == 0) {
+            alert('请输入手机号码');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/member/sms_test/getcode',
+            data: {mobile_txt},
+            success: function (res) {
+                let status = res.status || 0;
+                let msg = res.msg || '';
+                let data = res.data || [];
+                if (status == 0) {
+                    alert(msg);
+                }
+                if (status == 1) {
+                    let Html = data.join('<br>');
+                    $('#showRespons').html(Html).slideDown(1000);
+                }
+
+
+            }
+        })
+
+
+    }
+
+</script>
+</html>

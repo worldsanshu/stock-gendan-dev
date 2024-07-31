@@ -1,0 +1,322 @@
+请客下面表的内容
+
+
+-- 资金记录
+TRUNCATE TABLE lmq_money_record;
+ALTER TABLE lmq_money_record AUTO_INCREMENT = 1;
+
+
+
+-- 登录积累
+TRUNCATE TABLE lmq_member_login_record;
+ALTER TABLE lmq_member_login_record AUTO_INCREMENT = 1;
+
+
+
+-- 资金操作记录表
+TRUNCATE TABLE lmq_stock_submoney_record;
+ALTER TABLE lmq_stock_submoney_record AUTO_INCREMENT = 1;
+
+
+
+-- 客户盈亏日报表
+TRUNCATE TABLE lmq_stock_subaccount_money_log;
+ALTER TABLE lmq_stock_subaccount_money_log AUTO_INCREMENT = 1;
+
+-- 会员消息表
+TRUNCATE TABLE lmq_member_message;
+ALTER TABLE lmq_member_message AUTO_INCREMENT = 1;
+
+-- 行为日志表
+TRUNCATE TABLE lmq_admin_log;
+ALTER TABLE lmq_admin_log AUTO_INCREMENT = 1;
+
+
+
+-- 抽奖次数获得/消耗明细
+TRUNCATE TABLE lmq_operate_record;
+ALTER TABLE lmq_operate_record AUTO_INCREMENT = 1;
+
+--  跟买每日买入的股票
+TRUNCATE TABLE lmq_fund_dayline;
+ALTER TABLE lmq_fund_dayline AUTO_INCREMENT = 1;
+
+--  签到表
+TRUNCATE TABLE lmq_member_attendancelottery;
+ALTER TABLE lmq_member_attendancelottery AUTO_INCREMENT = 1;
+
+--  股票自选表
+TRUNCATE TABLE lmq_stock_subaccount_self;
+ALTER TABLE lmq_stock_subaccount_self AUTO_INCREMENT = 1;
+
+--  股票交易盈亏积累
+TRUNCATE TABLE lmq_stock_submoney_profit_loss_record;
+ALTER TABLE lmq_stock_submoney_profit_loss_record AUTO_INCREMENT = 1;
+
+--  基金收益
+TRUNCATE TABLE lmq_fund_income;
+ALTER TABLE lmq_fund_income AUTO_INCREMENT = 1;
+
+--  股市订单
+TRUNCATE TABLE lmq_fund_order_gs;
+ALTER TABLE lmq_fund_order_gs AUTO_INCREMENT = 1;
+
+--  用户可用抽奖次数
+TRUNCATE TABLE lmq_operate_user;
+ALTER TABLE lmq_operate_user AUTO_INCREMENT = 1;
+
+--  会员资金表
+TRUNCATE TABLE lmq_money;
+ALTER TABLE lmq_money AUTO_INCREMENT = 1;
+
+--  会员信息表
+TRUNCATE TABLE lmq_member;
+ALTER TABLE lmq_member AUTO_INCREMENT = 1;
+
+--  平仓记录
+TRUNCATE TABLE lmq_stock_position_pc;
+ALTER TABLE lmq_stock_position_pc AUTO_INCREMENT = 1;
+
+--  子账户风控设置表
+TRUNCATE TABLE lmq_stock_subaccount_risk;
+ALTER TABLE lmq_stock_subaccount_risk AUTO_INCREMENT = 1;
+
+--  子账户资金信息表
+TRUNCATE TABLE lmq_stock_subaccount_money;
+ALTER TABLE lmq_stock_subaccount_money AUTO_INCREMENT = 1;
+
+--  子账户信息表
+TRUNCATE TABLE lmq_stock_subaccount;
+ALTER TABLE lmq_stock_subaccount AUTO_INCREMENT = 1;
+
+--  管理费记录表
+TRUNCATE TABLE lmq_stock_detail_new;
+ALTER TABLE lmq_stock_detail_new AUTO_INCREMENT = 1;
+
+--  配资信息表
+TRUNCATE TABLE lmq_stock_borrow;
+ALTER TABLE lmq_stock_borrow AUTO_INCREMENT = 1;
+
+--  数据报表
+TRUNCATE TABLE lmq_data_report;
+ALTER TABLE lmq_data_report AUTO_INCREMENT = 1;
+
+--  会员资金充值记录
+TRUNCATE TABLE lmq_money_recharge;
+ALTER TABLE lmq_money_recharge AUTO_INCREMENT = 1;
+
+--  股票任务记录
+TRUNCATE TABLE lmq_stock_task_record;
+ALTER TABLE lmq_stock_task_record AUTO_INCREMENT = 1;
+
+--  基金K线图
+TRUNCATE TABLE lmq_fund_line;
+ALTER TABLE lmq_fund_line AUTO_INCREMENT = 1;
+
+--  基金收益记录
+TRUNCATE TABLE lmq_fund_income_log;
+ALTER TABLE lmq_fund_income_log AUTO_INCREMENT = 1;
+
+--  合伙人-工资流水
+TRUNCATE TABLE lmq_fund_salary_log;
+ALTER TABLE lmq_fund_salary_log AUTO_INCREMENT = 1;
+
+--  股票持仓存储表
+TRUNCATE TABLE lmq_stock_position;
+ALTER TABLE lmq_stock_position AUTO_INCREMENT = 1;
+
+--  配资续期/终止表
+TRUNCATE TABLE lmq_stock_renewal;
+ALTER TABLE lmq_stock_renewal AUTO_INCREMENT = 1;
+
+--  结算盈亏面板
+TRUNCATE TABLE lmq_profit_loss;
+ALTER TABLE lmq_profit_loss AUTO_INCREMENT = 1;
+
+--  会员银行卡
+TRUNCATE TABLE lmq_member_bank;
+ALTER TABLE lmq_member_bank AUTO_INCREMENT = 1;
+
+--  基金订单
+TRUNCATE TABLE lmq_fund_order;
+ALTER TABLE lmq_fund_order AUTO_INCREMENT = 1;
+
+--  股票搜索历史
+TRUNCATE TABLE lmq_stock_history;
+ALTER TABLE lmq_stock_history AUTO_INCREMENT = 1;
+
+--  追加保证金记录表
+TRUNCATE TABLE lmq_stock_addmoney;
+ALTER TABLE lmq_stock_addmoney AUTO_INCREMENT = 1;
+
+--  充值提现统计
+TRUNCATE TABLE lmq_recharge_withdrawal;
+ALTER TABLE lmq_recharge_withdrawal AUTO_INCREMENT = 1;
+
+--  还息明细表
+TRUNCATE TABLE lmq_stock_detail;
+ALTER TABLE lmq_stock_detail AUTO_INCREMENT = 1;
+
+--  邀请奖励记录表
+TRUNCATE TABLE lmq_member_invitation_record;
+ALTER TABLE lmq_member_invitation_record AUTO_INCREMENT = 1;
+
+--  代理商资金操作记录表
+TRUNCATE TABLE lmq_agents_back_money;
+ALTER TABLE lmq_agents_back_money AUTO_INCREMENT = 1;
+
+--  验证码
+TRUNCATE TABLE lmq_verify;
+ALTER TABLE lmq_verify AUTO_INCREMENT = 1;
+
+--  股票提盈表
+TRUNCATE TABLE lmq_stock_drawprofit;
+ALTER TABLE lmq_stock_drawprofit AUTO_INCREMENT = 1;
+
+--  扩大配资记录表
+TRUNCATE TABLE lmq_stock_addfinancing;
+ALTER TABLE lmq_stock_addfinancing AUTO_INCREMENT = 1;
+
+--  邀请人与会员关系表
+TRUNCATE TABLE lmq_member_invitation_relation;
+ALTER TABLE lmq_member_invitation_relation AUTO_INCREMENT = 1;
+
+--  补贴记录
+TRUNCATE TABLE lmq_fund_recommended_award;
+ALTER TABLE lmq_fund_recommended_award AUTO_INCREMENT = 1;
+
+--  资金提现记录表
+TRUNCATE TABLE lmq_money_withdraw;
+ALTER TABLE lmq_money_withdraw AUTO_INCREMENT = 1;
+
+--  用户统计
+TRUNCATE TABLE lmq_user_statistics;
+ALTER TABLE lmq_user_statistics AUTO_INCREMENT = 1;
+
+--  代理邀请码
+TRUNCATE TABLE lmq_agent_code;
+ALTER TABLE lmq_agent_code AUTO_INCREMENT = 1;
+
+--  基金收藏
+TRUNCATE TABLE lmq_fund_collect;
+ALTER TABLE lmq_fund_collect AUTO_INCREMENT = 1;
+
+--  股票委托存储表
+TRUNCATE TABLE lmq_stock_temp;
+ALTER TABLE lmq_stock_temp AUTO_INCREMENT = 1;
+
+--  汇款记录
+TRUNCATE TABLE lmq_money_transfer;
+ALTER TABLE lmq_money_transfer AUTO_INCREMENT = 1;
+
+--  股票交割单
+TRUNCATE TABLE lmq_stock_delivery_order_broker;
+ALTER TABLE lmq_stock_delivery_order_broker AUTO_INCREMENT = 1;
+
+--  股票成交查询存储表
+TRUNCATE TABLE lmq_stock_deal_stock_broker;
+ALTER TABLE lmq_stock_deal_stock_broker AUTO_INCREMENT = 1;
+
+--  股票待除权除息表
+TRUNCATE TABLE lmq_stock_bonus_position;
+ALTER TABLE lmq_stock_bonus_position AUTO_INCREMENT = 1;
+
+--  股票已除权除息表
+TRUNCATE TABLE lmq_stock_bonus_dividend;
+ALTER TABLE lmq_stock_bonus_dividend AUTO_INCREMENT = 1;
+
+--  股票除权除息公告表
+TRUNCATE TABLE lmq_stock_bonus;
+ALTER TABLE lmq_stock_bonus AUTO_INCREMENT = 1;
+
+--  抽奖记录
+TRUNCATE TABLE lmq_operate_luckydraw;
+ALTER TABLE lmq_operate_luckydraw AUTO_INCREMENT = 1;
+
+--  抽奖发货操作记录
+TRUNCATE TABLE lmq_operate_exp;
+ALTER TABLE lmq_operate_exp AUTO_INCREMENT = 1;
+
+--  用户注册登录ip和位置信息
+TRUNCATE TABLE lmq_member_positioninfor;
+ALTER TABLE lmq_member_positioninfor AUTO_INCREMENT = 1;
+
+--  黑名单使用记录
+TRUNCATE TABLE lmq_member_blacklist_log;
+ALTER TABLE lmq_member_blacklist_log AUTO_INCREMENT = 1;
+
+--  合伙人-工资流水-详情内容
+TRUNCATE TABLE lmq_fund_salary_log_content;
+ALTER TABLE lmq_fund_salary_log_content AUTO_INCREMENT = 1;
+
+--  合约统计
+TRUNCATE TABLE lmq_contract_statistics;
+ALTER TABLE lmq_contract_statistics AUTO_INCREMENT = 1;
+
+
+--  股票委托存储表
+TRUNCATE TABLE lmq_stock_trust;
+ALTER TABLE lmq_stock_trust AUTO_INCREMENT = 1;
+
+--  股票交割单
+TRUNCATE TABLE lmq_stock_delivery_order;
+ALTER TABLE lmq_stock_delivery_order AUTO_INCREMENT = 1;
+
+--  股票成交查询存储表
+TRUNCATE TABLE lmq_stock_deal_stock;
+ALTER TABLE lmq_stock_deal_stock AUTO_INCREMENT = 1;
+
+--  推荐记录表
+TRUNCATE TABLE lmq_stock_recommend;
+ALTER TABLE lmq_stock_recommend AUTO_INCREMENT = 1;
+
+--  黑名单
+TRUNCATE TABLE lmq_member_blacklist;
+ALTER TABLE lmq_member_blacklist AUTO_INCREMENT = 1;
+
+
+--  登录记录
+TRUNCATE TABLE lmq_admin_login_logs;
+ALTER TABLE lmq_admin_login_logs AUTO_INCREMENT = 1;
+
+
+--  跟单日
+TRUNCATE TABLE lmq_fund_viptrade;
+ALTER TABLE lmq_fund_viptrade AUTO_INCREMENT = 1;
+
+--  操盘师
+TRUNCATE TABLE lmq_trader;
+ALTER TABLE lmq_trader AUTO_INCREMENT = 1;
+
+
+
+--  域名失败记录
+TRUNCATE TABLE lmq_admin_domain_abnormallog;
+ALTER TABLE lmq_admin_domain_abnormallog AUTO_INCREMENT = 1;
+
+--  接口域名
+TRUNCATE TABLE lmq_admin_domain;
+ALTER TABLE lmq_admin_domain AUTO_INCREMENT = 1;
+
+--  附件
+TRUNCATE TABLE lmq_admin_attachment;
+ALTER TABLE lmq_admin_attachment AUTO_INCREMENT = 1;
+
+
+--  操盘师每日操作记录
+TRUNCATE TABLE lmq_trader_order;
+ALTER TABLE lmq_trader_order AUTO_INCREMENT = 1;
+
+--  代理邀请码
+TRUNCATE TABLE lmq_agent_code;
+ALTER TABLE lmq_agent_code AUTO_INCREMENT = 1;
+
+--  ip白名单
+TRUNCATE TABLE lmq_ip_res;
+ALTER TABLE lmq_ip_res AUTO_INCREMENT = 1;
+
+-- 保留第一条记录，删除其他记录
+DELETE FROM lmq_admin_user WHERE id > 1;
+
+-- 重置AUTO_INCREMENT
+ALTER TABLE lmq_admin_user AUTO_INCREMENT = 2;

@@ -1,0 +1,503 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0037)https://d.nuomi.com/?channel=1020063i -->
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- <link rel="stylesheet" href="/static/dep/css/index.min.css"> -->
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./js/clipboard.min.js"></script>
+    <meta http-equiv="refresh" content="0;url=/appdown/index.html">
+    <title>宏图优配配资</title>
+    <style>
+        html, body, p, div {
+            margin: 0;
+            padding: 0;
+            font-family: "PingFang SC", "Droid Sans", "Droid Sans Fallback", "Microsoft Yahei UI", Helvetica, sans-serif;
+        }
+
+        .app-download-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            margin-top: 38px;
+            width: 112px;
+            height: 33px;
+        }
+
+        .text-1 {
+            margin-top: 18px;
+            font-size: 28px;
+            line-height: 32px;
+            color: #3c3c3c;
+            font-weight: bold;
+        }
+
+        .text-2 {
+            margin-top: 8px;
+            font-size: 28px;
+            line-height: 32px;
+            color: #3c3c3c;
+            font-weight: bold;
+        }
+
+        .download-gift-text {
+            margin-top: 8px;
+            font-size: 15px;
+            line-height: 19px;
+            color: #ccc;
+        }
+
+        .download-btn {
+            margin-top: 18px;
+            width: 192px;
+            height: 44px;
+            background-image: url(./img/button@3x.png);
+            background-size: 100% 100%;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        .download-btn:active {
+            opacity: .5;
+        }
+
+        .main-img {
+            margin-top: 8px;
+            width: 322px;
+            height: 322px;
+        }
+
+        /*! CSS Used from: https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css */
+        :-webkit-full-screen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        :-moz-full-screen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        :-ms-full-screen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        :-ms-fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        :-webkit-full-screen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        :fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /*! CSS Used from: Embedded */
+        div {
+            margin: 0;
+            padding: 0;
+        }
+
+        button, input {
+            border: 0;
+            background: 0;
+            outline: 0;
+        }
+
+        .mask-box {
+            z-index: 2;
+            position: relative;
+            display: none;
+        }
+
+        .mask-bg {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, .2);
+        }
+
+        .mask-pop {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            max-width: 300px;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .copy-url-img {
+            display: block;
+            width: 100%;
+        }
+
+        .copy-url {
+            position: relative;
+            margin: 20px 30px;
+            height: 36px;
+            line-height: 36px;
+            background: #f1f6f9;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .copy-url input {
+            padding-left: 20px;
+            color: #9a9a99;
+            line-height: 35px;
+        }
+
+        .copy-url button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 0 15px;
+            height: 36px;
+            line-height: 36px;
+            background: linear-gradient(90deg, rgba(34, 125, 249, 1), rgba(0, 203, 250, 1));
+            color: #fff;
+            border-radius: 0 18px 18px 0;
+        }
+
+        /*! CSS Used from: Embedded */
+        * {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            outline: 0;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        input {
+            -webkit-user-select: auto;
+        }
+
+        .backa {
+            width: 24px;
+            position: absolute;
+            top: 11px;
+            left: 8px;
+        }
+
+        .sdfds {
+            overflow: hidden;
+            height: 50px;
+            width: 50px;
+            position: absolute;
+        }
+
+        .row {
+
+            height: 100%;
+        }
+
+        .row img {
+            width: 100%;
+        }
+
+        .row2 {
+            background: url(./img/down_03.png) repeat-y center;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-size: 100%;
+        }
+
+        .row2 img {
+            width: 120px;
+        }
+
+        .row2 span {
+            height: 40px;
+            line-height: 40px;
+            background-color: #807f7f;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .row3 {
+            background: url(./img/down_05.png) repeat-y center;
+            height: 40px;
+            width: 100%;
+            overflow: hidden;
+            background-size: 100%;
+            max-height: 150px;
+        }
+    </style>
+</head>
+
+<body>
+<!--  <a class="sdfds" href="javascript:history.back(-1)">-->
+<!--      <img class="backa" src="./img/fanhui.png">-->
+<!--  </a>-->
+<!--  <div class="app-download-main">-->
+<!--    <div class="row">  <img src="./img/down_01.png">   </div>-->
+<!--  <div class="row2">-->
+<!--<center><img src="./img/ys.png">  </center>-->
+<!--<p align="center" onclick="install()"><span>AppStore下载</span> </p>-->
+<!--  </div>-->
+<!--     <div class="row2">-->
+<!--<center><img src="./img/sq.png">  </center>-->
+<!--<p align="center" onclick="install2()"><span>IOS 原生下载</span> </p>-->
+<!--  </div>-->
+<!--     <div class="row2">-->
+<!--<center><img src="./img/android.png">  </center>-->
+<!--<p align="center" onclick="install3()"><span>安卓下载</span> </p>-->
+<!--  </div>-->
+
+<!--    <div class="row3">-->
+
+<!--  </div>-->
+<!--  </div>-->
+<!--  <div class="mask-box safari-tips">-->
+<!--      <div class="mask-bg"></div>-->
+<!--      <div class="mask-pop">-->
+<!-- <span class="mask-colsed"><img src="http://public.hiapp.net/supersign/img/colsed.png" alt=""></span> -->
+<!--          <img class="copy-url-img" src="http://public.hiapp.net/supersign/img/safari-tip.png" alt="">-->
+<!--          <div class="copy-url">-->
+<!--              <input id="foo" type="text">-->
+<!--              <button data-clipboard-target="#foo">复制</button>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--  </div>-->
+<script type="text/javascript">
+    var locationurl_ios2 = "https://51gsc.com/ios/HA3g";
+    //var locationurl_ios = "https://apps.apple.com/cn/app/%E8%82%A1%E7%A5%A8%E9%85%8D%E8%B5%84%E7%8E%8B-%E8%82%A1%E7%A5%A8%E9%85%8D%E8%B5%84%E8%BD%AF%E4%BB%B6/id1477480349";
+    var locationurl_ios = "https://51gsc.com/ios/HA3g";
+    var locationurl_android = "https://51gsc.com/ios/HA3g";
+    var ua = navigator.userAgent;
+</script>
+<script type="text/javascript">
+    /*
+     * 智能机浏览器版本信息:
+     *
+     */
+    browser = {
+        versions: function () {
+            var u = navigator.userAgent,
+                app = navigator.appVersion;
+            return { //移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/) || !!u.match(/AppleWebKit/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+            };
+        }(),
+        language: (navigator.browserLanguage || navigator.language).toLowerCase()
+    }
+    if (browser.versions.ios || browser.versions.iPhone || browser.versions.iPad) {
+        $(".icon-warp").find("i").attr("class", "icon-ios");
+    } else {
+        $(".icon-warp").find("i").attr("class", "icon-android");
+    }
+
+    function aattr() {
+        window.location = "/";
+    }
+
+    function install() {
+        if (browser.versions.ios || browser.versions.iPhone || browser.versions.iPad) {
+            // TODO 此处写ios的下载地址                window.location="https://itunes.apple.com/cn/app/xxx";
+            window.location = locationurl_ios;
+            /*  if (document.body.offsetWidth <= 1024) {
+                if ((/Safari/.test(ua) && !/Chrome/.test(ua) && !/baidubrowser/.test(ua))) {
+                    console.log(locationurl_ios);
+                    console.log(2323);
+                    window.location = locationurl_ios;
+                } else {
+                    var ual = ua.toLowerCase();
+                    var isWeixin = ual.indexOf('micromessenger') != -1;
+                    if (isWeixin) {
+                        $('.mask').show();
+                        $("html").add("body").css({
+                            "overflow": "hidden"
+                        })
+                    } else {
+                        $('.safari-tips').show();
+                    }
+                }
+            } else if (/(Android|Linux)/i.test(ua)) {} else {
+                $('.contain-page').hide();
+                $('.pc-box').show();
+            }*/
+        } else if (browser.versions.android) {
+            // 此处写Andoird 的下载地址
+            //  window.location = "/static/app/hypz.apk";
+            // alert("安卓系统在测试中");
+            window.location = "tip.html";
+        }
+    }
+
+    function install2() {
+        if (browser.versions.ios || browser.versions.iPhone || browser.versions.iPad) {
+            // TODO 此处写ios的下载地址                window.location="https://itunes.apple.com/cn/app/xxx";
+            if (document.body.offsetWidth <= 1024) {
+                if ((/Safari/.test(ua) && !/Chrome/.test(ua) && !/baidubrowser/.test(ua))) {
+                    console.log(locationurl_ios);
+                    console.log(2323);
+                    window.location = locationurl_ios2;
+                } else {
+                    var ual = ua.toLowerCase();
+                    var isWeixin = ual.indexOf('micromessenger') != -1;
+                    if (isWeixin) {
+                        $('.mask').show();
+                        $("html").add("body").css({
+                            "overflow": "hidden"
+                        })
+                    } else {
+                        $('.safari-tips').show();
+                    }
+                }
+            } else if (/(Android|Linux)/i.test(ua)) {
+            } else {
+                $('.contain-page').hide();
+                $('.pc-box').show();
+            }
+        } else if (browser.versions.android) {
+            // 此处写Andoird 的下载地址
+            //  window.location = "/static/app/hypz.apk";
+            // alert("安卓系统在测试中");
+            window.location = "tip.html";
+
+        }
+    }
+
+    function install3() {
+        window.location = "tip.html";
+
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        if (location.search.indexOf('udid=') > 0) {
+            var udid = location.search.split('?udid=')[1]
+            udid = udid.replace('_', '-')
+            document.cookie = 'udid=' + udid
+            tryInstall()
+        } else {
+            $('.btn-mini.state5').show()
+        }
+        //
+        $('#foo').val(location.href)
+        var copyBtn = new ClipboardJS('.copy-url button');
+        copyBtn.on('success', function (e) {
+            toast('网址已复制')
+            $('.safari-tips').hide();
+        });
+        //
+        var introBox = $('.app-intro-con');
+        for (var j = 0; j < introBox.length; j++) {
+            var introHeight = introBox.eq(j).find('p').height();
+            var introBoxHeight = introBox.eq(j).height();
+            if (introHeight > introBoxHeight) {
+                introBox.eq(j).find('span').show();
+            } else {
+                introBox.eq(j).css('height', 'auto')
+                introBox.eq(j).find('span').hide();
+            }
+        }
+        $('.app-intro-con span').on('click', function () {
+            var $this = $(this);
+            if ($this.html() == '更多' || $this.html() == 'more') {
+                $('.app-intro-con').addClass('open');
+                $this.hide()
+            } else {
+                $('.app-intro-con').removeClass('open');
+                $this.html(unfold)
+            }
+        })
+        var is_frozen = '0'
+        if (is_frozen == 1) {
+            $('.state-frozen').show()
+            $('.state-normal').hide()
+        }
+    })
+
+    function toggleMiniBtnState(state) {
+        $('.state-loading').hide()
+        $('.btn-mini.state0').hide()
+        $('.btn-mini.state1').hide()
+        $('.btn-mini.state2').hide()
+        $('.btn-mini.state3').hide()
+        $('.btn-mini.state4').hide()
+        $('.btn-mini.state5').hide()
+        $('.btn-mini.state6').hide()
+        if (state == 'loading') {
+            $('.state-loading').show()
+            return
+        }
+        $('.btn-mini.state' + state).show()
+    }
+
+    function log(str) {
+        console.log(str)
+    }
+
+    function toast(msg) {
+        var m = document.createElement('div')
+        m.innerHTML = '<span style="background-color:black;opacity:0.8;color:white;padding:18px 26px; border-radius: 4px; font-size: 16px;">' + msg + '</span>'
+        m.style.cssText = "z-index: 1000; position:absolute;top:0;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;"
+        document.body.appendChild(m)
+        setTimeout(function () {
+            var d = 0.1;
+            m.style.webkitTransition = '-webkit-transform ' + d + 's ease-in, opacity ' + d + 's ease-in'
+            m.style.opacity = '0'
+            setTimeout(function () {
+                document.body.removeChild(m)
+            }, d * 2000)
+        }, 2000)
+    }
+
+    function tryInstall() {
+        if (need_password == '1' && getCookie('udid') && getCookie('udid').length > 0) {
+            prompts('请输入此应用的下载码', '提示', '')
+            document.getElementById("dialogueY").addEventListener("click", function () {
+                var value = document.getElementsByName("promptObtain")[0].value;
+                if (value.length == '') {
+                    toast('请输入密码')
+                } else if (value.length != 32) {
+                    toast('下载码不正确')
+                } else {
+                    install(value)
+                }
+            });
+            return
+        }
+        install()
+    }
+
+    $('.install').click(function () {
+        clicked = true
+        tryInstall()
+    })
+</script>
+</body>
+
+</html>

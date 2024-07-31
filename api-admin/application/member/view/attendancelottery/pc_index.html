@@ -1,0 +1,703 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8"/>
+    <title>{block name="title"}{:config('web_site_title')}{/block}</title>
+    <script src="__STATIC__/wap/lib/jquery-2.1.4.js"></script>
+    <script src="__STATIC__/libs/layer/layer.js"></script>
+    <script src="__STATIC__/wap/js/vue.min.js"></script>
+    <script src="__STATIC__/common/js/common.js"></script>
+    <link rel="stylesheet" href="__STATIC__/wap/lib/weui.min.css">
+    <link rel="stylesheet" href="__STATIC__/wap/css/jquery-weui.css">
+    <link rel="stylesheet" href="__STATIC__/wap/css/common.css">
+    <script src="__STATIC__/wap/lib/fastclick.js"></script>
+    <script>
+        var mid = {$mid};
+        var current_page;
+        var ismobile = {$is_mobile};
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 微软雅黑;
+            font-size: 14px;
+            min-width: 1100px;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .sign div {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .wripe {
+            width: 1000px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            position: relative;
+        }
+
+        .sign {
+            background-color: #FEE595;
+        }
+
+        .sign-1 {
+            width: 100%;
+            height: 630px;
+            background: url(__STATIC__/member/images/sign/sign_head.jpg) no-repeat center center;
+        }
+
+        .sign-2 {
+            width: 100%;
+
+        }
+
+        .borderb {
+            border-bottom: 1px dotted #AF8341 !important;
+        }
+
+        .libaolist .btn-disable {
+
+            background: #a94442 !important;
+
+        }
+
+        .sign-2-1 {
+            width: 100%;
+            height: 838px;
+            background: url(__STATIC__/member/images/sign/sign_2.png) no-repeat center center;
+            padding: 0 41px;
+        }
+
+        .sign-2-1 ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            width: 100%;
+            overflow: hidden;
+            padding-top: 125px;
+        }
+
+        .sign-2-1 ul li {
+            width: 14.28%;
+            font-size: 20px;
+            color: #323232;
+            line-height: 35px;
+            float: left;
+            text-align: center;
+        }
+
+        .sign-2-1-1 {
+            overflow: hidden;
+        }
+
+        .sign-date {
+            width: 44px;
+            height: 45px;
+            background: url(__STATIC__/member/images/sign/sign_12.png) no-repeat center center;
+            float: left;
+            font-size: 18px;
+            text-align: center;
+            line-height: 45px;
+            margin: 44px 43px 0;
+            position: relative;
+        }
+
+        .sign-date p {
+            font-size: 14px;
+            color: #E10B1B;
+            display: none;
+            width: 100px;
+            text-align: center;
+            position: absolute;
+            bottom: -38px;
+            left: -28px;
+        }
+
+        .sign-date p i {
+            font-style: normal;
+            color: #E10B1B;
+        }
+
+        .sign-date-1 {
+            width: 48px;
+            height: 69px;
+            background: url(__STATIC__/member/images/sign/sign_5.png) no-repeat top center;
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            display: none;
+        }
+
+        .sign-date-2 {
+            width: 41px;
+            height: 60px;
+            background: url(__STATIC__/member/images/sign/sign_13.png) no-repeat center center;
+            position: absolute;
+            top: -7px;
+            right: -48px;;
+            display: none;
+        }
+
+        .sign-submit {
+            width: 211px;
+            height: 53px;
+            text-align: center;
+            line-height: 53px;
+            font-size: 30px;
+            color: #7C3F13;
+            margin: 70px auto 22px;
+            background: url(__STATIC__/member/images/sign/sign_6.png) no-repeat center center;
+            clear: both;
+            cursor: pointer;
+        }
+
+        .sign-2-1 .sign-p1 {
+            width: 100%;
+            text-align: center;
+            color: #323232;
+            font-size: 16px;
+        }
+
+        .sign-p1 i {
+            color: #FE3C00;
+            text-decoration: underline;
+            font-style: normal;
+            margin: 0 5px;
+        }
+
+        .sign-p1 button {
+            width: 112px;
+            height: 30px;
+            text-align: center;
+            line-height: 25px;
+            background-color: #FEF9E0;
+            border: 1px solid #ff4840;
+            color: #ff4840;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .sign-p1 button:hover {
+            background-color: #ff4840;
+            color: #fff;
+        }
+
+        #sign_nologin {
+            display: none;
+        }
+
+        .sign-3 {
+            width: 100%;
+            height: 846px;
+            background: url(__STATIC__/member/images/sign/sign_7.png) no-repeat center center;
+        }
+
+        .sign-3-1 {
+            text-align: center;
+        }
+
+        .sign-3 .turntable-bg {
+            float: left;
+            margin-top: 68px;
+        }
+
+        .sign-3 .sign-3-2 {
+            width: 343px;
+            height: 513px;
+            background: url(__STATIC__/member/images/sign/sign_10.png) no-repeat top right;
+            float: right;
+            margin-top: 128px;
+        }
+
+        .sign-3-2 h3 {
+            font-size: 20px;
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .sign-3-2-1 {
+            overflow: hidden;
+            padding: 0 65px;
+        }
+
+        .sign-3-2-1 .span1 {
+            float: left;
+            color: #d01b21;
+            line-height: 60px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .sign-3-2-1 .span2 {
+            float: right;
+            color: #d01b21;
+            line-height: 60px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .sign-3-2-2 {
+            padding: 0 65px;
+        }
+
+        .sign-3-2-2 ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            height: 410px;
+            overflow-y: auto;
+        }
+
+        .sign-3-2-2 ul li {
+            color: #8e5a17;
+            font-size: 14px;
+            line-height: 35px;
+        }
+
+        .sign-4 {
+            width: 100%;
+            height: 488px;
+        }
+
+        .sign-4 h3 {
+            color: #c40000;
+            font-size: 36px;
+            line-height: 90px;
+            border-bottom: 1px dashed #AF8341;
+            margin-top: 40px;
+            margin-bottom: 15px;
+        }
+
+        .sign-4 p {
+            color: #8e5a17;
+            font-size: 16px;
+            line-height: 38px;
+            margin-top: 7px;
+        }
+
+        .sign-4 p i {
+            font-style: normal;
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 7px;
+            border: 1px solid #8e5a17;
+            text-align: center;
+            line-height: 14px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .sign-5 {
+            width: 100%;
+            height: 225px;
+            background-color: #F4B430;
+        }
+
+        .sign-5-1 {
+            width: 395px;
+            height: 100px;
+            float: left;
+            border-right: 1px solid #D79716;
+            text-align: right;
+            margin-top: 60px;
+        }
+
+        .sign-5-1 img {
+            margin-right: 30px;
+            width: 348px;
+        }
+
+        .sign-5-2 {
+            width: 500px;
+            height: 100px;
+            float: left;
+            border-left: 1px solid #FBC85B;
+            color: #fff;
+            margin-top: 60px;
+            padding-left: 25px;
+        }
+
+        .sign-5-2 .p1 {
+            font-size: 22px;
+            line-height: 45px;
+        }
+
+        .sign-5-2 .p2 {
+            font-size: 16px;
+            line-height: 22px;
+        }
+
+        .sign-right {
+            width: 215px;
+            height: 480px;
+            position: fixed;
+            right: 5%;
+            top: 50%;
+            margin-top: -250px;
+            background: url(__STATIC__/member/images/sign/sign_3.png) no-repeat top center;
+            z-index: 10000;
+        }
+
+        .sign-right ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            margin-left: 50px;
+            margin-top: 100px;
+        }
+
+        .sign-right ul li {
+            line-height: 38px;
+            text-align: center;
+        }
+
+        .sign-right ul li a {
+            display: block;
+            font-size: 16px;
+            color: #5B2607;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .sign-right ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .sign-erweima {
+            width: 130px;
+            height: 150px;
+            text-align: center;
+            background-color: #F5B529;
+            font-size: 11px;
+            color: #5B2607;
+            position: relative;
+            margin-top: 3px;
+            margin-left: 64px;
+            padding-top: 5px;
+        }
+
+        .sign-fenxiang {
+            width: 64px;
+            height: 74px;
+            text-align: center;
+            line-height: 80px;
+            background: url(__STATIC__/member/images/sign/sign_4.png) no-repeat center center;
+            position: absolute;
+            top: 140px;
+            left: 34px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .sign-fenxiang:hover .sign-fenxiang-1 {
+            display: block;
+        }
+
+        .sign-fenxiang-1 {
+            width: 100px;
+            position: absolute;
+            top: 12px;
+            left: -100px;
+            background-color: #FFEFD9;
+            display: none;
+        }
+
+        .sign-fenxiang-1 a {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            margin-left: 7px;
+            color: #5B2607;
+            font-size: 12px;
+            line-height: 30px;
+        }
+
+        .sign-fenxiang-1 a:hover {
+            background-color: #EAE0D1;
+        }
+
+        .sign-fenxiang-1 span {
+            display: inline-block;
+            width: 36px;
+            height: 34px;
+            background: url(__STATIC__/member/images/sign/fenxiangtubiao.png) no-repeat;
+            vertical-align: middle;
+        }
+
+        .sign-fenxiang-1 .jiathis_button_qzone span {
+            background-position: 0px -31px;
+        }
+
+        .sign-fenxiang-1 .jiathis_button_tsina span {
+            background-position: 0px 2px;
+        }
+
+        .sign-fenxiang-1 .jiathis_button_tqq span {
+            background-position: 0px -1760px;
+            height: 32px;
+        }
+
+        .sign-fenxiang-1 .jiathis_button_weixin span {
+            background-position: 0px -3680px;
+            height: 32px;
+        }
+
+        .sign-fenxiang-1 .jiathis_button_renren span {
+            background-position: 0px -64px;
+            height: 32px;
+        }
+
+        .sign-fenxiang-1 i {
+            display: inline-block;
+            width: 50px;
+            font-style: normal;
+            vertical-align: middle;
+        }
+
+        .bshare-custom.icon-medium-plus a {
+            padding-left: 10px !important;
+        }
+
+        .turntable-bg {
+            width: 650px;
+            height: 677px;
+            margin: 0 auto;
+            position: relative;
+            background: url("__STATIC__/member/sign/turntable_bg.png") no-repeat center center;
+        }
+
+        .turntable-bg .mask {
+            width: 454px;
+            height: 451px;
+            position: absolute;
+            left: 116px;
+            top: 60px;
+            /*z-index:9;*/
+        }
+
+        .turntable-bg .pointer {
+            width: 155px;
+            height: 256px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -77px;
+            margin-top: -180px;
+            z-index: 8;
+            cursor: pointer;
+        }
+
+        .turntable-bg .rotate {
+            width: 450px;
+            height: 450px;
+            position: absolute;
+            left: 40px;
+            top: 27px;
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="__STATIC__/wap/qd/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/wap/qd/css/style.css">
+<link rel="stylesheet" href="__STATIC__/wap/qd/css/qiandao_style.css">
+<style>
+    .btn {
+
+        padding: 6px 3px !important;
+        font-size: 12px !important;
+
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .refack {
+        position: absolute;
+        z-index: 50;
+        color: #fff;
+        font-size: 35px;
+        font-weight: 100;
+        top: 10px;
+    }
+
+    .sign-erweima img {
+        width: 128px;
+    }
+</style>
+<body>
+<div class="sign">
+    <div class="sign-right">
+        <ul>
+            <li><a href="/">返回首页</a>
+            </li>
+            <li id="sign-right-3"><a href="#wripe">活动规则</a>
+            </li>
+
+        </ul>
+        <div class="sign-erweima">
+            <img src="{:get_files_path(config('home_img_03'))}"/>
+            <p>扫一扫</p>
+            <p>了解更多的攻略</p>
+        </div>
+    </div>
+    <div class="sign-1"></div>
+    <div class="sign-2" id="sign-2">
+        <div class="wripe">
+
+
+            <div class="row">
+                <div class="col-xs-12 clearPadding">
+
+
+                    <div class="calendar">
+                        <div class="calenbox">
+                            <div id="calendar"></div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-qiandao" onClick="signIn()">马上签到</button>
+                        </div>
+                    </div>
+                    <div class="padding10">
+                        <div class="font16 pb10 borderb"><strong>签到记录</strong></div>
+                        <div class="libaolist">
+
+                            {volist name="datalist" id="vo"}
+
+                            <div class="clearfix borderb ptb10">
+                                <div class="col-xs-9 clearPadding">
+                                    <div class="media">
+                                        <a class="media-left pt3" href="javascript:void(0);">
+                                            <img src="__STATIC__/wap/qd/picture/dou.png"
+                                                 style="width:30px;height:30px;">
+                                        </a>
+                                        <div class="media-body">
+                                            <div class="">{$vo.addtime}已打卡，共坚持了{$vo.count}天</div>
+                                            <div class="text-muted font12">连续签到5天即可领取</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 clearPadding text-right pt2">
+                                    <button class="btn btn-disable" disable>获得{$vo.money}元</button>
+
+                                </div>
+                            </div>
+
+
+                            {/volist}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="sign-4">
+        <div class="wripe">
+            <h3 id="wripe">活动规则</h3>
+            <!--            <p><i>1</i>此活动只允许平台会员参加。</p>-->
+            <!--            <p><i>2</i>用户第1天签到，可获得10元体验金；第2天签到，可获15元；第3天签到，可获得20元；第4天签到，可获得25元；第5天签到，可获得30元；第6天签到，可获得35元；第7天签到，可获得35元……以此类推，连续第10天签到，累计共获得275元体验金，并获得1次抽奖机会；-->
+            <!--            </p>-->
+            <!--            <p><i>3</i>连续签到20天，可获得2次抽奖机会； 连续签到30天，可获得4次抽奖机会；</p>-->
+            <!--            <p><i>4</i>若在此期间用户未连续签到，系统将自动从第1天计算签到金额；</p>-->
+            <!--            <p><i>5</i>推荐好友注册，可获得2次抽奖机会；</p>-->
+            <!--            <p><i>6</i>此活动时间期限为2019年6月1日至2019年12月1日；</p>-->
+            <!--            <p><i>7</i>本活动最终解释权归青岛波波(弘财富配资)网络科技有限公司版权所有。</p>-->
+            {:config('cj_guizi')}
+        </div>
+    </div>
+    <div class="sign-5">
+        <div class="wripe">
+            <div class="sign-5-1">
+                <img src="/{$logoPaths}"/>
+            </div>
+            <div class="sign-5-2">
+                <p class="p1"> (宏图优配配资)诚通宏图基金管理有限公司版权所有</p>
+                <p class="p2">客服热线：{:config('web_site_telephone')} </p>
+                <p class="p2">公司网址：{$rooturl}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="maskbox"></div>
+<div class="qdbox">
+    <div class="text-center text-green font18"><strong>签到成功！</strong></div>
+    <div class="text-center pt10">您已经连续签到&nbsp;<span class="text-green">{$countday}</span>&nbsp;天</div>
+    <div class="text-center ptb15"><img src="__STATIC__/wap/qd/picture/gift.png" style="width:125px;margin-left:20px;">
+    </div>
+    <div class="text-center">
+        <button class="btn btn-lottery" onclick="window.location.href='/member/attendancelottery/lottery'">去抽奖
+        </button>
+    </div>
+</div>
+</body>
+<script src="__STATIC__/wap/qd/js/jquery-1.10.2.min.js"></script>
+<script src="__STATIC__/wap/qd/js/calendar.js"></script>
+<script>
+    function signIn() {
+        htmlobj = $.ajax({
+            type: "GET",
+            url: "/member/attendancelottery/ajaxattendance",
+            dataType: "JSON",
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("request_type", "ajax");
+            },
+            success: function (data) {
+                console.log(data.message);
+                if (data.status == "200") {
+                    $(".maskbox").fadeIn();
+                    $(".qdbox").fadeIn();
+                    $(".maskbox").height($(document).height());
+                } else {
+                    alert(data.message);
+                    return false
+                }
+
+            },
+            error: function (data) {
+                console.log("签到失败");
+            }
+        });
+
+
+    }
+
+    $(".maskbox").click(function () {
+        $(".maskbox").fadeOut();
+        $(".qdbox").fadeOut();
+    });
+    $(function () {
+        //ajax获取日历json数据
+        var signList = {$jsondate};
+        calUtil.init(signList);
+    });
+</script>
+
+{// 站点统计代码}
+
+<div style="    display: none;">
+    {:config('web_site_statistics')}
+    </body>
+    {block name="script"}{/block}
+
+</html>

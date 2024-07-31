@@ -1,0 +1,110 @@
+<link rel="stylesheet" href="/static/admin/css/statistics.css">
+
+<div class="layui-body layui-bg-gray">
+    <div class="layui-card layui-bg-gray">
+
+        <div class="layui-card-body layui-anim layui-anim-upbit">
+            <div class="think-box-shadow store-total-container notselect">
+                <div class="margin-bottom-15">数据统计</div>
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-sm6 layui-col-md2">
+                        <div class="store-total-item nowrap"
+                             style="background: linear-gradient(-141deg,#963064,#8a0920);">
+                            <div>预估佣金</div>
+                            <div>{$accumulateRemission}</div>
+                            <div>今日新增佣金 <span class="num2">{$today_accumulateRemission}</span>
+                            </div>
+                            <p>昨日新增佣金 <span class="num3">{$yestoday_accumulateRemission}</span>
+                            </p>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-survey"></i>
+                    </div>
+
+                    <div class="layui-col-sm6 layui-col-md2">
+                        <div class="store-total-item nowrap"
+                             style="background:linear-gradient(-125deg,#ff7d7d,#fb2c95)">
+                            <div>用户总量</div>
+                            <div>{$member_count}</div>
+                            <div>今日新增用户 <span class="num2">{$today_member_num}</span>
+                            </div>
+                            <p>昨日新增用户 <span class="num3">{$yestoday_member_num}</span>
+                            </p>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-user"></i>
+                    </div>
+                    <div class="layui-col-sm6 layui-col-md2">
+                        <div class="store-total-item nowrap"
+                             style="background:linear-gradient(-113deg,#c543d8,#925cc3)">
+                            <div>配资总量</div>
+                            <div>{$stock_nums}</div>
+                            <div>今日配资订单 <span class="num2">{$today_stock_nums}</span>
+                            </div>
+                            <p>昨日配资订单 <span class="num3">{$yes_stock_nums}</span>
+                            </p>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-read"></i>
+                    </div>
+                    <div class="layui-col-sm6 layui-col-md2">
+                        <div class="store-total-item nowrap"
+                             style="background: linear-gradient(-113deg,#8e8cb3,#2219d0);">
+                            <div>配资总金额</div>
+                            <div>{$stock_money}</div>
+                            <div>今日新增金额 <span class="num2">{$today_stock_money}</span>
+                            </div>
+                            <p>昨日新增金额 <span class="num3">{$yes_stock_money}</span>
+                            </p>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-rmb"></i>
+                    </div>
+                    <div class="layui-col-sm6 layui-col-md2">
+                        <div class="store-total-item nowrap"
+                             style="background:linear-gradient(-141deg,#ecca1b,#f39526)">
+                            <div>用户充值</div>
+                            <div>{$money_recharge}</div>
+                            <div>今日新增充值 <span class="num2">{$today_money_recharge}</span>
+                            </div>
+                            <p>昨日新增充值 <span class="num3">{$yes_money_recharge}</span>
+                            </p>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-survey"></i>
+                    </div>
+                    <div class="layui-col-sm6 layui-col-md2">
+                        <div class="store-total-item nowrap"
+                             style="background: linear-gradient(-141deg,#ec4b1b,#f39526);">
+                            <div>用户提现</div>
+                            <div>{$money_withdraw}</div>
+                            <div>今日新增提现 <span class="num2">{$today_money_withdraw}</span>
+                            </div>
+                            <p>昨日新增提现 <span class="num3">{$yes_money_withdraw}</span>
+                            </p>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-dollar"></i>
+                    </div>
+
+                </div>
+            </div>
+            <div class="think-box-shadow store-total-container notselect">
+                <div class="margin-bottom-15">收入统计</div>
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-sm6 layui-col-md6">
+                        <div class="store-total-item nowrap"
+                             style="background:linear-gradient(-141deg,#ecca1b,#f39526)">
+                            <div>累计分佣</div>
+                            <div>{$accumulateRemission}</div>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-dollar"></i>
+                    </div>
+                    <div class="layui-col-sm6 layui-col-md6">
+                        <div class="store-total-item nowrap"
+                             style="background: linear-gradient(-141deg,#ec4b1b,#f39526);">
+                            <div>分佣排名</div>
+                            <div>{$accumulateRemission_pm}</div>
+                        </div>
+                        <i class="store-total-icon layui-icon layui-icon-survey"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

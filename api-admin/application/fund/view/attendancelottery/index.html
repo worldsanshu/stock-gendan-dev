@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="viewport"
+          content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="keywords" content="{:config('web_site_keywords')}"/>
+    <meta name="description" content="{:config('web_site_description')}"/>
+
+    <title>{block name="title"}{:config('web_site_title')}{/block}</title>
+    <script src="__STATIC__/wap/lib/jquery-2.1.4.js"></script>
+    <script src="__STATIC__/libs/layer/layer.js"></script>
+    <script src="__STATIC__/wap/js/vue.min.js"></script>
+    <script src="__STATIC__/common/js/common.js"></script>
+    <link rel="stylesheet" href="__STATIC__/wap/lib/weui.min.css">
+    <link rel="stylesheet" href="__STATIC__/wap/css/jquery-weui.css">
+    <link rel="stylesheet" href="__STATIC__/wap/css/common.css">
+    <script src="__STATIC__/wap/lib/fastclick.js"></script>
+    <script>
+        var mid = {$mid};
+        var current_page;
+        var ismobile = {$is_mobile};
+    </script>
+</head>
+
+<link rel="stylesheet" href="__STATIC__/wap/qd/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/wap/qd/css/style.css">
+<link rel="stylesheet" href="__STATIC__/wap/qd/css/qiandao_style.css">
+<style>
+    .btn {
+
+        padding: 6px 3px !important;
+        font-size: 12px !important;
+
+    }
+
+    .left-arrow2 .left-arrow:before {
+        top: 30px !important;
+    }
+
+    .refack {
+        position: absolute;
+        z-index: 50;
+        color: #fff;
+        font-size: 35px;
+        font-weight: 100;
+        top: 10px;
+    }
+</style>
+<body>
+{block name="swiper"}{/block}
+
+<div class="container">
+    <Div class="refack">
+        <div class="v-header-left">
+            <div class="left-arrow" onclick="javascript:window.history.go(-1);"></div>
+        </div>
+
+    </Div>
+    <div class="row">
+        <div class="col-xs-12 clearPadding">
+            <div class=""><img src="__STATIC__/wap/qd/picture/qdbanner.jpg" class="img-responsive"></div>
+
+            <div class="calendar">
+                <div class="calenbox">
+                    <div id="calendar"></div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-qiandao" onClick="signIn()">马上签到</button>
+                </div>
+            </div>
+            <div class="padding10">
+                <div class="font16 pb10 borderb"><strong>签到记录</strong></div>
+                <div class="libaolist">
+
+                    {volist name="datalist" id="vo"}
+
+                    <div class="clearfix borderb ptb10">
+                        <div class="col-xs-9 clearPadding">
+                            <div class="media">
+                                <a class="media-left pt3" href="javascript:void(0);">
+                                    <img src="__STATIC__/wap/qd/picture/dou.png" style="width:30px;height:30px;">
+                                </a>
+                                <div class="media-body">
+                                    <div class="">{$vo.addtime}已打卡，共坚持了{$vo.count}天</div>
+                                    <div class="text-muted font12">连续签到5天即可领取</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 clearPadding text-right pt2">
+                            <button class="btn btn-disable" disable>获得{$vo.money}元</button>
+
+                        </div>
+                    </div>
+
+
+                    {/volist}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="maskbox"></div>
+<div class="qdbox">
+    <div class="text-center text-green font18"><strong>签到成功！</strong></div>
+    <div class="text-center pt10">您已经连续签到&nbsp;<span class="text-green">{$countday}</span>&nbsp;天</div>
+    <div class="text-center ptb15"><img src="__STATIC__/wap/qd/picture/gift.png" style="width:125px;margin-left:20px;">
+    </div>
+    <div class="text-center">
+        <button class="btn btn-lottery" onclick="openurl('/member/attendancelottery/lottery')">去抽奖</button>
+    </div>
+</div>
+<script src="__STATIC__/wap/qd/js/jquery-1.10.2.min.js"></script>
+<script src="__STATIC__/wap/qd/js/calendar.js"></script>
+<script>
+    function signIn() {
+        var sessionstr2 = JSON.parse(
+            sessionStorage.getItem('persist:root')
+        );
+
+        var exp = sessionstr2;
+        if (emptyempty_v2(exp)) {
+            location.href = '/wap/login';
+        }
+        console.log(sessionstr2);
+        var token = sessionstr2.token;
+        var token = token.replace('"', '');
+        var token = token.replace('"', '');
+        var token = token.replace('""', '');
+        if (token == '""' || emptyempty_v2(token)) {
+            location.href = '/wap/login';
+        } else {
+            htmlobj = $.ajax({
+                type: "GET",
+                url: "/member/attendancelottery/ajaxattendance?token=" + token,
+                dataType: "JSON",
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("request_type", "ajax");
+                },
+                success: function (data) {
+                    console.log(data.message);
+                    if (data.status == "200") {
+                        $(".maskbox").fadeIn();
+                        $(".qdbox").fadeIn();
+                        $(".maskbox").height($(document).height());
+                    } else {
+                        alert(data.message);
+                        return false
+                    }
+
+                },
+                error: function (data) {
+                    console.log("签到失败");
+                }
+            });
+        }
+
+
+    }
+
+    $(".maskbox").click(function () {
+        $(".maskbox").fadeOut();
+        $(".qdbox").fadeOut();
+    });
+    $(function () {
+        //ajax获取日历json数据
+        var signList = {$jsondate};
+        calUtil.init(signList);
+    });
+
+
+    function openurl(url) {
+        var sessionstr2 = JSON.parse(
+            sessionStorage.getItem('persist:root')
+        );
+        var token = sessionstr2.token;
+        var token = token.replace('"', '');
+        var token = token.replace('"', '');
+        if (token == '""') {
+            location.href = '/wap/login';
+        } else {
+            console.log(token);
+            var url = url + '?token=' + token;
+            console.log(url);
+            location.href = url;
+        }
+    }
+
+    //验证是否为空  v2   返回 空为true  不为空着false
+    function emptyempty_v2(mixed_var) {
+        var key;
+        if (mixed_var == "" || mixed_var == 0 || mixed_var == "0" || mixed_var == null || mixed_var == false || mixed_var == '' || typeof (mixed_var) == "undefined" || typeof (mixed_var) == NaN) {
+            return true;
+        }
+        if (typeof mixed_var == 'object') {
+            for (key in mixed_var) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+</script>
+
+{// 站点统计代码}
+<div style="    display: none;">
+    {:config('web_site_statistics')}
+</body>
+{block name="script"}{/block}
+
+
+<script>
+    $(document).ready(function () {
+        var u = navigator.userAgent;
+        var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        /*  if (isIOS) {
+              if (screen.height == 812 && screen.width == 375){
+                  console.log("slider");
+
+
+                  $(".v-header-left").addClass("left-arrow2");
+
+
+
+                  console.log("iphoneX");
+              }else{
+  //不是iphoneX
+                  console.log("不是iphoneX");
+              }
+          }*/
+    });
+</script>
+</body>
+
+</html>

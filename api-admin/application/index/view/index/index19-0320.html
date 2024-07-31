@@ -1,0 +1,511 @@
+{extend name="public:layout" /}
+{block name="style"}
+<link rel="stylesheet" href="__STATIC__/public/css/animate.min.css">
+<link rel="stylesheet" href="__HOME_CSS__/index.css">
+{/block}
+{block name="main-container"}
+<div class="banner">
+    <div class="full-width-slider" id="bannerSlider">
+        <!--<ul class="clearfix">
+            {notempty name="slider"}
+                {volist name="slider" id="sl"}
+                <li class="item">
+                    <a href="http://{$sl.url}">
+                        <img class="img-responsive"  src="{$sl.cover|get_file_path}" alt="{$sl.title}">
+                    </a>
+                </li>
+                {/volist}
+            {/notempty}
+        </ul>-->
+        <ul class="clearfix">
+            <li class="item">
+                <a href="http://pz6665.com">
+                    <img class="img-responsive" src="/uploads/images/20190106/banner01.jpg" alt="首页幻灯片2">
+                </a>
+            </li>
+            <li class="item">
+                <a href="http://pz6665.com">
+                    <img class="img-responsive" src="/uploads/images/20190106/banner02.jpg" alt="pc">
+                </a>
+            </li>
+            <li class="item">
+                <a href="http://6665.com">
+                    <img class="img-responsive" src="/uploads/images/20190106/banner03.jpg" alt="pc">
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="float-box popbox1">
+        <div class="popbox-bg"></div>
+        <div class="popbox-main">
+            <div class="text">您炒股，我出钱</div>
+            <div class="text-large">目前免息配资{$freeconfig['free_set'][1]}天</div>
+            <div class="text">资金双重保障，100%实盘交易</div>
+            {if condition="$mid eq 0"}
+            <div class="operate">
+                <!--<a href="{:url('/register')}" class="btn btn-primary btn-block">注册领红包</a>-->
+                <a href="{:url('/register')}" class="btn btn-primary btn-block"></a>
+            </div>
+            <div class="extra-text">已有账号？<a href="{:url('/login')}">立即登录</a></div>
+            {else /}
+            <div class="operate">
+                <a href="{:url('/member')}" class="btn btn-primary btn-block">我的账户</a>
+            </div>
+            <div class="extra-text"><a href="{:url('/signout')}">注销登录</a></div>
+            {/if}
+        </div>
+    </div>
+</div>
+<div class="data-show">
+    <!--公告-->
+    <div class="notice wrapper clearfix">
+        <i></i> <span class="notice-tit">网站公告 |</span>
+        <div class="notice-left">
+            <div class="bd">
+                <div class="tempWrap">
+                    <ul class="infoList">
+                        {volist name="ar_Listno" id="vo"}
+                        <li><a href="{:url('cms/document/detail', ['id' => $vo['id'], 'model' => $model])}"
+                               target="_blank">{$vo.title}</a><span>{$vo.create_time|date="Y-m-d",###}</span></li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="notice-more fr"><a href="/cms/column/index/id/2.html" target="_blank">更多公告 ></a></div>
+    </div>
+    <!--公告 end-->
+</div>
+<div class="newbee">
+    <div class="wrapper clearfix">
+        <div class="item">
+            <div class="figure">
+                <img src="__HOME_IMG__/icon-1.png" alt="">
+            </div>
+            <div class="item-body">
+                <div class="title">资金保障</div>
+                <div class="text">资金第三方托管，专款专用</div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="figure">
+                <img src="__HOME_IMG__/icon-2.png" alt="">
+            </div>
+            <div class="item-body">
+                <div class="title">真实交易</div>
+                <div class="text">100%实盘，level2可查委托</div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="figure">
+                <img src="__HOME_IMG__/icon-3.png" alt="">
+            </div>
+            <div class="item-body">
+                <div class="title">快捷提现</div>
+                <div class="text">闪电提现，三十分钟到账</div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="figure">
+                <img src="__HOME_IMG__/icon-4.png" alt="">
+            </div>
+            <div class="item-body">
+                <div class="title">专业服务</div>
+                <div class="text">客户体验至上为宗旨</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper clearfix">
+    <img style="width:100%;" src="__STATIC__/home/img/pzlc.jpg">
+</div>
+<div class="section-product section-peizi clearfix">
+    <div class="section-left">
+        <div class="section-left-bg"></div>
+        <h3 class="right-tit">股票配资</h3>
+        <p class="right-info">
+            您炒股 我出钱 <br>
+            资金放大2-10倍 <br>
+            盈利全归您 <br>
+            低门槛 提现快
+        </p>
+        <!--<img src="__HOME_IMG__/img-stock.jpg" width="300" height="360" alt="">-->
+    </div>
+    <div class="section-main">
+        <div class="peizi-item wow flipInY animated" data-wow-delay=".2s"
+             style="visibility: visible; animation-delay: 0.2s; animation-name: flipInY;">
+            <div class="title">免息配资</div>
+            <div class="desc">
+                不收取管理费，盈利的{$freeconfig['free_set'][2]}%归您
+            </div>
+            <div class="feature">
+                <div class="con">
+                            <span class="text-xlarge text-yellow">
+                                免
+                            </span>
+                </div>
+                <div class="name">所有费用</div>
+            </div>
+
+            <div class="meta">
+                <div class="clearfix">
+                    <div class="name">配资期限：</div>
+                    <div class="val">{$freeconfig['free_set'][1]}天</div>
+                </div>
+                <div class="clearfix">
+                    <div class="name">可持有比例：</div>
+                    <div class="val">无限制</div>
+                </div>
+            </div>
+            <div class="btns-botton">
+                <a class="grab-btn" href="/stock/free.html">
+                    <em></em><i>立即申请</i>
+                </a>
+            </div>
+        </div>
+        <div class="peizi-item wow flipInY animated" data-wow-delay=".2s"
+             style="visibility: visible; animation-delay: 0.2s; animation-name: flipInY;">
+            <div class="title">按天配资</div>
+            <div class="desc">
+                自动延期，按日计息
+            </div>
+            <div class="feature">
+                <div class="con">
+                            <span class="text-xlarge text-yellow">
+                                {$min_day_rate}%
+                            </span>起
+                </div>
+                <div class="name">费率</div>
+            </div>
+            <div class="meta">
+                <div class="clearfix">
+                    <div class="name">最高可配资：</div>
+                    <div class="val">{$globalconfig['money_range'][1]}元</div>
+                </div>
+                <div class="clearfix">
+                    <div class="name">起配金额：</div>
+                    <div class="val">{$globalconfig['money_range'][0]}元</div>
+                </div>
+            </div>
+            <div class="btns-botton">
+                <a class="grab-btn" href="/stock/day.html">
+                    <em></em><i>立即申请</i>
+                </a>
+            </div>
+        </div>
+        <div class="peizi-item wow flipInY animated" data-wow-delay=".2s"
+             style="visibility: visible; animation-delay: 0.2s; animation-name: flipInY;">
+            <div class="title">按月配资</div>
+            <div class="desc">
+                股市投资利器，月配更划算
+            </div>
+            <div class="feature">
+                <div class="con">
+                            <span class="text-xlarge text-yellow">
+                                {$max_month_rate}
+                            </span>
+                    倍
+                </div>
+                <div class="name">最大杠杆比例</div>
+            </div>
+            <div class="meta">
+                <div class="clearfix">
+                    <div class="name">最高可配资：</div>
+                    <div class="val">{$globalconfig['money_range'][1]}元</div>
+                </div>
+                <div class="clearfix">
+                    <div class="name">起配金额：</div>
+                    <div class="val">{$globalconfig['money_range'][0]}元</div>
+                </div>
+            </div>
+            <div class="btns-botton">
+                <a class="grab-btn" href="/stock/month.html">
+                    <em></em><i>立即申请</i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="wrapper tonglan">{:get_advert(16)}</div>
+<div class="section-product section-market clearfix">
+    <div class="section-left">
+        <div class="section-left-bg"></div>
+        <h3 class="right-tit">股市行情</h3>
+        <p class="right-info">
+            权威、全面 <br>
+            专业、及时 <br>
+            的行情数据 <br>
+        </p>
+        <!--<img src="__HOME_IMG__/img-market.jpg" width="300" height="360" alt="">-->
+    </div>
+    <div class="section-main clearfix">
+        <div class="stock-info">
+            <div class="stock-hd clearfix">
+                <div class="stock-name">
+                    <a href="#" class="link" id="change-stock-btn">更换股票</a>
+                    <span id="stock-name"> -- </span>（<span id="stock-code"> -- </span>）
+                </div>
+                <div class="stock-trend">
+                    <span class="price" id="stock-price"></span>
+                    <span class="trend-mark" id="trend-mark"></span>
+                    <div class="meta">
+                        <div id="stock-price-range">--</div>
+                        <div><span id="stock-range-rate">--</span>%</div>
+                    </div>
+                    <div class="max">
+                        <div>最高：<span id="stock-highest">--</span></div>
+                        <div>最低：<span id="stock-lowest">--</span></div>
+                    </div>
+                </div>
+                <div class="stock-search" id="j-stock-search">
+                    <div class="search-box">
+                        <input type="text" id="j-search-text"/>
+                    </div>
+
+                </div>
+            </div>
+            <div class="j-tab stock-chart">
+                <ul class="tab-hd clearfix">
+                    <li class="active tab-item"><a href="#">分时线</a></li>
+                    <li class="tab-item"><a href="#">日K线</a></li>
+                    <li class="tab-item"><a href="#">周K线</a></li>
+                    <li class="tab-item"><a href="#">月K线</a></li>
+                </ul>
+                <div class="chart-panel tab-panel active">
+                    <div class="chart-wrap">
+                        <img class="chart" src="http://image.sinajs.cn/newchart/min/n/sh000001.gif" id="chart-min"
+                             alt="">
+                    </div>
+                </div>
+                <div class="chart-panel tab-panel">
+                    <div class="chart-wrap">
+                        <img class="chart" src="http://image.sinajs.cn/newchart/daily/n/sh000001.gif" id="chart-daily"
+                             alt="">
+                    </div>
+                </div>
+
+                <div class="chart-panel tab-panel">
+                    <div class="chart-wrap">
+                        <img class="chart" src="http://image.sinajs.cn/newchart/weekly/n/sh000001.gif" id="chart-weekly"
+                             alt="">
+                    </div>
+                </div>
+
+                <div class="chart-panel tab-panel">
+                    <div class="chart-wrap">
+                        <img class="chart" src="http://image.sinajs.cn/newchart/monthly/n/sh000001.gif"
+                             id="chart-monthly" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="trade-info">
+            <table class="trade-table">
+                <tr>
+                    <td width="40%">卖五价</td>
+                    <td width="30%" align="center" id="sell-five-price">--</td>
+                    <td width="30%" align="right" id="sell-five-amount">--</td>
+                </tr>
+                <tr>
+                    <td>卖四价</td>
+                    <td align="center" id="sell-four-price">--</td>
+                    <td align="right" id="sell-four-amount">--</td>
+                </tr>
+                <tr>
+                    <td>卖三价</td>
+                    <td align="center" id="sell-three-price">--</td>
+                    <td align="right" id="sell-three-amount">--</td>
+                </tr>
+                <tr>
+                    <td>卖二价</td>
+                    <td align="center" id="sell-two-price">--</td>
+                    <td align="right" id="sell-two-amount">--</td>
+                </tr>
+                <tr>
+                    <td>卖一价</td>
+                    <td align="center" id="sell-one-price">--</td>
+                    <td align="right" id="sell-one-amount">--</td>
+                </tr>
+            </table>
+
+            <table class="trade-table">
+                <tr>
+                    <td width="40%">买一价</td>
+                    <td width="30%" align="center" id="buy-one-price">--</td>
+                    <td width="30%" align="right" id="buy-one-amount">--</td>
+                </tr>
+                <tr>
+                    <td>买二价</td>
+                    <td align="center" id="buy-two-price">--</td>
+                    <td align="right" id="buy-two-amount">--</td>
+                </tr>
+                <tr>
+                    <td>买三价</td>
+                    <td align="center" id="buy-three-price">--</td>
+                    <td align="right" id="buy-three-amount">--</td>
+                </tr>
+                <tr>
+                    <td>买四价</td>
+                    <td align="center" id="buy-four-price">--</td>
+                    <td align="right" id="buy-four-amount">--</td>
+                </tr>
+                <tr>
+                    <td>买五价</td>
+                    <td align="center" id="buy-five-price">--</td>
+                    <td align="right" id="buy-five-amount">--</td>
+                </tr>
+            </table>
+            <a href="" class="btn btn-red btn-block" id="btn-market">立即配资</a>
+        </div>
+    </div>
+</div>
+<div class="seciton-intro clearfix wrapper">
+    <div class="item">
+
+        <div class="title">新手指引</div>
+        <div class="desc">
+            <a href="/cms/document/detail/id/8.html">
+                如何注册，如何配资？ <br>
+                股票配资流程是什么？ <br>
+                快速获得实盘资金？
+            </a>
+        </div>
+        <div class="icon">
+            <img src="__HOME_IMG__/icon-teacher.png" alt="">
+        </div>
+    </div>
+    <div class="item">
+        <div class="title">安全保障</div>
+        <div class="desc">
+            <a>
+                配资炒股可信吗？ <br>
+                怎样选择配资平台？ <br>
+                实盘交易才是王道！
+            </a>
+        </div>
+        <div class="icon">
+            <img src="__HOME_IMG__/icon-square.png" alt="">
+        </div>
+    </div>
+    <div class="item">
+        <div class="title">快速赚佣金</div>
+        <div class="desc">
+            <a>
+                您可以通过这里发展您的客户， <br>
+                每发生一笔配资，您将赚取 <span class="text-red">{$globalconfig['rebate']}%</span>的佣金， <br>
+                可以随时兑换提取。
+            </a>
+        </div>
+        <div class="icon">
+            <img src="__HOME_IMG__/icon-trend-group.png" alt="">
+        </div>
+    </div>
+    <div class="item">
+        <div class="title">关于我们</div>
+        <div class="desc">
+            <a>
+                走进金牌配资 <br>
+                了解金牌配资 <br>
+                金牌配资发展历程
+            </a>
+        </div>
+        <div class="icon">
+            <img src="__HOME_IMG__/icon-bag.png" alt="">
+        </div>
+    </div>
+</div>
+<div class="wrapper edge-cont">
+    <div class="pb6 clearfix">
+
+        <div class="pb6-r">
+            <div class="gonggaoBox">
+
+                <div id="bd_two" class="bd dd">
+                    <p><span>股市动态</span> <a href="/cms/column/index/id/11.html" target="_blank" class="gg">更多
+                        +</a></p>
+
+                    <ul>
+                        {volist name="ar_Listdongtai" id="vo"}
+                        <li><span class="date">{$vo.create_time|date="Y-m-d",###}</span> <a id="bd_colors"
+                                                                                            href="{:url('cms/document/detail', ['id' => $vo['id'], 'model' => $model])}"
+                                                                                            target="_blank"><strong>·</strong>
+                            &nbsp;&nbsp;{$vo.title}</a></li>
+                        {/volist}
+                    </ul>
+
+                </div>
+                <div id="hd_two" class="hd dd">
+                    <p class="dd_line"><span>财经资讯</span> <a href="/cms/column/index/id/12.html" target="_blank"
+                                                                class="gg">更多 +</a></p>
+                    <ul>
+                        {volist name="ar_Listzixun" id="vo"}
+                        <li><span class="date">{$vo.create_time|date="Y-m-d",###}</span><a id="bd_colors"
+                                                                                           href="{:url('cms/document/detail', ['id' => $vo['id'], 'model' => $model])}"
+                                                                                           target="_blank"><strong>·</strong>
+                            &nbsp;&nbsp; {$vo.title}</a></li>
+                        {/volist}
+                    </ul>
+
+                </div>
+
+
+            </div>
+            <!--切换 end-->
+        </div>
+    </div>
+</div>
+
+
+<div class="partner wrapper">
+    <div class="floor-hd">
+        <h3><a class="fl">合作伙伴</a></h3>
+    </div>
+    <div class="partner-bd">
+        <ul class="clearfix">
+            {notempty name="link"}
+            {volist name="link" id="li"}
+            <li class="item">
+                <a href="{$li.url}" target="_blank">
+                    <img class="img-responsive" src="{$li.logo|get_file_path}" alt="{$li.title}">
+                </a>
+            </li>
+            {/volist}
+            {else/}
+            <li class="item">
+                <a href="">
+                    <img src="__HOME_IMG__/partner-logo.png" alt="">
+                </a>
+            </li>
+            {/notempty}
+
+        </ul>
+    </div>
+</div>
+<!--累计配资人数{$borrow_count} 累计实盘资金 {$operate_account}-->
+{/block}
+
+{block name="script"}
+<script>
+    var searchStockUrl = "{:url('market/index/search_keyword')}"; // 搜索股票接口
+</script>
+<script src="__STATIC__/common/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore-min.js"></script>
+<script src="__STATIC__/libs/full-width-slider/full-width-slider.js"></script>
+<script src="__STATIC__/home/js/index.js"></script>
+<script language="javascript" src="http://ddt.zoosnet.net/JS/LsJS.aspx?siteid=DDT59619908&float=1&lng=cn"></script>
+<script>
+    // $.ajax({ url: "/index/index/startapi.html",  success: function(){}});
+    /*网站公告*/
+    jQuery(".notice-left").slide({
+        titCell: ".hd ul",
+        mainCell: ".bd ul",
+        autoPage: true,
+        effect: "left",
+        autoPlay: true,
+        vis: 2
+    });
+</script>
+{/block}
