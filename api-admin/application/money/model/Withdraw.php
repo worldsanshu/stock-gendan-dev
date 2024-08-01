@@ -325,11 +325,11 @@ class Withdraw extends Model
             ];
         }
 //        是否自动到账0=手动，1=自动'
-        if($payment['is_auto'] == '0'){
-            return [
-                'code'=>200,
-            ];
-        }
+//        if($payment['is_auto'] == '0'){
+//            return [
+//                'code'=>200,
+//            ];
+//        }
 
         $orderInfo = [
             'app_id' => $payment['app_id'],
