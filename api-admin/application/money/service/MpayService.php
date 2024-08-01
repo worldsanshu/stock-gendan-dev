@@ -26,7 +26,7 @@ class MpayService
                 'merchUserId'=>$info['app_id'],
                 'merchOrderId'=>$info['order_no'],
                 'userWalletAddress'=>$info['address'],
-                'amount'=>intval($info['amount']),
+                'amount'=>intval($info['real_money']),
                 'title'=>'平台提现'
             ];
             //        获取支付请求url
@@ -36,7 +36,7 @@ class MpayService
 //                $url = $payment->specific_address;
 //            }
             //        获取支付请求url
-            $host = $info['specific_address']?:'https://1b763c18-3ca4-11ef-a2eb-864d3c14f554.mp-api.app';
+            $host = $info['specific_address']?:'https://0df89348-445a-11ef-87d0-c2db0ac3caf8.mp-api.app';
             $curl = $this->makeCurl($host);
 
 //            $curl = $this->makeCurl('https://1b763c18-3ca4-11ef-a2eb-864d3c14f554.mp-api.app');

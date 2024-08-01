@@ -663,7 +663,7 @@ EOF;
             ->hideCheckbox()
             ->addTopButton('custem', $btn_excel)
             ->addTopButton('custem', $btn_commission) // 批量添加顶部按钮
-            ->addRightButton('edit', ['title' => '编辑回退'], ['area' => ['800px', '90%'], 'title' => '提现审核']) // 批量添加右侧按钮
+//            ->addRightButton('edit', ['title' => '编辑回退'], ['area' => ['800px', '90%'], 'title' => '提现审核']) // 批量添加右侧按钮
             ->addRightButton('btn_detail', $btn_detail,true)
 //          ->addRightButton('custom1', $btn_getWithdraw)
 //          ->addRightButton('custom2', $btn_getRecharge)

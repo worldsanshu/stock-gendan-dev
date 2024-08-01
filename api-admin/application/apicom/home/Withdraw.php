@@ -88,7 +88,7 @@ class Withdraw extends Common
             ajaxmsg('支付密码错误', 0, '', true, ['msgCode' => 'L0008']);
         }
         if ($data['money'] <= 0) {
-            ajaxmsg('提现金额错误！', 0, '', true, ['msgCode' => 'L0001']);
+            ajaxmsg('提现金额错误！', 0, '', true, ['msgCode' => 'L0003']);
         }
 
         $result = Db::name('money_withdraw_config')->where("id", 1)->find();

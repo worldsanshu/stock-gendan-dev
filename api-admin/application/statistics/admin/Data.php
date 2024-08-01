@@ -155,6 +155,12 @@ class Data extends Admin
         $map[]=['money_recharge.status','eq', 1];
         $order = $this->getOrder();
         empty($order) && $order = 'id desc';
+        foreach ($map as $key => $value) {
+            if($value[0] == 'create_time'){
+                unset( $map[$key] );
+            }
+        }
+
         // 数据列表
         $data_list = RechargeModel::getAll($map, $order);
         return ZBuilder::make('table')
