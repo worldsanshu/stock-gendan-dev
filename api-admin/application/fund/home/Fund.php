@@ -1202,8 +1202,9 @@ class Fund extends Common
             ->where([
                 'to.trader_id' => $id,
             ])
+            ->where('to.type', '=', '1')
             ->where('to.status', '>', '0')
-            ->order('to.sell_time desc')
+            ->order('to.create_time desc')
             ->limit(5)
             ->select()->toArray();
         $domain           = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
@@ -1300,8 +1301,9 @@ class Fund extends Common
 //                'to.status'    => 1,
 'to.trader_id' => $trader_id,
             ])
+            ->where('to.type', '=', '1')
             ->where('to.status', '>', '0')
-            ->order('to.sell_time desc')
+            ->order('to.create_time desc')
             ->order($order)
             ->paginate(['page' => $page, 'list_rows' => $page_size]);
         foreach ($list as $k => $v) {
