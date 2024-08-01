@@ -513,7 +513,7 @@ class Profile extends Common
                         }
                         ajaxmsg('设置失败，请重试', 0);
                     } else {
-                        ajaxmsg('原支付密码错误，请重试', 0, '', true, ['msgCode' => 'L0070']);
+                        ajaxmsg('原密码错误，请重试', 0, '', true, ['msgCode' => 'L0070']);
                     }
                 }
             } else {
