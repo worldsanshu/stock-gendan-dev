@@ -82,7 +82,7 @@ class Custommenu extends Admin
         ];
 
         $url_name = [
-            '0' => '不跳转',
+//            '0' => '不跳转',
             '1' => '内部路径',
             '2' => '外部链接',
 
@@ -142,6 +142,7 @@ class Custommenu extends Admin
                     ->addColumn('status', '状态', 'switch')
                     ->addColumn('right_button', '操作', 'btn')
                     ->addRightButtons(['edit']) // 批量添加右侧按钮  ,last_login_time
+                    ->addRightButtons('delete') // 批量添加右侧按钮  ,last_login_time
                     ->replaceRightButton(['is_default' => 1], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
                     ->setRowList($data_list) // 设置表格数据
                     ->setPages($page) // 设置分页数据
@@ -171,6 +172,7 @@ class Custommenu extends Admin
                     ->addColumn('status', '状态', 'switch')
                     ->addColumn('right_button', '操作', 'btn')
                     ->addRightButtons(['edit']) // 批量添加右侧按钮  ,last_login_time
+                    ->addRightButtons('delete') // 批量添加右侧按钮  ,last_login_time
                     ->replaceRightButton(['is_default' => 1], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
                     ->setRowList($data_list) // 设置表格数据
                     ->setPages($page) // 设置分页数据
@@ -191,6 +193,11 @@ class Custommenu extends Admin
             if ($data['status']) {
                 $data['status'] = 1;
             }
+            if($data['url_type'] == 2) {
+                if (!preg_match('/^https?:\/\//', $data['url'])) {
+                    $this->error('请填写正确的链接:需要包含http:// 或者 https://');
+                }
+            }
             // 验证失败 输出错误信息
             $isExists = Db::name('custom_menu')->where('name', $data['name'])->where('position', $data['name'])->count();
             if ($isExists > 0) {
@@ -208,7 +215,7 @@ class Custommenu extends Admin
         }
 //        $url_name = array("url" => "内置路径", "custom" => "第三方路径");
         $url_name = [
-            '0' => '不跳转',
+//            '0' => '不跳转',
             '1' => '内部路径',
             '2' => '外部链接',
 
@@ -217,7 +224,7 @@ class Custommenu extends Admin
             ->setPageTitle('新增') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
                 ['text', 'name', '名称', ''],
-                ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name],
+                ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name,'1'],
                 ['text', 'url', '路径', ''],
                 ['radio','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
                 ['number', 'sort', '排序'],
@@ -225,6 +232,7 @@ class Custommenu extends Admin
             ])
 //            ->addSwitch('status', '显示状态', '', '1')
             ->addImage('img_url', '图标')
+            ->setTrigger('url_type', '1', 'url_level')
             ->fetch();
     }
 
@@ -240,6 +248,11 @@ class Custommenu extends Admin
             if($isExists){
                 if ($isExists['id'] != $data['id']) {
                     $this->error('名称已存在');
+                }
+            }
+            if($data['url_type'] == 2) {
+                if (!preg_match('/^https?:\/\//', $data['url'])) {
+                    $this->error('请填写正确的链接:需要包含http:// 或者 https://');
                 }
             }
             $data['update_time'] = time();
@@ -259,7 +272,7 @@ class Custommenu extends Admin
 //        }
 //        $url_name = array("url" => "内置路径", "custom" => "第三方路径");
         $url_name = [
-            '0' => '不跳转',
+//            '0' => '不跳转',
             '1' => '内部路径',
             '2' => '外部链接',
 
@@ -301,7 +314,7 @@ class Custommenu extends Admin
     public function menu($group = '')
     {
         $url_name = [
-            '0' => '不跳转',
+//            '0' => '不跳转',
             '1' => '内部路径',
             '2' => '外部链接',
 

@@ -74,7 +74,7 @@ class Customproperty extends Admin
 
 
         $url_name = [
-            '0' => '不跳转',
+//            '0' => '不跳转',
             '1' => '内部路径',
             '2' => '外部链接',
 
@@ -109,6 +109,7 @@ class Customproperty extends Admin
                     'url'     => $v['url'],
                     'url_type'  => $v['url_type'],
                     'url_level' => $v['url_level'],
+                    'money' => $v['money'],
                 ];
                 CustompropertyModel::create($data);
             }

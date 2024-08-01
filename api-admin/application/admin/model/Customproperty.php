@@ -58,6 +58,7 @@ class Customproperty extends Model
                 'img_url' => $domain.'/uploads/default/account-balance.png',
                 'url_level' => '2',
                 'url_type' => '1',
+                'money' => 'account',
             ],
             [
                 'name' => '保证金',
@@ -65,6 +66,7 @@ class Customproperty extends Model
                 'img_url' => $domain.'/uploads/default/bond.png',
                 'url_level' => '1',
                 'url_type' => '1',
+                'money' => 'bond_account',
             ],
             [
                 'name' => '活动金',
@@ -72,6 +74,7 @@ class Customproperty extends Model
                 'img_url' => $domain.'/uploads/default/activity-gold.png',
                 'url_level' => '1',
                 'url_type' => '1',
+                'money' => 'activity_account',
             ],
             [
                 'name' => '冻结资产',
@@ -79,6 +82,7 @@ class Customproperty extends Model
                 'img_url' => $domain.'/uploads/default/freeze.png',
                 'url_level' => '1',
                 'url_type' => '1',
+                'money' => 'freeze',
             ],
             [
                 'name' => '持仓资产',
@@ -86,6 +90,7 @@ class Customproperty extends Model
                 'img_url' => $domain.'/uploads/default/fund.png',
                 'url_level' => '1',
                 'url_type' => '1',
+                'money' => 'contract_gd',
             ],
         ];
 
