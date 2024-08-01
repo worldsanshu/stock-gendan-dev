@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "fc-iconfont"; /* Project id 4572375 */
+  src: url('./iconfont.woff2?t=1718017591157') format('woff2'),
+       url('./iconfont.woff?t=1718017591157') format('woff'),
+       url('./iconfont.ttf?t=1718017591157') format('truetype');
+}
+
+.fc-iconfont {
+  font-family: "fc-iconfont", serif !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-stock:before {
+  content: "\e65a";
+}
+
+.icon-agent:before {
+  content: "\e628";
+}
+
+.icon-copy-trading:before {
+  content: "\e63a";
+}
+
+.icon-about:before {
+  content: "\e640";
+}
+
+.icon-profile:before {
+  content: "\e6c3";
+}
+
+.icon-wallet:before {
+  content: "\e60f";
+}
+
+.icon-step-right:before {
+  content: "\e610";
+}
+
+.icon-step-top:before {
+  content: "\e613";
+}
+
+.icon-bankcard:before {
+  content: "\e600";
+}
+
+.icon-copy:before {
+  content: "\e612";
+}
+
