@@ -609,8 +609,9 @@ class User extends Common
 
             foreach ($banner as $key => $val) {
 
-
-                $banner[$key]['img_url'] = '//' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
+                $domain        = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+                $banner[$key]['img_url'] = $domain . get_files_path($val['cover']);
+//                $banner[$key]['img_url'] = '//' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
             }
         } else {
             $banner = Db::name('cms_slider')->where($map)->field("id,title,cover,sort,url,jumpid")->order('sort asc')->find();
@@ -641,8 +642,9 @@ class User extends Common
 
             foreach ($banner as $key => $val) {
 
-
-                $banner[$key]['img_url'] = '//' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
+                $domain        = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+                $banner[$key]['img_url'] = $domain . get_files_path($val['cover']);
+//                $banner[$key]['img_url'] = '//' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
             }
         } else {
             $banner = Db::name('cms_slider')->where($map)->field("id,title,cover,sort,url,url_level,url_type")->order('sort asc')->find();

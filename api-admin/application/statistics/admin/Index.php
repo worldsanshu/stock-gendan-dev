@@ -12,9 +12,11 @@ namespace app\statistics\admin;
 
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
+use app\common\service\UserService;
 use app\market\model\Position;
 use app\money\model\Money;
 use app\money\model\Record;
+use app\money\model\Record as RecordModel;
 use app\statistics\model\ContractStatistics as ContractStatisticsModel;
 use app\statistics\model\ProfitLoss as ProfitLossModel;
 use app\statistics\model\RechargeWithdrawal as RechargeWithdrawalModel;
@@ -902,22 +904,47 @@ class Index extends Admin
         if ($admin_user['role'] == 2) {
             $where['for_user'] = $admin_user['for_user'];
         }
+        #平台充提差  扣除白名单
+        $memberIds = Db::name('member')
+            ->where('role_name', '普通会员')
+            ->where((new UserService())->getAgentSql('id'))->column('id');
+
+        $memberIds = array_merge($memberIds, [0]);
+        $memberIds = implode(',', $memberIds);
         if ($map === "888") {
             // 累计提盈
-            $drawprofit = Db::name('stock_drawprofit ')->where($where)->where(['status' => 1])->sum('money');
-            $drawprofit = money_convert($drawprofit);
+            $drawprofit = Db::name('fund_profit_record ')
+                ->whereIn('uid',$memberIds)
+                ->where($where)->where(['status' => 1])->sum('money');
+//            $drawprofit = money_convert($drawprofit);
+
+
             //累计充值
             //累计充值总额
             $r_total = Db::name('money_recharge')
+              ->whereIn('mid',$memberIds)
               ->where(['status' => 1])
               ->where($where)
               ->sum('money');
+            //        增加资金操作类型：系统自动转入
+            $Record_recharge = RecordModel::where('type','18')->whereIn('mid',$memberIds)->sum('affect');
+            $r_total = sprintf("%.2f", $r_total +$Record_recharge);// 保留两位小数
             $r_total = money_convert($r_total);
+
+
             //累计提现总额
             $w_total = Db::name('money_withdraw')
+              ->whereIn('mid',$memberIds)
               ->where(['status' => 1])
               ->where($where)
               ->sum('money');
+            //        增加资金操作类型：管理员操作
+            //    由于旧数据有正数,如不清数据，只能固定查询 负数
+            $Record_withdraw = RecordModel::where('type','19')->whereIn('mid',$memberIds)->where('affect','<','0')->sum('affect');
+            $Record_withdraw = abs($Record_withdraw);
+//            $Record_withdraw = $Record_withdraw; //单位元
+            $w_total = sprintf("%.2f", $w_total + $Record_withdraw);// 保留两位小数
+
             $w_total = money_convert($w_total);
             return ZBuilder::make('table')
               ->setTemplate('amountstatistics')

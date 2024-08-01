@@ -28,9 +28,7 @@ use app\money\model\Money as MoneyModel;
 use app\money\model\Recharge;
 use app\money\model\Record;
 use think\Db;
-use think\db\Where;
 use think\helper\Hash;
-use think\facade\Lang;
 
 class Fund extends Common
 {
@@ -474,15 +472,14 @@ class Fund extends Common
         if (!empty($user_level) & !in_array($level, $user_level)) {
             ajaxmsg('当前等级不在优投师的等级列表内', 0);
         };
-        $buy_where=[];
-        $buy_where[]=['cycle','=',$cycle];
-        $buy_where[]=['uid','=',$uid];
-        $buy_where[]=['trader_id','=',$trader_id];
-        $buy_where[]=['status','in','0,1,6,7'];
-        if (FundOrderGs::where($buy_where)->find() ){
+        $buy_where   = [];
+        $buy_where[] = ['cycle', '=', $cycle];
+        $buy_where[] = ['uid', '=', $uid];
+        $buy_where[] = ['trader_id', '=', $trader_id];
+        $buy_where[] = ['status', 'in', '0,1,6,7'];
+        if (FundOrderGs::where($buy_where)->find()) {
             ajaxmsg('已存在有效期内的合约，不能重复购买', 0);
         };
-
 
         // 数据列表
         if ($order_type == 2) { //普通优投
@@ -546,10 +543,10 @@ class Fund extends Common
         } else {
             $fundendtime = 0;
         }
-        if(config('auto_gd_Audit')){
-            $status=1;
-        }else{
-            $status=0;
+        if (config('auto_gd_Audit')) {
+            $status = 1;
+        } else {
+            $status = 0;
         }
         //本处应该使用事务机制，但是执行到saveData这个静态方法时，导致事务执行失败
 //        try {
@@ -566,11 +563,11 @@ class Fund extends Common
         $data['mobile']        = $user['mobile'];
         $data['commission']    = $divide_into;
         $data['cycle']         = $cycle;
-        $data['status']         = $status;
+        $data['status']        = $status;
         $data['agent_id']      = $agent_id;
-        $data['confirm_time']      =  time();
+        $data['confirm_time']  = time();
 
-        $res_data              = FundOrderGs::create($data);
+        $res_data = FundOrderGs::create($data);
         if ($res_data) {
             //添加添加收益记录
             $add_fund_income['name']       = $name;
@@ -580,18 +577,18 @@ class Fund extends Common
             $add_fund_income_insert        = FundIncome::create($add_fund_income);
             //结算合伙人补贴
             FundOrderGs::recommendeDaward($uid, $name, $res_data['id'], $order_type);
-            $user_balance    = Money::getMoney($uid);
-            $freeze_new      = $money * 100;
+            $user_balance = Money::getMoney($uid);
+            $freeze_new   = $money * 100;
 
             //判断是否开启自动审核
-            if(config('auto_gd_Audit')){
+            if (config('auto_gd_Audit')) {
                 Money::where('mid', $uid)->setDec('account', $money * 100);
-                $info    = $order_sn . '跟投审核通过,扣除金额' . $money . '元';
-                $account = $user_balance['account'];
-                $obj = ['affect' => -$freeze_new, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $order_sn];
+                $info            = $order_sn . '跟投审核通过,扣除金额' . $money . '元';
+                $account         = $user_balance['account'];
+                $obj             = ['affect' => -$freeze_new, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $order_sn];
                 $Record_saveData = Record::saveData($uid, -$freeze_new, $account, 95, $info, '', '', $obj);
 
-            }else{
+            } else {
                 $up_money_freeze = bcadd($user_balance['freeze'], $money * 100);
                 MoneyModel::money_freeze($uid, $up_money_freeze, $user_balance['account'] - $money * 100);
                 $account         = $user_balance['account'];
@@ -600,10 +597,6 @@ class Fund extends Common
                 $Record_saveData = Record::saveData($uid, -$freeze_new, $account, 97, $info, '', '', $obj);
 
             }
-
-
-
-
 
             Member::where('id', $uid)->update(['is_buy' => 1]);
             //Member::updateUserLevel($uid); //升级 合伙人统一升级
@@ -771,12 +764,12 @@ class Fund extends Common
     //我的订单列表-股市
     public function getMyOrderListgs()
     {
-        $uid                = MID;
-        $page               = input('page', 1);
-        $map                = [];
-        $map['o.uid']       = $uid;
+        $uid          = MID;
+        $page         = input('page', 1);
+        $map          = [];
+        $map['o.uid'] = $uid;
 //        $map['o.status']    = 1;
-        $map['o.status'] = [1, 6, 7];
+        $map['o.status']    = [1, 6, 7];
         $order              = 'o.id desc';
         $res                = FundOrdergs::getList($page, $map, $order);
         $data['statistics'] = $res['statistics'] ?? [];
@@ -1050,40 +1043,39 @@ class Fund extends Common
     //获取操盘师列表
     public function getTraderList()
     {
-        $page = input('page', 1);
-        $type = input('type', '');
+        $page    = input('page', 1);
+        $type    = input('type', '');
         $keyword = input('keyword', '');
-        $map  = [];
-        $where  = [];
+        $map     = [];
+        $where   = [];
         if ($type) {
             $map['type'] = $type;
         }
 //        0:默认选项卡列表 1:搜索页面
         $trader_list_type = config('trader_list_type');  //操盘师列表类型
 
-
         $map['status'] = 1;
         $order         = 'id desc';
         $page_size     = 20;
         $field         = '*,headimgurl headimgurl_text';
-        $domain = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+        $domain        = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
 
-        if(isset($trader_list_type) && $trader_list_type == 1){
-            unset( $map['type'] );
-            $list = [];
-            $list['total'] = 0;
-            $list['per_page'] = 20;
+        if (isset($trader_list_type) && $trader_list_type == 1) {
+            unset($map['type']);
+            $list                 = [];
+            $list['total']        = 0;
+            $list['per_page']     = 20;
             $list['current_page'] = 1;
-            $list['last_page'] = 0;
-            $list['data'] = [];
+            $list['last_page']    = 0;
+            $list['data']         = [];
             if ($keyword) {
                 $where[] = ['name', 'like', '%' . $keyword . '%'];
-                $list          = TraderModel::where($map)->where($where)->order($order)->field($field)->paginate(['page' => $page, 'list_rows' => $page_size]);
+                $list    = TraderModel::where($map)->where($where)->order($order)->field($field)->paginate(['page' => $page, 'list_rows' => $page_size]);
                 foreach ($list as $k => &$v) {
-                    $v['max_money']         = convertToTenThousand($v['max_money']);
-                    $v['min_money']         = convertToTenThousand($v['min_money']);
-                    if($v['type']==2){
-                        $viptrade=FundViptradeModel::where('traderid',$v['id'])->select();
+                    $v['max_money'] = convertToTenThousand($v['max_money']);
+                    $v['min_money'] = convertToTenThousand($v['min_money']);
+                    if ($v['type'] == 2) {
+                        $viptrade = FundViptradeModel::where('traderid', $v['id'])->select();
                         // 初始化最大值和最小值
                         $maxValue = PHP_INT_MIN;
                         $minValue = PHP_INT_MAX;
@@ -1106,31 +1098,31 @@ class Fund extends Common
                             }
                         }
 //                        $v['divide_into']       = formatNumber($v['$minValue']) . "%-" .formatNumber($v['$maxValue']);
-                        if(count($viptrade)>1){
+                        if (count($viptrade) > 1) {
 //                            最大最小值相等只显示一个
-                            if($minValue == $maxValue){
-                                $v['divide_into']       = formatNumber($minValue) . "%";
-                            }else{
-                                $v['divide_into']       = $minValue. "%-" .$maxValue."%";
+                            if ($minValue == $maxValue) {
+                                $v['divide_into'] = $minValue . "%";
+                            } else {
+                                $v['divide_into'] = $minValue . "%-" . $maxValue . "%";
                             }
-                        }else{
-                            $v['divide_into']       = formatNumber($minValue)."%";
+                        } else {
+                            $v['divide_into'] = $minValue . "%";
                         }
-                    }else{
-                        $v['divide_into']       = formatNumber($v['divide_into']) . "%";
+                    } else {
+                        $v['divide_into'] = formatNumber($v['divide_into']) . "%";
                     }
                     $v['system_commission'] = config('system_commission') . "%";
-                    $v['head_img'] = $v['headimgurl_text'] ?:$domain.'/uploads/default/user.jpg';
+                    $v['head_img']          = $v['headimgurl_text'] ?: $domain . '/uploads/default/user.jpg';
 
                 }
             }
-        }else{
-            $list          = TraderModel::where($map)->where($where)->order($order)->field($field)->paginate(['page' => $page, 'list_rows' => $page_size]);
+        } else {
+            $list = TraderModel::where($map)->where($where)->order($order)->field($field)->paginate(['page' => $page, 'list_rows' => $page_size]);
             foreach ($list as $k => &$v) {
-                $v['max_money']         = convertToTenThousand($v['max_money']);
-                $v['min_money']         = convertToTenThousand($v['min_money']);
-                if($v['type']==2){
-                    $viptrade=FundViptradeModel::where('traderid',$v['id'])->select();
+                $v['max_money'] = convertToTenThousand($v['max_money']);
+                $v['min_money'] = convertToTenThousand($v['min_money']);
+                if ($v['type'] == 2) {
+                    $viptrade = FundViptradeModel::where('traderid', $v['id'])->select();
                     // 初始化最大值和最小值
                     $maxValue = PHP_INT_MIN;
                     $minValue = PHP_INT_MAX;
@@ -1138,30 +1130,30 @@ class Fund extends Common
                     // 遍历数组找出最大值和最小值
                     foreach ($viptrade as $item) {
 
-                            if ($item['commission'] > $maxValue) {
-                                $maxValue = $item['commission'];
-                            }
-                            if ($item['commission'] < $minValue) {
-                                $minValue = $item['commission'];
-                            }
+                        if ($item['commission'] > $maxValue) {
+                            $maxValue = $item['commission'];
+                        }
+                        if ($item['commission'] < $minValue) {
+                            $minValue = $item['commission'];
+                        }
 
                     }
-                    if(count($viptrade)>1){
+                    if (count($viptrade) > 1) {
                         //                            最大最小值相等只显示一个
-                        if($minValue == $maxValue){
-                            $v['divide_into']       = formatNumber($minValue) . "%";
-                        }else{
-                            $v['divide_into']       = $minValue. "%-" .$maxValue."%";
+                        if ($minValue == $maxValue) {
+                            $v['divide_into'] =$minValue. "%";
+                        } else {
+                            $v['divide_into'] = $minValue . "%-" . $maxValue . "%";
                         }
-                    }else{
-                        $v['divide_into']       = formatNumber($minValue)."%";
+                    } else {
+                        $v['divide_into'] = $minValue . "%";
                     }
-                }else{
-                    $v['divide_into']       = formatNumber($v['divide_into']) . "%";
+                } else {
+                    $v['divide_into'] = formatNumber($v['divide_into']) . "%";
                 }
 
                 $v['system_commission'] = config('system_commission') . "%";
-                $v['head_img'] = $v['headimgurl_text'] ?:$domain.'/uploads/default/user.jpg';
+                $v['head_img']          = $v['headimgurl_text'] ?: $domain . '/uploads/default/user.jpg';
 
             }
         }
@@ -1177,13 +1169,13 @@ class Fund extends Common
 
     public function getTraderDetail()
     {
-        $id           = input('id', '');
-        $field        = '*,headimgurl headimgurl_text';
-        $form         = TraderModel::where('id', $id)->field($field)->find();
-        $form->max_money         = convertToTenThousand($form->max_money);
-        $form->min_money         = convertToTenThousand($form->min_money);
-        if($form->type==2){
-            $viptrade=FundViptradeModel::where('traderid',$form->id)->select();
+        $id              = input('id', '');
+        $field           = '*,headimgurl headimgurl_text';
+        $form            = TraderModel::where('id', $id)->field($field)->find();
+        $form->max_money = convertToTenThousand($form->max_money);
+        $form->min_money = convertToTenThousand($form->min_money);
+        if ($form->type == 2) {
+            $viptrade = FundViptradeModel::where('traderid', $form->id)->select();
             // 初始化最大值和最小值
             $maxValue = PHP_INT_MIN;
             $minValue = PHP_INT_MAX;
@@ -1191,35 +1183,35 @@ class Fund extends Common
             // 遍历数组找出最大值和最小值
             foreach ($viptrade as $item) {
 
-                    if ($item['commission'] > $maxValue) {
-                        $maxValue = $item['commission'];
-                    }
-                    if ($item['commission'] < $minValue) {
-                        $minValue = $item['commission'];
-                    }
+                if ($item['commission'] > $maxValue) {
+                    $maxValue = $item['commission'];
+                }
+                if ($item['commission'] < $minValue) {
+                    $minValue = $item['commission'];
+                }
 
             }
-            $form->divide_into     =$minValue . "%-" .$maxValue."%";
-        }else{
-            $form->divide_into  = formatNumber( $form->divide_into) . "%";
+            $form->divide_into = $minValue . "%-" . $maxValue . "%";
+        } else {
+            $form->divide_into = formatNumber($form->divide_into) . "%";
         }
         $data         = [];
         $data['form'] = $form;
 
-        $list = TraderOrder::alias('to')
+        $list             = TraderOrder::alias('to')
             ->where([
                 'to.trader_id' => $id,
             ])
-            ->where('to.status','>','0')
-            ->order('to.create_time desc')
+            ->where('to.status', '>', '0')
+            ->order('to.sell_time desc')
             ->limit(5)
             ->select()->toArray();
-        $domain = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
-        $form['head_img'] = $form['headimgurl_text'] ?:$domain.'/uploads/default/user.jpg';
+        $domain           = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+        $form['head_img'] = $form['headimgurl_text'] ?: $domain . '/uploads/default/user.jpg';
 
         foreach ($list as $k => $v) {
             $list[$k]['buy_time'] = date('Y-m-d', strtotime($v['buy_time']));
-            if(!empty($v['sell_time'])){
+            if (!empty($v['sell_time'])) {
                 $list[$k]['sell_time'] = date('Y-m-d', strtotime($v['sell_time']));
                 if ($v['buy_price'] != 0 && $v['sell_price'] != 0) {
 // 浮动收益 = 卖出价格 - 买入价格 / 买入价格 * 100%
@@ -1227,7 +1219,7 @@ class Fund extends Common
                 } else {
                     $list[$k]['floating_ratio'] = '- -';
                 }
-            }else{
+            } else {
                 $list[$k]['floating_ratio'] = '- -';
             }
 
@@ -1270,7 +1262,7 @@ class Fund extends Common
 //            $data['form']['monthly_revenue'] += round((($value['money'] + $value['balance']) / $value['money'] - 1) * 100, 2);
 //        }
 //        $data['form']['monthly_revenue'] = sprintf("%.2f", $data['form']['monthly_revenue']);
-        $data['list']                = $list;
+        $data['list'] = $list;
 
 //        战绩显示开关
         $data['seeting']['trader_record']   = config('trader_record');
@@ -1306,15 +1298,15 @@ class Fund extends Common
         $list = TraderOrder::alias('to')
             ->where([
 //                'to.status'    => 1,
-                'to.trader_id' => $trader_id,
+'to.trader_id' => $trader_id,
             ])
-            ->where('to.status','>','0')
-            ->order('to.create_time desc')
+            ->where('to.status', '>', '0')
+            ->order('to.sell_time desc')
             ->order($order)
             ->paginate(['page' => $page, 'list_rows' => $page_size]);
         foreach ($list as $k => $v) {
             $list[$k]['buy_time'] = date('Y-m-d', strtotime($v['buy_time']));
-            if(!empty($v['sell_time'])){
+            if (!empty($v['sell_time'])) {
                 $list[$k]['sell_time'] = date('Y-m-d', strtotime($v['sell_time']));
                 if ($v['buy_price'] != 0 && $v['sell_price'] != 0) {
 // 浮动收益 = 卖出价格 - 买入价格 / 买入价格 * 100%
@@ -1322,7 +1314,7 @@ class Fund extends Common
                 } else {
                     $list[$k]['floating_ratio'] = '- -';
                 }
-            }else{
+            } else {
                 $list[$k]['floating_ratio'] = '- -';
             }
 
@@ -1527,8 +1519,8 @@ class Fund extends Common
 //                    $v["user_level_list"][] = $level_array[$level];
 //                }
 //                只保留第一层
-                    $user_levels_text       = $level_array[$v["user_level"][0]] .'(及以上)';
-                    $v["user_level_list"][] = $level_array[$v["user_level"][0]] .'(及以上)';
+                $user_levels_text       = $level_array[$v["user_level"][0]] . '(及以上)';
+                $v["user_level_list"][] = $level_array[$v["user_level"][0]] . '(及以上)';
 //        print_r($arr);die;
                 #去掉最后一个 <br>（如果需要的话）
                 if (!empty($user_levels_text)) {
@@ -1557,11 +1549,11 @@ class Fund extends Common
     //获取合伙人规则
     public function getRuleContent()
     {
-        $lang = Lang::range();
-        $map['lang']     = $lang;
-        $map['status']   = 1;
-        $map['tagname']  = 'rule_content';
-        $info            = AdvertModel::where($map)->find();
+        $lang           = input('lang');
+        $map['lang']    = $lang;
+        $map['status']  = 1;
+        $map['tagname'] = 'rule_content';
+        $info           = AdvertModel::where($map)->find();
 //        $content         = $info['content'];
 //        $data['content'] = $content;
 //        $data['content'] = '1、完成首充并且本周有优投记录的才算有效人数。
@@ -1570,7 +1562,7 @@ class Fund extends Common
 //                            4、团队工资比例结合直属下级合伙人工资比例核算周工资。
 //                            5、合伙人补贴以及周工资一周结算一次。';
 
-        $data['partner_notice'] = config('partner_notice'); //标题
+        $data['partner_notice']         = config('partner_notice');         //标题
         $data['partner_notice_content'] = config('partner_notice_content'); //内容
         return json(array(
             'data'    => $data,

@@ -407,7 +407,7 @@ EOF;
 
             ['trader_id', '=', $info['trader_id']],
             ['confirm_time', '<', strtotime(date($info['buy_time'] . " 14:00:00"))],
-            ['fundendtime', '>', strtotime(date($info['buy_time'] . " H:i:s"))]
+            ['fundendtime', '>', strtotime(date($info['buy_time'] . " 00:00:00"))]
         ])->select();
 
         $n    = 0;

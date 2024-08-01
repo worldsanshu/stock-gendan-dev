@@ -199,7 +199,7 @@ class Trader extends Admin
         $type_list = $this->trader_documentary_array;
         return ZBuilder::make('form')->setPageTitle('新增') // 设置页面标题
         ->addFormItems([ // 批量添加表单项
-                         ['image', 'headimgurl', '头像','最有尺寸：200px*200px'],
+                         ['image', 'headimgurl', '头像','最佳尺寸：200px*200px'],
                          ['text', 'product_name', '产品名称'],
                          ['text', 'name', '讲师名称','5个字以内,超出会导致错位'],
                          ['text', 'level_name', '级别名称（如：操盘师）','5个字以内,超出会导致错位'],
@@ -353,7 +353,7 @@ class Trader extends Admin
         return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
         ->addFormItems([ // 批量添加表单项
                          ['hidden', 'id'],
-                         ['image', 'headimgurl', '头像'],
+                         ['image', 'headimgurl', '头像','最佳尺寸：200px*200px'],
                          ['text', 'product_name', '产品名称'],
                          ['text', 'name', '讲师名称','5个字以内,超出会导致错位'],
                          ['text', 'level_name', '级别名称（如：操盘师）','5个字以内,超出会导致错位'],

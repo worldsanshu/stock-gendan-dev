@@ -36,8 +36,7 @@ class System extends Common
         $data_list['web_operation_platform'] = config('web_operation_platform');
         $data_list['serviceUrl'] = config('kefuurl');
         $data_list['appdown'] = config('appdown');
-//        合伙人周工资
-        $data_list['wage_display'] = intval(config('wage_display')??'1');
+
 
 
 //        每日福利区域
@@ -72,6 +71,10 @@ class System extends Common
             'auto_gd_Audit'=>config('auto_gd_Audit')??1,
 //            邮箱注册
             'email_register'=>config('email_register')??1,
+            //        合伙人周工资
+            'wage_display'=>config('wage_display')??1,
+//            查看我的权益
+            'my_rights'=>config('my_rights')??1,
         ];
         foreach ($module as &$value) {
             $value = intval($value);
@@ -289,7 +292,7 @@ class System extends Common
         $navigation = Customproperty::
             where('status', 1)
             ->order('sort asc')
-            ->field('name,url_type,url,img_url img_url_text,default_icon,url_level,sort')
+            ->field('name,url_type,url,img_url img_url_text,default_icon,url_level,sort,money')
             ->select();
 
         if(count($navigation) > 0){

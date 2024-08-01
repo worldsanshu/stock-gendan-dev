@@ -1429,7 +1429,23 @@ class Fundordergs extends Admin
             if (!$userlist) {
                 $this->error('会员不存在');
             }
+            #插入操盘记录内容
+            $datainsert['position']    = $data['position'];
+            $datainsert['buy_time']    = $data['buytime'];
+            $datainsert['buy_price']   = $data['buyprice'];
+            $datainsert['date']        = date('Y-m-d', strtotime($data['buytime']));
+            $datainsert['trader_id']   = $data['trader'];
+            $datainsert['trader_name'] = TraderModel::get( $data['trader'])['name'];
+            $stockinfo                 = StockListModel::where('code', $data['porductlist'])->find();
+            $datainsert['stock_name']  = $stockinfo['title'];
+            $datainsert['stock_code']  = $data['porductlist'];
+            $datainsert['create_time'] = time();
+            $datainsert['status']      = 2;
+            $datainsert['type']        = 2;
 
+            $datainsert['note']        = implode(',', $mobile_list);
+            $impact_quantity=0;
+            $insertGetId = TraderOrderModel::insertGetId($datainsert);
             foreach ($userlist as $value) {
                 # 先生成每日订单=>成功后返回订单列表
                 $autodate = ['uid' => $value['id'], 'buytime' => $data['buytime']];
@@ -1439,9 +1455,12 @@ class Fundordergs extends Admin
                 $orderlist = FundOrderGsModel::autobuildgsrecord($autodate);
 
                 if (empty($orderlist)) {
-                    $this->error('这些用户在选择的买入时间段内没有可以操作的订单,请检查买入股票时间是否在订单确认时间之后');
+                   continue;
                 }
+
+
                 printlog($orderlist, "先生成每日订单", 'buy');
+
                 foreach ($orderlist as $d) {
 
                     //获取该用户这个等级的最大仓位；
@@ -1466,23 +1485,7 @@ class Fundordergs extends Admin
                         ])->delete();
                         continue;
                     }
-                    #插入操盘记录内容
-                    $datainsert['position']    = $position * 100;
-                    $datainsert['buy_time']    = $data['buytime'];
-                    $datainsert['buy_price']   = $data['buyprice'];
-                    $datainsert['date']        = date('Y-m-d', strtotime($data['buytime']));
-                    $datainsert['trader_id']   = $d['trader_id'];
-                    $datainsert['trader_name'] = TraderModel::get($d['trader_id'])['name'];
-                    $stockinfo                 = StockListModel::where('code', $data['porductlist'])->find();
-                    $datainsert['stock_name']  = $stockinfo['title'];
-                    $datainsert['stock_code']  = $data['porductlist'];
-                    $datainsert['create_time'] = time();
-                    $datainsert['status']      = 2;
-                    $datainsert['type']        = 2;
-                    $datainsert['impact_quantity']        = count($orderlist);
-                    $datainsert['note']        = implode(',', $mobile_list);
 
-                    $insertGetId = TraderOrderModel::insertGetId($datainsert);
 
                     if (config('buy_cost')) {
 
@@ -1523,9 +1526,12 @@ class Fundordergs extends Admin
                     ])->update(['status'=>6]);
 
                 }
-
+                $impact_quantity++;
             }
-
+            TraderOrderModel::where('id',$insertGetId)->update(['impact_quantity'=>$impact_quantity]);
+            if($impact_quantity==0){
+                $this->error('这些用户在选择的买入时间段内没有可以操作的订单,请检查买入股票时间是否在订单确认时间之后');
+            }
             $this->success('操作成功', cookie('__forward__'));
         }
 
