@@ -30,11 +30,11 @@ return [
 //         'gentou2.0p0.cn'  => 2,//测试  代理的
 //     ],
     
-    'root_domain' => explode(',', Env::get('domain.root_domain', 'www.a1.com,gendan.topic.run,gentou1.0p0.cn')),// #1总站
-    'agent_domain' => explode(',', Env::get('domain.agent_domain','gentouagent.0p0.cn,gentou2.0p0.cn')), //#2代理站
+    'root_domain' => explode(',', Env::get('domain.root_domain', '')),// #1总站
+    'agent_domain' => explode(',', Env::get('domain.agent_domain','')), //#2代理站
 
     //分享页域名
-    'share_domain'           => Env::get('domain.share_domain', 'gentou1.0p0.cn'),
+    'share_domain'           => Env::get('domain.share_domain', ''),
 
     #更新股票数据url
     'f10_api_url'=> Env::get('F10.f10_api_url', 'https://quantapi.51ifind.com/api/v1/'),
