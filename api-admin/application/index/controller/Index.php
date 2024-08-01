@@ -10,21 +10,19 @@
 // +----------------------------------------------------------------------
 namespace app\index\controller;
 
-use AlibabaCloud\Client\AlibabaCloud;
-use AlibabaCloud\Client\Exception\ClientException;
-use AlibabaCloud\Client\Exception\ServerException;
 use app\cms\model\Column as ColumnModel;
 use app\money\model\Record;
-use think\Db;
-use TencentCloud\Sms\V20190711\SmsClient;
-// 导入要请求接口对应的 Request 类
-use TencentCloud\Sms\V20190711\Models\SendSmsRequest;
-use TencentCloud\Common\Exception\TencentCloudSDKException;
 use TencentCloud\Common\Credential;
-// 导入可选配置类
+use TencentCloud\Common\Exception\TencentCloudSDKException;
 use TencentCloud\Common\Profile\ClientProfile;
 use TencentCloud\Common\Profile\HttpProfile;
-use think\helper\Hash;
+use TencentCloud\Sms\V20190711\Models\SendSmsRequest;
+use TencentCloud\Sms\V20190711\SmsClient;
+use think\Db;
+
+// 导入要请求接口对应的 Request 类
+
+// 导入可选配置类
 
 /**
  * 前台首页控制器
@@ -34,23 +32,23 @@ class Index extends Home
 {
 
     public function index2()
-    {   $mobile=13013411365;
-        $TemplateParamSet='113311';
+    {
+        $mobile           = 13013411365;
+        $TemplateParamSet = '113311';
 
-        $_CFG=config('SMS_channel_config');
-        $_CFG=$_CFG['SMStx'];
+        $_CFG = config('SMS_channel_config');
+        $_CFG = $_CFG['SMStx'];
 
-        $SecretId =$_CFG['SecretId'];
-        $SecretKey =$_CFG['SecretKey'];
+        $SecretId  = $_CFG['SecretId'];
+        $SecretKey = $_CFG['SecretKey'];
 
-        $templateId =$_CFG['templateId'];
-        $smsSign =$_CFG['smsSign'];
-        $SmsSdkAppid=$_CFG['SDKAppID'];
-
+        $templateId  = $_CFG['templateId'];
+        $smsSign     = $_CFG['smsSign'];
+        $SmsSdkAppid = $_CFG['SDKAppID'];
 
         try {
             // 实例化认证对象
-            $cred = new Credential($SecretId, $SecretKey);
+            $cred        = new Credential($SecretId, $SecretKey);
             $httpProfile = new HttpProfile();
             $httpProfile->setEndpoint("sms.tencentcloudapi.com");
 
@@ -65,7 +63,7 @@ class Index extends Home
             $req = new SendSmsRequest();
             echo $mobile;
             // 发送短信验证码配置参数
-            $params = '{"PhoneNumberSet":["+86'.$mobile.'"],"TemplateID":"'.$templateId.'","Sign":"'.$smsSign.'","TemplateParamSet":["'.$TemplateParamSet.'"],"SmsSdkAppid":"'.$SmsSdkAppid.'"}';
+            $params = '{"PhoneNumberSet":["+86' . $mobile . '"],"TemplateID":"' . $templateId . '","Sign":"' . $smsSign . '","TemplateParamSet":["' . $TemplateParamSet . '"],"SmsSdkAppid":"' . $SmsSdkAppid . '"}';
             $req->fromJsonString($params);
 
             // 通过 client 对象调用 SendSms 方法发起请求
@@ -73,13 +71,9 @@ class Index extends Home
 
             // 输出 JSON 格式的字符串回包
             print_r($resp->toJsonString());
-        }
-        catch(TencentCloudSDKException $e) {
+        } catch (TencentCloudSDKException $e) {
             echo $e;
         }
-
-
-
 
     }
 
@@ -91,7 +85,6 @@ class Index extends Home
 //        echo "\r\n";
 //        $a=Hash::check((string)123456, $newpwd);
 
-        
 //        var_dump(get_trading_time());
 //        var_dump(get_trading_time('2024-07-28 14:50:22','datetime'));
 //        // 测试函数
@@ -107,9 +100,9 @@ class Index extends Home
        */
     public function getstock()
     {
-        $code = input('stockcode');
+        $code     = input('stockcode');
         $codetime = input('time');
-        $data = z_market_time_bat($code, $codetime);
+        $data     = z_market_time_bat($code, $codetime);
         if ($data) {
             $data = $data[0];
             if ($data['current_price']) {
@@ -123,7 +116,7 @@ class Index extends Home
     public function tt()
     {
 
-        $google = new \PHPGangsta_GoogleAuthenticator();
+        $google   = new \PHPGangsta_GoogleAuthenticator();
         $username = '15296573112';
         $app_name = '配资';
         // 生成谷歌key
@@ -148,9 +141,10 @@ class Index extends Home
      */
     public function inviteuser()
     {
-
-       $this->assign('recom_id', input('recom_id'));
-       return $this->fetch();
+        $appdown = config('appdown') ?? '/index/index/appdown';
+        $this->assign('recom_id', input('recom_id'));
+        $this->assign('appdown', $appdown);
+        return $this->fetch();
     }
 
     /**
@@ -181,10 +175,10 @@ class Index extends Home
      */
     private function getStatistics()
     {
-        $result = [];
-        $result['member'] = Db::name('member')->count('id');//获取累计配资人数
-        $result['borrow'] = Db::name('stock_borrow')->where("type", '<>', 6)->sum('init_money');//获取累计实盘资金
-        $return_money = Db::name('stock_subaccount_money')->sum('return_money');//获取累计赚取收益
+        $result                 = [];
+        $result['member']       = Db::name('member')->count('id');                                    //获取累计配资人数
+        $result['borrow']       = Db::name('stock_borrow')->where("type", '<>', 6)->sum('init_money');//获取累计实盘资金
+        $return_money           = Db::name('stock_subaccount_money')->sum('return_money');            //获取累计赚取收益
         $result['return_money'] = $return_money < 0 ? 0 : $return_money / 100;
         return $result;
     }
@@ -247,20 +241,20 @@ class Index extends Home
     public function getArticleList($id = null, $limit = 12, $ar_type = "")
     {
         if ($id === null) $this->error('缺少参数');
-        $map = [
+        $map    = [
             'status' => 1,
-            'id' => $id
+            'id'     => $id
         ];
         $column = Db::name('cms_column')->where($map)->find();
         if (!$column) $this->error("该栏目不存在(id={$id})");
         $model = Db::name('cms_model')->where('id', $column['model'])->find();
         if ($model['type'] == 2) {
-            $cid_all = ColumnModel::getChildsId($id);
+            $cid_all   = ColumnModel::getChildsId($id);
             $cid_all[] = (int)$id;
-            $map = [
-                $model['table'] . '.trash' => 0,
+            $map       = [
+                $model['table'] . '.trash'  => 0,
                 $model['table'] . '.status' => 1,
-                $model['table'] . '.cid' => ['in', $cid_all]
+                $model['table'] . '.cid'    => ['in', $cid_all]
             ];
             $data_list = Db::view($model['table'], true)
                 ->view('admin_user', 'username', $model['table'] . '.uid=admin_user.id', 'left')
@@ -270,9 +264,9 @@ class Index extends Home
                 ->select();
             $this->assign('model', $column['model']);
         } else {
-            $cid_all = ColumnModel::getChildsId($id);
+            $cid_all   = ColumnModel::getChildsId($id);
             $cid_all[] = (int)$id;
-            $map = [
+            $map       = [
                 ['cms_document.trash', '=', 0],
                 ['cms_document.status', '=', 1],
                 ['cms_document.cid', 'in', $cid_all]
@@ -296,9 +290,9 @@ class Index extends Home
     //异步
     public function payDebaoNotice()
     {
-        $flag = $this->debao_verify($_POST);
+        $flag     = $this->debao_verify($_POST);
         $trade_no = $_POST['trade_no'];//多得宝支付交易号
-        $nid = $_POST['order_no'];//获取订单号
+        $nid      = $_POST['order_no'];//获取订单号
         if ($flag) {//判断提交来的数组是否为空
             $done = $this->payDone(1, $nid, $trade_no);
         } else {
@@ -314,21 +308,21 @@ class Index extends Home
     //接收数据验证
     private function debao_verify($arr)
     {
-        $merchant_code = $arr["merchant_code"];
-        $interface_version = $arr["interface_version"];
-        $sign_type = $arr["sign_type"];
-        $dinpaySign = base64_decode($arr["sign"]);
-        $notify_type = $arr["notify_type"];
-        $notify_id = $arr["notify_id"];
-        $order_no = $arr["order_no"];
-        $order_time = $arr["order_time"];
-        $order_amount = $arr["order_amount"];
-        $trade_status = $arr["trade_status"];
-        $trade_time = $arr["trade_time"];
-        $trade_no = $arr["trade_no"];
-        $bank_seq_no = $arr["bank_seq_no"];
+        $merchant_code      = $arr["merchant_code"];
+        $interface_version  = $arr["interface_version"];
+        $sign_type          = $arr["sign_type"];
+        $dinpaySign         = base64_decode($arr["sign"]);
+        $notify_type        = $arr["notify_type"];
+        $notify_id          = $arr["notify_id"];
+        $order_no           = $arr["order_no"];
+        $order_time         = $arr["order_time"];
+        $order_amount       = $arr["order_amount"];
+        $trade_status       = $arr["trade_status"];
+        $trade_time         = $arr["trade_time"];
+        $trade_no           = $arr["trade_no"];
+        $bank_seq_no        = $arr["bank_seq_no"];
         $extra_return_param = $arr["extra_return_param"];
-        $public_key = config('public_key');
+        $public_key         = config('public_key');
         //$orginal_money = $arr["orginal_money"];
         /////////////////////////////   参数组装  /////////////////////////////////
         /**
@@ -355,7 +349,7 @@ class Index extends Home
         //echo $signStr;
         /////////////////////////////   RSA-S验证  /////////////////////////////////
         $dinpay_public_key = openssl_get_publickey($public_key);
-        $flag = openssl_verify($signStr, $dinpaySign, $dinpay_public_key, OPENSSL_ALGO_MD5);
+        $flag              = openssl_verify($signStr, $dinpaySign, $dinpay_public_key, OPENSSL_ALGO_MD5);
         return $flag;
     }
 
@@ -364,22 +358,22 @@ class Index extends Home
         $done = false;
         if ($this->locked) return false;
         $this->locked = true;
-        $vo = Db::name('money_recharge')->field('mid,money,fee,status')->where("order_no='{$nid}'")->find();
-        $vo1 = Db::name('money')->field('account')->where("mid='{$vo['mid']}'")->find();
+        $vo           = Db::name('money_recharge')->field('mid,money,fee,status')->where("order_no='{$nid}'")->find();
+        $vo1          = Db::name('money')->field('account')->where("mid='{$vo['mid']}'")->find();
         switch ($status) {
             case 1:
                 $updata['status'] = $status;
                 //$updata['tran_id'] = text($oid);
                 if ($vo['status'] != 0 || !is_array($vo)) return;
-                $xid = Db::name('money_recharge')->where("mid={$vo['mid']} AND order_no='{$nid}'")->update($updata);
-                $tmoney = floatval($vo['money'] - $vo['fee']);
-                $account = $vo1['account'] + $tmoney;
+                $xid                = Db::name('money_recharge')->where("mid={$vo['mid']} AND order_no='{$nid}'")->update($updata);
+                $tmoney             = floatval($vo['money'] - $vo['fee']);
+                $account            = $vo1['account'] + $tmoney;
                 $updata1['account'] = $account;
-                $nn = false;
+                $nn                 = false;
                 if ($xid) $nn = Db::name('money')->where("mid={$vo['mid']}")->update($updata1);
                 $record = new Record();
                 if ($xid && $nn) {
-                    $obj = ['affect' => $tmoney, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $vo1['activity_account'], 'sn' => ''];
+                    $obj   = ['affect' => $tmoney, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $vo1['activity_account'], 'sn' => ''];
                     $newid = $record->saveData($vo['mid'], $tmoney, $account, 1, '充值单号：' . $nid, '', '', $obj);
 
                 }
@@ -391,7 +385,7 @@ class Index extends Home
                 break;
             case 3:
                 $updata['status'] = $status;
-                $xid = Db::name('money_recharge')->where("mid={$vo['mid']} AND order_no='{$nid}'")->update($updata);
+                $xid              = Db::name('money_recharge')->where("mid={$vo['mid']} AND order_no='{$nid}'")->update($updata);
                 break;
         }
         if ($status > 0) {
@@ -425,7 +419,7 @@ class Index extends Home
                 echo "Your favorite fruit is neither apple, banana, or orange!";
         }
         $http = empty($_SERVER['HTTP_X_CLIENT_PROTO']) ? 'http://' : $_SERVER['HTTP_X_CLIENT_PROTO'] . '://';
-        $img = $http . $_SERVER["HTTP_HOST"] . $imgpath;
+        $img  = $http . $_SERVER["HTTP_HOST"] . $imgpath;
         header("location:$img");
 //        $info = getimagesize($img);
 //        $imgExt = image_type_to_extension($info[2], false);  //获取文件后缀
@@ -446,7 +440,5 @@ class Index extends Home
         $this->assign('url', config('kefuurl'));
         return $this->fetch();
     }
-
-
 
 }

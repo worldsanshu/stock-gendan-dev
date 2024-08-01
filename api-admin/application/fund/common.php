@@ -3,8 +3,6 @@
 use app\fund\model\FundDayline as FundDaylineModel;
 
 
-
-
 /**
  * Desc : 投资中的金额
  * User : you name

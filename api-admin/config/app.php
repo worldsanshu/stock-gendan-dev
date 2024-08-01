@@ -21,14 +21,7 @@ return [
     #平台上架开始时间
     'Added_time'             => Env::get('ADDED_TIME', date('Y-m-d 00:00:00')),
     #运行访问后台的域名
-    #@1总站 @2代理站
-//     'web_type'             => [
-//         'www.a1.com'  => 1,  //本地正式
-//         'gendan.topic.run'  => 1,//测试  正式的
-//         'gentou1.0p0.cn'  => 1,//测试  正式的
-//         'gentouagent.0p0.cn'  => 2,//测试 代理的
-//         'gentou2.0p0.cn'  => 2,//测试  代理的
-//     ],
+
     
     'root_domain' => explode(',', Env::get('domain.root_domain', '')),// #1总站
     'agent_domain' => explode(',', Env::get('domain.agent_domain','')), //#2代理站

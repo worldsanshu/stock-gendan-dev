@@ -205,230 +205,243 @@ class FundOrderGs extends Model
         return $form ?: [];
     }
 
-    //结算基金（每天三点后结算）--股市
+// 在 settlementFundgs 方法中使用 chunk
     public static function settlementFundgs($ids = null)
     {
+
         if ($ids) {
-            $res = FundDaylineModel::where('id', 'in', $ids)->where('status', 2)->select();
+            return FundDaylineModel::where('id', 'in', $ids)->where('status', 2)->chunk(50, [__CLASS__, 'calculate']);
         } else {
-            $res = FundDaylineModel::where('status', 2)->select();
+            return FundDaylineModel::where('status', 2)->chunk(50, [__CLASS__, 'calculate']);
         }
-        if (!$res) {
-            return;
-        }
-        printlog(count($res), "条数据待结算：", 'jiesuan');
-        #结算逻辑：
-        #1、买的时候需要扣除券商佣金（交金额的3%）、过户费（交金额的0.001%）、规费（交金额的0.002%
-        #2、卖的时候需要扣除印花税（成交金额的0.1%）、过户费（成交金额的0.01%）、券商佣金（成交金额的3%)
-        #3、扣除本次的佣金交易所得佣金
-        foreach ($res as $value) {
-            $uid          = $value['uid'];
-            $user_balance = Money::getMoney($uid);
-            printlog($value['order_sn'], '单号', 'jiesuan');
-            // 第一步计算订单利润：卖出减去买入总金额-减去买入成本-卖出成本
-            $sellprice_sum = $value['sell_price'] * $value['num'];
-            $buyprice_sum  = $value['buy_price'] * $value['num'];
-            printlog($sellprice_sum, '卖出总价', 'jiesuan');
-            printlog($buyprice_sum, '买入总价', 'jiesuan');
+    }
 
-            #印花税
-            $stamp_duty = config('stamp_duty') / 10000;
-            #过户费
-            $transfer_fee = config('transfer_fee') / 1000;
-            #券商佣金
-            $commission = config('commission') / 10000;
-            #规费
-            $stock_trading_fees = config('stock_trading_fees') / 1000;
-            if (config('buy_cost')) {
-                #买入成本
-                $buy_cost = $buyprice_sum * $commission + $buyprice_sum * $transfer_fee + $buyprice_sum * $stock_trading_fees;
-            } else {
-                $buy_cost = 0;
-            }
+    /**
+     * Desc : 结算分配处理函数
+     * Date : 2024-07-31 02:44
+     *
+     * @param $res
+     *
+     * @throws \think\Exception
+     */
+    public function calculate($res)
+    {
 
-            printlog($buy_cost, '买入成本', 'jiesuan');
-            if (config('sell_cost')) {
-                #卖出成本
-                $sell_cost = $sellprice_sum * $commission + $sellprice_sum * $stamp_duty + $sellprice_sum * $transfer_fee;
-            } else {
-                $sell_cost = 0;
-            }
-
-            printlog($sell_cost, '卖出成本', 'jiesuan');
-            $money = $sellprice_sum - $buyprice_sum - $buy_cost - $sell_cost;
-            printlog($money, '扣除成本后', 'jiesuan');
-            $money = round($money, 2);
-            printlog($money, '取整', 'jiesuan');
-            #计算讲师佣金
-            printlog($value['commission_ratio'], '佣金比例', 'jiesuan');
-            #讲师佣金
-            $commission = max(0, $money * $value['commission_ratio'] / 100);
-            printlog($commission, '讲师佣金', 'jiesuan');
-            #平台佣金
-            $system_commission = max(0, $money * config('system_commission') / 100);
-            printlog($system_commission, '平台佣金', 'jiesuan');
-
-            #打开注释的话就变成稳赚了
-//            $money = max(0, $money - $commission);
-            printlog($money, '最后的利润', 'jiesuan');
-
-            if ($buyprice_sum == 0) {
-                continue;
-            }
-            #最后利润=买入总价-卖出总价-买入成本-卖出成本-讲师佣金-平台佣金
-            #收益率=最后利润/买入总价*100%
-            $rebate = (($money - $commission - $system_commission) / $buyprice_sum) * 100;
-            printlog($rebate, '收益率', 'jiesuan');
-
-            #第二步 扣除买卖成本 如果利润还大于0 在优先扣除讲师佣金
-            printlog($money, '扣除买卖成本 如果利润还大于0 在优先扣除讲师佣金', 'jiesuan');
-            if ($money > 0) {
-                $activity_account = $user_balance['activity_account'] / 100;
-                printlog($activity_account, '活动金余额', 'jiesuan');
-                #扣除佣金-优先获取活动金
-                if ($activity_account >= $commission) {
-                    #活动金余额
-                    $activity_account -= $commission;
-                    #变化的活动金
-                    $Variety_activity_account = $commission;
-
-                } else {
-                    #变化的活动金
-                    $Variety_activity_account = $activity_account;
-                    #活动金余额消化完
-                    $activity_account = 0;
-                    #佣金减去剩余的活动，不够的金额在从利润扣
-                    $money = $money - ($commission - $user_balance['activity_account'] / 100);
-                }
-
-            } else {
-                $commission = 0;
-            }
-            #第二步 当利润还大于0时在扣 平台佣金
-            printlog($money, '当利润还大于0时在扣 平台佣金', 'jiesuan');
-            if ($money > 0) {
-                $activity_account = $user_balance['activity_account'] / 100;
-                printlog($activity_account, '活动金余额', 'jiesuan');
-                #扣除佣金-优先获取活动金
-                if ($activity_account >= $system_commission) {
-                    #活动金余额
-                    $activity_account -= $system_commission;
-                    #变化的活动金
-                    $Variety_activity_account = $system_commission;
-
-                } else {
-                    #变化的活动金
-                    $Variety_activity_account = $activity_account;
-                    #活动金余额消化完
-                    $activity_account = 0;
-                    #佣金减去剩余的活动，不够的金额在从利润扣
-                    $money = $money - ($system_commission - $user_balance['activity_account'] / 100);
-                }
-
-            } else {
-                $system_commission = 0;
-            }
-
-            #第二步 跟新订单数据
-            $FundDaylineModelupdate = FundDaylineModel::where(['id' => $value['id']])->update([
-                'buy_cost'          => $buy_cost,
-                'sell_cost'         => $sell_cost,
-                'profit'            => $money,
-                'commission'        => $commission,
-                'system_commission' => $system_commission,
-                'status'            => 3
-            ]);
-
-            #更新收益到用户表
-            $order_id        = $value['order_id'];
-            $orderinfo       = self::where('id', $order_id)->find();
-            $balance         = (float)$orderinfo['balance'];
-            $order_type      = $orderinfo['order_type'];
-            $map             = [];
-            $map['order_id'] = $order_id;
-            $map['uid']      = $uid;
-            printlog($map, '更新基金收益表', 'jiesuan');
-            printlog($money, '金额', 'jiesuan');
-            #第三步 更新收益到跟买收益表
-            $moneySign = $money < 0 ? 'dec' : 'inc';
-            printlog($moneySign, 'moneySign', 'jiesuan');
-            printlog(abs($money), 'abs($money)', 'jiesuan');
-            $FundIncomeupdate = FundIncome::where($map)
-                ->{$moneySign}('total_money', abs($money))
-                ->{$moneySign}('income_money', abs($money))
-                ->update(); //更新到收益表
-
-            #更改订单状态
-            $update_data                         = [];
-            $update_data['status']               = 1;
-            $update_data['balance']              = $balance + $money;
-            $update_data['is_sell']              = 1;
-            $update_data['settlement_last_time'] = time();
-            $update_data['settlement_days']      = $orderinfo['settlement_days'] + 1;//结算次数
-            #第四步 跟新订单数据
-            $order_update_data   = self::where('id', $order_id)->update($update_data);
-            $data                = [];
-            $data['name']        = $value['stockname'];
-            $data['code']        = $value['stockcode'];
-            $data['money']       = $money;
-            $data['rebate']      = $rebate;//收益率
-            $data['uid']         = $uid;
-            $data['fund_id']     = 0;
-            $data['balance']     = $balance + $money;
-            $data['old_balance'] = $balance;
-            $data['order_id']    = $order_id;
-            $data['order_type']  = $order_type;
-            $data['status']      = 1;
-            $data['create_time'] = time();
-            #第五步 插入收益记录
-            $fund_income_log = Db('fund_income_log')->insert($data);
-
-            if ($Variety_activity_account > 0) {
-                #扣除活动金
-                Money::where('mid', $uid)->setDec('activity_account', $Variety_activity_account * 100);
+        try {
+            // 开始事务
+            Db::startTrans();
+            printlog(count($res), "条数据待结算：", 'jiesuan');
+            #结算逻辑：
+            #1、买的时候需要扣除券商佣金（交金额的3%）、过户费（交金额的0.001%）、规费（交金额的0.002%
+            #2、卖的时候需要扣除印花税（成交金额的0.1%）、过户费（成交金额的0.01%）、券商佣金（成交金额的3%)
+            #3、扣除本次的佣金交易所得佣金
+            foreach ($res as $value) {
+                $uid          = $value['uid'];
                 $user_balance = Money::getMoney($uid);
-                $account      = $user_balance['account'];
-                $info         = '跟投结算,活动金' . $Variety_activity_account . '元，抵扣讲师佣金';
-                $obj          = ['affect' => 0, 'account' => $account, 'affect_activity' => $Variety_activity_account * 100, 'activity_account' => $activity_account * 100, 'sn' => ''];
-                Record::saveData($uid, $money * 100, $account, 98, $info, '', '', $obj);
+                printlog($value['order_sn'], '单号', 'jiesuan');
+                // 第一步计算订单利润：卖出减去买入总金额-减去买入成本-卖出成本
+                $sellprice_sum = $value['sell_price'] * $value['num'];
+                $buyprice_sum  = $value['buy_price'] * $value['num'];
+                printlog($sellprice_sum, '卖出总价', 'jiesuan');
+                printlog($buyprice_sum, '买入总价', 'jiesuan');
+
+                #印花税
+                $stamp_duty = config('stamp_duty') / 10000;
+                #过户费
+                $transfer_fee = config('transfer_fee') / 1000;
+                #券商佣金
+                $commission = config('commission') / 10000;
+                #规费
+                $stock_trading_fees = config('stock_trading_fees') / 1000;
+                if (config('buy_cost')) {
+                    #买入成本
+                    $buy_cost = $buyprice_sum * $commission + $buyprice_sum * $transfer_fee + $buyprice_sum * $stock_trading_fees;
+                } else {
+                    $buy_cost = 0;
+                }
+
+                printlog($buy_cost, '买入成本', 'jiesuan');
+                if (config('sell_cost')) {
+                    #卖出成本
+                    $sell_cost = $sellprice_sum * $commission + $sellprice_sum * $stamp_duty + $sellprice_sum * $transfer_fee;
+                } else {
+                    $sell_cost = 0;
+                }
+
+                printlog($sell_cost, '卖出成本', 'jiesuan');
+                $money = $sellprice_sum - $buyprice_sum - $buy_cost - $sell_cost;
+                printlog($money, '扣除成本后', 'jiesuan');
+                $money = round($money, 2);
+                printlog($money, '取整', 'jiesuan');
+                #计算讲师佣金
+                printlog($value['commission_ratio'], '佣金比例', 'jiesuan');
+                #讲师佣金
+                $commission = max(0, $money * $value['commission_ratio'] / 100);
+                printlog($commission, '讲师佣金', 'jiesuan');
+                #平台佣金
+                $system_commission = max(0, $money * config('system_commission') / 100);
+                printlog($system_commission, '平台佣金', 'jiesuan');
+
+                #打开注释的话就变成稳赚了
+//            $money = max(0, $money - $commission);
+                printlog($money, '最后的利润', 'jiesuan');
+
+                if ($buyprice_sum == 0) {
+                    continue;
+                }
+                #最后利润=买入总价-卖出总价-买入成本-卖出成本-讲师佣金-平台佣金
+                #收益率=最后利润/买入总价*100%
+                $rebate = (($money - $commission - $system_commission) / $buyprice_sum) * 100;
+                printlog($rebate, '收益率', 'jiesuan');
+
+                #第二步 扣除买卖成本 如果利润还大于0 在优先扣除讲师佣金
+                printlog($money, '扣除买卖成本 如果利润还大于0 在优先扣除讲师佣金', 'jiesuan');
+                if ($money > 0) {
+                    $activity_account = $user_balance['activity_account'] / 100;
+                    printlog($activity_account, '活动金余额', 'jiesuan');
+                    #扣除佣金-优先获取活动金
+                    if ($activity_account >= $commission) {
+                        #活动金余额
+                        $activity_account -= $commission;
+                        #变化的活动金
+                        $Variety_activity_account = $commission;
+
+                    } else {
+                        #变化的活动金
+                        $Variety_activity_account = $activity_account;
+                        #活动金余额消化完
+                        $activity_account = 0;
+                        #佣金减去剩余的活动，不够的金额在从利润扣
+                        $money = $money - ($commission - $user_balance['activity_account'] / 100);
+                    }
+
+                } else {
+                    $commission = 0;
+                }
+                #第二步 当利润还大于0时在扣 平台佣金
+                printlog($money, '当利润还大于0时在扣 平台佣金', 'jiesuan');
+                if ($money > 0) {
+                    $activity_account = $user_balance['activity_account'] / 100;
+                    printlog($activity_account, '活动金余额', 'jiesuan');
+                    #扣除佣金-优先获取活动金
+                    if ($activity_account >= $system_commission) {
+                        #活动金余额
+                        $activity_account -= $system_commission;
+                        #变化的活动金
+                        $Variety_activity_account = $system_commission;
+
+                    } else {
+                        #变化的活动金
+                        $Variety_activity_account = $activity_account;
+                        #活动金余额消化完
+                        $activity_account = 0;
+                        #佣金减去剩余的活动，不够的金额在从利润扣
+                        $money = $money - ($system_commission - $user_balance['activity_account'] / 100);
+                    }
+
+                } else {
+                    $system_commission = 0;
+                }
+
+                #第二步 跟新订单数据
+                $FundDaylineModelupdate = FundDaylineModel::where(['id' => $value['id']])->update([
+                    'buy_cost'          => $buy_cost,
+                    'sell_cost'         => $sell_cost,
+                    'profit'            => $money,
+                    'commission'        => $commission,
+                    'system_commission' => $system_commission,
+                    'status'            => 3
+                ]);
+
+                #更新收益到用户表
+                $order_id        = $value['order_id'];
+                $orderinfo       = self::where('id', $order_id)->find();
+                $balance         = (float)$orderinfo['balance'];
+                $order_type      = $orderinfo['order_type'];
+                $map             = [];
+                $map['order_id'] = $order_id;
+                $map['uid']      = $uid;
+                printlog($map, '更新基金收益表', 'jiesuan');
+                printlog($money, '金额', 'jiesuan');
+                #第三步 更新收益到跟买收益表
+                $moneySign = $money < 0 ? 'dec' : 'inc';
+                printlog($moneySign, 'moneySign', 'jiesuan');
+                printlog(abs($money), 'abs($money)', 'jiesuan');
+                $FundIncomeupdate = FundIncome::where($map)
+                    ->{$moneySign}('total_money', abs($money))
+                    ->{$moneySign}('income_money', abs($money))
+                    ->update(); //更新到收益表
+
+                #更改订单状态
+                $update_data                         = [];
+                $update_data['status']               = 1;
+                $update_data['balance']              = $balance + $money;
+                $update_data['is_sell']              = 1;
+                $update_data['settlement_last_time'] = time();
+                $update_data['settlement_days']      = $orderinfo['settlement_days'] + 1;//结算次数
+                #第四步 跟新订单数据
+                $order_update_data   = self::where('id', $order_id)->update($update_data);
+                $data                = [];
+                $data['name']        = $value['stockname'];
+                $data['code']        = $value['stockcode'];
+                $data['money']       = $money;
+                $data['rebate']      = $rebate;//收益率
+                $data['uid']         = $uid;
+                $data['fund_id']     = 0;
+                $data['balance']     = $balance + $money;
+                $data['old_balance'] = $balance;
+                $data['order_id']    = $order_id;
+                $data['order_type']  = $order_type;
+                $data['status']      = 1;
+                $data['create_time'] = time();
+                #第五步 插入收益记录
+                $fund_income_log = Db('fund_income_log')->insert($data);
+
+                if ($Variety_activity_account > 0) {
+                    #扣除活动金
+                    Money::where('mid', $uid)->setDec('activity_account', $Variety_activity_account * 100);
+                    $user_balance = Money::getMoney($uid);
+                    $account      = $user_balance['account'];
+                    $info         = '跟投结算,活动金' . $Variety_activity_account . '元，抵扣讲师佣金';
+                    $obj          = ['affect' => 0, 'account' => $account, 'affect_activity' => $Variety_activity_account * 100, 'activity_account' => $activity_account * 100, 'sn' => ''];
+                    Record::saveData($uid, $money * 100, $account, 98, $info, '', '', $obj);
+                }
+
+                printlog($fund_income_log, '第五步 插入收益记录', 'jiesuan');
+                printlog($FundIncomeupdate, '第三步 更新收益到跟买收益表', 'jiesuan');
+                printlog($FundDaylineModelupdate, '第二步 跟新订单数据', 'jiesuan');
+                printlog($order_update_data, '第四步 跟新订单数据', 'jiesuan');
+                printlog(date("Y-m-d", $orderinfo['fundendtime']), '结束时间', 'jiesuan');
+
+                #是今天结束的直接就结算合约
+                if ($orderinfo['fundendtime'] <= strtotime(date("Y-m-d 23:59:59"))) {
+                    printlog($value['id'], '去执行jiesu', 'jiesuan');
+                    processing_settlement($value['order_id'], $orderinfo);
+                }
+
             }
+            // 处理完一个块的数据后，手动关闭数据库连接
 
-            printlog($fund_income_log, '第五步 插入收益记录', 'jiesuan');
-            printlog($FundIncomeupdate, '第三步 更新收益到跟买收益表', 'jiesuan');
-            printlog($FundDaylineModelupdate, '第二步 跟新订单数据', 'jiesuan');
-            printlog($order_update_data, '第四步 跟新订单数据', 'jiesuan');
-            printlog(date("Y-m-d", $orderinfo['fundendtime']), '结束时间', 'jiesuan');
+            #不知道为什么用使用事务之后就不成功
 
-            #是今天结束的直接就结算合约
-            if ( $orderinfo['fundendtime']<=strtotime(date("Y-m-d 23:59:59")) ) {
-                printlog($value['id'],  '去执行jiesu', 'jiesuan');
-              processing_settlement($value['order_id'], $orderinfo);
+            if (
+                $fund_income_log &&
+                $FundIncomeupdate &&
+                $FundDaylineModelupdate &&
+                $order_update_data) {
+
+                Db::commit();
+                return true;
+            } else {
+                // 如果有任何操作失败，回滚事务
+                Db::rollback();
+                return false;
             }
-
+        } catch (Exception $e) {
+            // 捕获异常并回滚事务
+            Db::rollback();
+            return false;
         }
-        #不知道为什么用使用事务之后就不成功
-//            try {
-//                // 开始事务
-//                Db::startTrans();
-//                if ($saveData &&
-//                    $fund_income_log &&
-//                    $FundIncomeupdate &&
-//                    $FundDaylineModelupdate &&
-//                    $order_update_data) {
-//
-//                    Db::commit();
-//                    return true;
-//                } else {
-//                    // 如果有任何操作失败，回滚事务
-//                    Db::rollback();
-//                    return false;
-//                }
-//            } catch (Exception $e) {
-//                // 捕获异常并回滚事务
-//                Db::rollback();
-//                return false;
-//            }
-        return true;
     }
 
     /**
@@ -502,10 +515,10 @@ class FundOrderGs extends Model
 
         if ($id) {
             #只有未持仓状态才可以结算
-            $where=[
-                ['id','=', $id],
-                ['status','=', 1],
-                ['fundendtime','<=', $nextDayTimeStamp]
+            $where         = [
+                ['id', '=', $id],
+                ['status', '=', 1],
+                ['fundendtime', '<=', $nextDayTimeStamp]
             ];
             $orderinfolist = self::where($where)->find();
 
@@ -554,8 +567,8 @@ class FundOrderGs extends Model
             $date = $data['date'];
         }
         $wherelist = [['status', 'in', "1,6"],
-                      ['confirm_time', '<', strtotime(date($data['buytime'] . " 14:00:00"))],
-                      ['fundendtime', '>', strtotime(date($data['buytime'] . " H:i:s"))]
+                      ['confirm_time', '<', strtotime(date($data['buytime'] . " 23:59:59"))],
+                      ['fundendtime', '>', strtotime(date($data['buytime'] . " 00:00:00"))]
         ];
 
         if (isset($data['trader']) && !empty($data['trader'])) {
@@ -564,11 +577,10 @@ class FundOrderGs extends Model
         if ($uid) {
             $wherelist[] = ['uid', '=', $uid];
 
-            $list        = self::where($wherelist)->select();
+            $list = self::where($wherelist)->select();
         } else {
             $list = self::where($wherelist)->select();
         }
-
 
         if (empty($date)) {
             $date = date("Y-m-d");
