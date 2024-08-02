@@ -42,6 +42,7 @@
                                         <button title="展开所有节点" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有节点</button>
                                         <button title="收起所有节点" type="button" class="btn btn-warning" id="collapse-all"><i class="fa fa-minus"></i> 收起所有节点</button>
                                         <button title="更新会员级别" type="button" class="btn btn-default" id="collapse-update"><i class="fa fa-refresh"></i> 更新会员级别</button>
+                                        <button title="查看隐私信息" type="button" class="btn btn-info" id="privacy"><i class="fa fa-fw fa-refresh"></i> 查看隐私信息</button>
                                         <span class="form-inline">
                                         <input class="form-control" id="search-auth" onkeydown="if(event.keyCode === 13){return false;}" type="text" value="" placeholder="输入关键字搜索">
                                     </span>
@@ -59,6 +60,21 @@
             </div>
         </div>
     </div>
+
+
+<div class="layui-layer layui-layer-iframe layui-privacy" id="layui-layer1" type="iframe" times="1" showtime="0" contype="string"
+     style="z-index: 19891015; width: 500px; height: 40%; top: 281px; left: 238px;display: none">
+    <div class="layui-layer-title" style="cursor: move;">查看隐私信息</div>
+    <div id="" class="layui-layer-content">
+        <iframe scrolling="auto" allowtransparency="true" id="layui-layer-iframe1" name="layui-layer-iframe1" onload="this.className='';" class="" frameborder="0" src="/admin.php/member/index/privacy.html?_pop=1" style="height: 333px;">
+
+        </iframe>
+    </div>
+    <span class="layui-layer-setwin">
+        <a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
+    </span>
+    <span class="layui-layer-resize"></span>
+</div>
 {/block}
 
 {block name="script"}
@@ -141,6 +157,26 @@
                 //}
             }).fail(function () {
                 Dolphin.notify('服务器发生错误~', 'danger');
+            });
+        });
+        $(document).ready(function() {
+            // 初始隐藏弹窗
+            $('.layui-privacy').hide();
+
+            // 点击#privacy时显示带有layui-privacy类的div
+            $('#privacy').click(function () {
+                $('.layui-privacy').show();
+            });
+
+            // 监听关闭按钮的点击事件
+            $('.layui-layer-close1').on('click', function() {
+                // 隐藏弹窗
+                $('.layui-privacy').hide();
+
+                // 重新绑定显示弹窗的事件处理器
+                $('#privacy').off('click').on('click', function () {
+                    $('.layui-privacy').show();
+                });
             });
         });
     });

@@ -219,8 +219,8 @@ class Index extends Admin
         foreach ($gd_wait as $k=> $item){
             $gd_wait[$k]['trader_img'] = get_thumb($item['headimgurl']);
             $gd_wait[$k]['addtime'] = date("Y-m-d H:i:s",$item['create_time']);
+            $gd_wait[$k]['mobile'] = privacy_info_switch('mobile',$gd_wait[$k]['mobile']);
         }
-
 
         $this->assign('gd_wait',$gd_wait);
         $this->assign('gd_wait_count',count($gd_wait));
@@ -232,7 +232,9 @@ class Index extends Admin
             ->where((new UserService())->getAgentSql('mid'))
             ->where('r.status',0)->select();
         foreach ($recharge_wait as $k=> $item){
-            $gd_wait[$k]['create_time'] = date("Y-m-d H:i:s",$item['create_time']);
+            $recharge_wait[$k]['create_time'] = date("Y-m-d H:i:s",$item['create_time']);
+            $recharge_wait[$k]['mobile'] = privacy_info_switch('mobile',$recharge_wait[$k]['mobile']);
+
         }
         $this->assign('recharge_wait',$recharge_wait);
         $this->assign('recharge_wait_count',count($recharge_wait));
@@ -243,6 +245,9 @@ class Index extends Admin
             ->leftJoin('member m','w.mid = m.id')
             ->where((new UserService())->getAgentSql('mid'))
             ->where('w.status',0)->select();
+        foreach ($withdraw_wait as $k=> $item){
+            $withdraw_wait[$k]['mobile'] = privacy_info_switch('mobile',$withdraw_wait[$k]['mobile']);
+        }
         $this->assign('withdraw_wait',$withdraw_wait);
         $this->assign('withdraw_wait_count',count($withdraw_wait));
         #域名异常
@@ -260,6 +265,7 @@ class Index extends Admin
         $res=$res['list'];
         foreach ($res as $k=> $item){
             $username       = empty($item['username']) ? '--' : $item['username'];
+            $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
 
             $res[$k]['user_info'] = $username . "/" . $item['mobile'] ;
             $res[$k]['addtime'] = date("Y-m-d H:i:s",$item['create_time']);

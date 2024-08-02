@@ -32,6 +32,7 @@ class Index extends Admin
      */
     public function index($group = 'tab1')
     {
+
         $get_one = Db::name('interest_config')->select();
         if ($this->request->isPost()) {
             $data = input();
@@ -173,6 +174,8 @@ class Index extends Admin
         $res       = Interest::getList($page, $map, $order);
         $data_list = $res['list'] ?? [];
         foreach ($data_list as &$v) {
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
+
             $username       = empty($v['username']) ? '--' : $v['username'];
             $v['user_info'] = "<p>" . $username . "</p><p>" . $v['mobile'] . "</p>";
             if ($v['status'] == 1) {
@@ -189,6 +192,12 @@ class Index extends Admin
             'icon'  => 'fa fa-fw fa-cny',
             'class' => 'btn btn-xs btn-success',
             'href'  => url('edit', ['id' => '__id__'])
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         return ZBuilder::make('table')
             ->setSearchArea([
@@ -212,6 +221,7 @@ class Index extends Admin
                 ['right_button', '操作', 'btn']
             ])
             ->setPrimaryKey('id')
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //            ->addRightButton('custom', $btn_access_right, ['area' => ['800px', '90%'], 'title' => '测试返利']) // 批量添加右侧按钮
             ->addRightButton('edit', [], ['area' => ['800px', '90%'], 'title' => '测试返利']) // 批量添加右侧按钮
             ->addOrder('id,is_del')

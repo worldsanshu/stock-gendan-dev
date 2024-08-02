@@ -18,6 +18,7 @@ use app\user\model\Role as RoleModel;
 use app\user\model\User as UserModel;
 use think\Db;
 use think\facade\Hook;
+use think\helper\Hash;
 use util\Logs;
 use util\Tree;
 
@@ -37,7 +38,19 @@ class Index extends Admin
         // 获取查询条件
         $map = $this->getMap();
         // 数据列表
-        $data_list = UserModel::where($map)->order('sort,id desc')->paginate();
+        $data_list = UserModel::where($map)->order('sort,id desc')
+            ->paginate()
+            ->each(function ($v, $k) {
+                $v->mobile = privacy_info_switch('mobile',$v->mobile);
+                return $v;
+            });
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
+
         // 分页数据
         $page = $data_list->render();
 
@@ -59,7 +72,7 @@ class Index extends Admin
                            ['right_button', '操作', 'btn']
             ])
             ->addTopButtons('add,enable,disable,delete') // 批量添加顶部按钮
-
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addRightButton('edit', ['title' => '绑定谷歌登录器', 'href' => url('bindGoogle', ['id' => '__id__'])])
             ->addRightButtons('edit,delete') // 批量添加右侧按钮
             ->setRowList($data_list) // 设置表格数据

@@ -62,42 +62,7 @@ class Index extends Admin
         if ($admin_user['role'] == 2) {
             $map[] = ['agent_far','=',$admin_user['for_user']];
         }
-//        if ($input){
-//            if (!empty($input['user_id'])) {
-//                $map[] = ['m.id', '=', $input['user_id']];
-//            }
-//            if (!empty($input['name'])) {
-//                $map[] = ['m.name', 'like', "%".$input['name']."%"];
-//            }
-//            if (!empty($input['id_card'])) {
-//                $map[] = ['m.id_card', 'like', "%".$input['id_card']."%"];
-//            }
-//            if (!empty($input['mobile'])) {
-//                $map[] = ['m.mobile', 'like', "%".$input['mobile']."%"];
-//            }
-//            if (!empty($input['recharge_num'])) {
-//                $map[] = ['m.recharge_num', '=', $input['recharge_num']];
-//            }
-//            if (!empty($input['email'])) {
-//                $map[] = ['m.email', 'like', "%".$input['email']."%"];
-//            }
-//            // 确保日期字符串被正确转换为时间戳
-//            $startTimestamp = isset($input['_filter_time_from']) ? strtotime($input['_filter_time_from']) : '';
-//            $endTimestamp = isset($input['_filter_time_to']) ? strtotime($input['_filter_time_to'] . ' 23:59:59') : ''; // 添加23:59:59确保包括全天
-//// 结合起始和结束时间进行筛选
-//            if ($startTimestamp && $endTimestamp) {
-//                // 当开始和结束时间都设置时，同时应用两个条件
-//                $map[] = ['create_time', 'between', [$startTimestamp, $endTimestamp]];
-//            } elseif ($startTimestamp) {
-//                // 仅设置了开始时间
-//                $map[] = ['create_time', '>=', $startTimestamp];
-//            } elseif ($endTimestamp) {
-//                // 仅设置了结束时间
-//                $map[] = ['create_time', '<=', $endTimestamp];
-//            }
-//
-//
-//        }
+
         empty($order) && $order = 'id desc';
 //        $map['is_del'] = 0;
         // 数据列表
@@ -107,6 +72,10 @@ class Index extends Admin
         foreach ($data_list as $key => $value) {
             $data_list[$key]['agent_name'] = $agent_list[$value['agent_far']] ?? '';
             $email = $value['email'] ?? '--';
+//            -*-----------去加密信息
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+            $value['id_card'] = $value['id_card']?privacy_info_switch('id_card',$value['id_card']):'--';
+
             $data_list[$key]['user_us'] = "<p>" . $value['mobile'] . "</p><p>{$email}</p>";
             $data_list[$key]['user_info'] = "<p>" . $value['name'] . "</p><p>" . $value['id_card'] . "</p>";
             $data_list[$key]['invite'] = "<p>" . $value['invite_name'] . "</p><p>" . $value['invite_account'] . "</p>";
@@ -141,7 +110,6 @@ class Index extends Admin
         }
         // 分页数据
         $page = $data_list->render();
-
         if (empty($_SERVER["QUERY_STRING"])) {
             $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -
                 5) . "_export";
@@ -149,10 +117,12 @@ class Index extends Admin
             $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["PHP_SELF"], 0, -
                 5) . "_export?" . $_SERVER["QUERY_STRING"] . '&';
         }
+
+        $excel_url = 'index_export';
         $btn_excel = [
             'title' => '导出EXCEL表',
             'icon'  => 'fa fa-fw fa-download',
-            'href'  => url($excel_url . http_build_query([$map]), '', '')
+           'href' => url($excel_url.http_build_query([$map]), '', '')
         ];
 //        $btn_excel = ['title' => '导出EXCEL表', 'icon' => 'fa fa-fw fa-download', 'href' => url($excel_url, '', '')];
         $btn_report = ['title' => '统计', 'icon' => 'fa fa-fw fa-bar-chart', 'href' => url('statistics', ['id' => '__id__'])];
@@ -177,8 +147,15 @@ class Index extends Admin
         $btn_update = [
             'title' => '更新会员级别',
             'icon'  => 'fa fa-fw fa-refresh',
-            
+
             'href'  => url('net_update')
+        ];
+
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
 
         
@@ -190,10 +167,12 @@ class Index extends Admin
                 ['text', 'm.id_card', '身份证', 'like'],
                 ['text', 'm.mobile', '手机号', 'like'],
                 ['text', 'm.email', '邮箱', 'like'],
+                ['text', 'partner_directly_num', '合伙人邀请人数', 'like'],
                 ['daterange', 'm.create_time', '注册时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
                 ['text:4', 'agent_search', '代理姓名/手机号/用户ID',''],
                 ['text:4', 'partner_search', '合伙人姓名/手机号/用户ID',''],
                 ['select', 'role_name', '白名单', '', '', $role_name],
+                ['select', 'level', '会员级别', '', '', $level_list],
                 ])
         ->hideCheckbox()
           ->setTableName('member') // 设置数据表名
@@ -224,10 +203,12 @@ class Index extends Admin
           ->addRightButton('custom', $btn_report)
           ->addRightButton('custom', $btn_tree)
           ->addTopButton('add') // 批量添加顶部按钮
-//          ->addTopButton('add', [], ['area' => ['800px', '90%'], 'title' => '批量添加']) // 批量添加顶部按钮
             ->addTopButton('custom', $btn_access)
             ->addTopButton('custem', $btn_excel)
             ->addTopButton('custem', $btn_update)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
+//          ->addTopButton('add', [], ['area' => ['800px', '90%'], 'title' => '批量添加']) // 批量添加顶部按钮
+
           ->addOrder('id,id_auth,reg_time,status,is_del,level')
           ->setRowList($data_list) // 设置表格数据
           ->setPages($page) // 设置分页数据
@@ -607,16 +588,27 @@ class Index extends Admin
         // 获取查询条件
         $map = $this->getMap();
 
-        $order = $this->getOrder();
 
+        $order = 'id desc';
         // 数据列表
-        $data_list = Db::name('member_smslog')->where($map)->order($order)->paginate();
+        $data_list = Db::name('member_smslog')->where($map)->order($order)
+            ->paginate()
+            ->each(function ($v, $k) {
+                $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
+                return $v;
+            });
 
         $btn_access = [
             'title' => '外部访问获取',
             'icon' => 'fa fa-fw fa-cc-visa',
             'href' => '/index.php/member/sms_test',
             'target' => '_blank'];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
             ->setSearchArea([
                 ['text', 'mobile', '手机号', 'like'],
@@ -633,9 +625,12 @@ class Index extends Admin
                            ['ip', 'IP'],
                            ['status', '是否成功', 'yesno'],
                            ['return_content', '返回内容提示'],
-                           ['send_content', '请求内容']])
-            ->addRightButtons(['edit', 'delete']) // 批量添加右侧按钮  ,last_login_time
 
+                           ['send_content', '请求内容'],
+                           ['addtime', '操作时间', 'datetime']
+            ])
+            ->addRightButtons(['edit', 'delete']) // 批量添加右侧按钮  ,last_login_time
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addTopButton('custom', $btn_access)
 
             ->setRowList($data_list) // 设置表格数据
@@ -667,6 +662,7 @@ class Index extends Admin
         $data_list = MemberLoginRecord::where($map)->order($order)->paginate();
         foreach ($data_list as $key => $value) {
             $data_list[$key]['login_ip'] = long2ip($value['login_ip']);
+            $data_list[$key]['mobile'] = privacy_info_switch('mobile',$data_list[$key]['mobile']);
         }
         // 分页数据
         $page = $data_list->render();
@@ -676,6 +672,12 @@ class Index extends Admin
             $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["PHP_SELF"], 0, -5) . "_export?" . $_SERVER["QUERY_STRING"];
         }
         $btn_excel = ['title' => '导出EXCEL表', 'icon' => 'fa fa-fw fa-download', 'href' => url($excel_url, '', '')];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
 //            ->setSearch(['username' => '姓名', 'mobile' => '手机号']) // 设置搜索框
             ->setSearchArea([
@@ -699,6 +701,7 @@ class Index extends Admin
 //            ['right_button', '操作', 'btn']
         ])->hideCheckbox()
           ->setTableName('member')
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //            ->addTopButtons('enable,disable,delete') // 批量添加顶部按钮
 //        ->addTopButton('custem', $btn_excel)->addRightButtons(['edit', 'delete']) // 批量添加右侧按钮  ,last_login_time
 //        ->addRightButton('aedit', ['href' => url('reset_payword', ['id' => '__id__']) ])
@@ -752,6 +755,7 @@ class Index extends Admin
         foreach ($xlsData as $k => $v) {
             $v['is_del'] = $is_del_arr[$v['is_del']];
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
         }
         $title = "会员列表";
         $arrHeader = array(
@@ -808,6 +812,14 @@ class Index extends Admin
                     $this->error('身份证格式不对');
                 }
             }
+//            手机号
+            $members_mobile = MemberModel::where(['id' => $data['id']])->value('mobile');
+            if ($data['mobile'] != $members_mobile) {
+                $memberhasid_mobile = MemberModel::where(['mobile' => $data['mobile']])->value('mobile');
+                if ($memberhasid_mobile) {
+                    $this->error('该手机号已经被使用');
+                }
+            }
             // 验证失败 输出错误信息
 //            if (true !== $result) $this->error($result);
             // 如果没有填写密码，则不更新密码
@@ -833,6 +845,10 @@ class Index extends Admin
 
 
             if (MemberModel::update($data)) {
+                $sync_ta  = [
+                    'mobile'   => $data['mobile'],
+                ];
+                Member::syncUpdateMobile($sync_ta,$data['id'],2);
                 $member = MemberModel::get($data['id']);
 
 //                修改下线代理
@@ -881,13 +897,26 @@ class Index extends Admin
         $info['agent_id'] = $agent_status;
         $agent_list = MemberModel::where('agent_id', '>', 0)->column('name', 'id');
         unset($info['passwd'], $info['paywd']);
+//        开启才能看隐私信息
+        $privacy = cookie('__privacy__');
+        if($privacy == 'close'){
+            $info['id_card'] = privacy_info_switch('id_card',$info['id_card']);
+            $info['mobile'] = privacy_info_switch('mobile',$info['mobile']);
+            $privacy_mobile = ['static', 'mobile', '用户名/手机号'];
+            $privacy_id_card = ['static', 'id_card', '身份证号'];
+        }else{
+            $privacy_mobile = ['text', 'mobile', '用户名/手机号'];
+            $privacy_id_card = ['text', 'id_card', '身份证号'];
+        }
         return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
         ->addFormItems([ // 批量添加表单项
           ['hidden', 'id'],
-          ['text', 'mobile', '用户名/手机号', ''],
+//          ['text', 'mobile', '用户名/手机号', ''],
+            $privacy_mobile,
           ['text', 'email', '邮箱', ''],
                          ['text', 'name', '姓名', ''],
-          ['text', 'id_card', '身份证号'],
+//          ['text', 'id_card', '身份证号'],
+            $privacy_id_card,
           ['text', 'bank_card', '银行卡', ''],
 //        ['select', 'agent_far', '选择代理', '请选择代理',$agent_list],
           ['text', 'remarks', '备注'],
@@ -1095,7 +1124,8 @@ class Index extends Admin
     
     //推荐路径
     public function tree()
-    { 
+    {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
         $uid = input('uid',0); 
         $level_array = Funduserlevelarray(); 
         
@@ -1118,12 +1148,14 @@ class Index extends Admin
                 }else{
                     $value['not_in'] = 0;
                 };
+                $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
             }
         }else{
             $us = MemberModel::where('id', $uid)->field('id,0 as pid,name as username,mobile as name,mobile,is_buy,level,partner_parent_net,partner_parent_level,partner_parent_id')->find();
             $parentId = $us->partner_parent_id;
             $path = $us->partner_parent_net . ',' . $us->id;
-            
+            $us->mobile = privacy_info_switch('mobile',$us->mobile);
+
             $list = MemberModel::where('1=1')
             ->field('id,partner_parent_id as pid,name as username,mobile as name,mobile,is_buy,level')
             ->where([['partner_parent_net', 'like', $path . '%']])
@@ -1144,6 +1176,7 @@ class Index extends Admin
                 }else{
                     $value['not_in'] = 0;
                 };
+                $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
             }
             //加入自己当第一级
             $list[] = $us->toArray();
@@ -1221,7 +1254,14 @@ class Index extends Admin
             $item->income_invest = round($item->income_invest , 2);
             $item->directly = Member::where('partner_parent_id',$uid)->where(['is_buy'=>1])->count();//直属人数
             $item->income_partner = FundSalaryLog::where('uid',$uid)->sum('price');//合伙人收益
+            $item->mobile = privacy_info_switch('mobile',$item->mobile);
         });
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         
         return ZBuilder::make('table')
 //         ->setSearchArea([
@@ -1244,7 +1284,8 @@ class Index extends Admin
             ['directly', '直属人数'],
             ['income_partner', '合伙人收益'],
         ])->setTableName('fund')
-        ->addOrder('id')->setRowList($data_list) // 设置表格数据 
+        ->addOrder('id')->setRowList($data_list) // 设置表格数据
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
         //->setColumnWidth('settle_time,create_time', 140)
         ->fetch(); // 渲染模板
         
@@ -1383,6 +1424,46 @@ class Index extends Admin
        (new PartnerSettleService())->netWork();
        Cache::rm('stopAjax_update');
        $this->success('更新成功');
+    }
+
+
+    public function privacy()
+    {
+        // 保存数据
+        if ($this->request->isPost()) {
+            $data = input();
+            $privacy_pass = Db::name('admin_user')->where('id', UID)->find();
+            if (!Hash::check((string)$data['password'], $privacy_pass['password'])) {
+                $log['remark'] ='ID:'.UID.'.用户名：'.$privacy_pass['username'].'查看隐私信息失败';
+                $log['status'] =2;
+//                if(ce_privacy_log($log)){
+//                }
+                action_log('view_privacy', 'member', UID, UID,$log['remark']);
+                    $this->error('密码错误');
+
+            }else{
+                $log['remark'] ='ID:'.UID.'.用户名：'.$privacy_pass['username'].'查看了隐私信息';
+                $log['status'] =1;
+//                if(ce_privacy_log($log)){
+                cookie('__privacy__', 'open');
+                action_log('view_privacy', 'member', UID, UID,$log['remark']);
+                $this->success('验证成功', cookie('__forward__'),'_parent_reload');
+//                }
+//                $this->error('验证失败');
+            }
+        }
+        $privacy = cookie('__privacy__');
+//        if($privacy == 'open'){
+//            $this->error('隐私信息已开启');
+//        }else{
+            return ZBuilder::make('form')
+                ->setPageTitle('查看隐私信息') // 设置页面标题
+                ->setPageTips('请输入密码验证！', 'danger')
+                ->addPassword('password', '登录密码')
+                ->fetch();
+//        }
+
+
     }
 }
 

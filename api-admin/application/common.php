@@ -32,6 +32,7 @@ use think\facade\Env;
 use think\facade\Lang;
 use think\facade\Request;
 use think\facade\Session;
+use think\helper\Hash;
 use util\Logs;
 use AlibabaCloud\Client\Exception\ServerException;
 use app\common\model\Area;
@@ -4786,5 +4787,54 @@ if (!function_exists('generate_order_no')) {
         }
         $dateTimeStr = date('YmdHis');
         return $prefix . $dateTimeStr . $id;
+    }
+}
+
+
+/**
+ * 隐私信息显示隐藏
+ *
+ * @param string $type 类型 mobile id_card
+ * @param string $value 值
+ *
+ */
+function privacy_info_switch($type,$value) {
+    $privacy = cookie('__privacy__');
+        if($privacy == 'close'){
+            switch ($type) {
+                case 'mobile':
+                    $result = substr_replace($value, '****', 3, 4);
+                    break;
+                case 'id_card':
+                    $result = substr_replace($value, '********', 4, 8);
+                    break;
+                default:
+                    $result = '';
+            }
+        }else{
+            $result = $value;
+        }
+
+    return $result;
+}
+
+
+/**
+ * 记录查看隐私信息
+ *
+ */
+function ce_privacy_log($log) {
+
+    $data['user_id'] =UID;
+    $data['remark'] =$log['remark'];
+    $data['status'] =$log['status'];
+    $data['create_time'] =time();
+    $d_info = Db::name("privacy_log")->insert($data);
+    if($d_info){
+//        验证成功在开启
+        if($log['status'] ==1){
+            cookie('__privacy__', 'open');  //隐私保护、登录默认是关闭状态 close关闭 open开
+        }
+        return true;
     }
 }

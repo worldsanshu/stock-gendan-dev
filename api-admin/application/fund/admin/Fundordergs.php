@@ -54,7 +54,7 @@ class Fundordergs extends Admin
         $data_list = $res['list'] ?? [];
         foreach ($data_list as $key => $value) {
             $username = empty($value['username']) ? '--' : $value['username'];
-
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
             $email                            = $value['email'] ?: '--';
             $mobile                           = $value['mobile'] ?: '--';
             $str                              = "<p>" . $value['trader_texta'] . "</p><p>" . $value['commission'] . "</p>";
@@ -88,6 +88,12 @@ class Fundordergs extends Admin
             'class' => 'btn btn-primary  js-get',
             'href'  => url('accessdata') . '?code=1'
         ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
 //            ->setExtraHtmlFile('search', 'toolbar_top')
             ->setSearchArea([
@@ -120,6 +126,8 @@ class Fundordergs extends Admin
             ->addRightButton('edit', ['title' => "确认投资订单", 'href' => url('accessdata', ['ids' => '__id__', 'group' => 'index'])])
             ->addOrder('id,is_del')->setRowList($data_list) // 设置表格数据
             ->addTopButton('custom', $btn_access) // 添加批量买入处理按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
+
                                                   //            ->addTopButton('custom', $dqr_access) // 添加批量驳回处理按钮
                                                   //            ->addFilterMap('id', ['code' => '0']) // 只获取group等于cms的id字段信息
                                                   //          ->addTimeFilter('o.create_time') // 添加时间段筛选
@@ -152,6 +160,7 @@ class Fundordergs extends Admin
         $data_list = $res['list'] ?? [];
         foreach ($data_list as $key => $value) {
             $username                        = empty($value['username']) ? '--' : $value['username'];
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
             $data_list[$key]['user_info']    = "<p>" . $username . "</p><p>" . $value['mobile'] . "</p>";
             $data_list[$key]['codetype']     = $this->documentary_array[$value['order_type']];
             $data_list[$key]['orderbalance'] = orderbalance($value['id'], 'FundOrderGs');
@@ -177,7 +186,12 @@ class Fundordergs extends Admin
         $btn_addInvestment = ['title' => '追加投资', 'icon' => 'fa fa-fw fa-cny', 'href' => url('addInvestment', ['ids' => '__id__'])];
 
         $btn_edit = ['title' => '修改日期', 'icon' => 'fa fa-fw fa-key', 'href' => url('dataUpdate', ['ids' => '__id__'])];
-
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
             ->setPageTitle('持仓优投订单（合约）')
             ->setSearchArea([
@@ -222,7 +236,7 @@ class Fundordergs extends Admin
             ->addRightButton('custom', $btn_detail) // 批量添加顶部按钮
             ->addRightButton('SettlementOrder', $btn_SettlementOrder) // 批量添加顶部按钮
             ->addRightButton('renewal', $btn_renewal) // 批量表格按钮
-
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addRightButton('addInvestment', $btn_addInvestment) // 批量表格按钮
             ->addRightButton('btn_edit', $btn_edit)
             ->addRightButton('edit', ['title' => '编辑订单'])
@@ -496,6 +510,7 @@ class Fundordergs extends Admin
         $data_list = $res['list'] ?? [];
         foreach ($data_list as &$v) {
             $username       = empty($v['username']) ? '--' : $v['username'];
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
             $v['user_info'] = "<p>" . $username . "</p><p>" . $v['mobile'] . "</p>";
         }
         // 分页数据
@@ -519,6 +534,12 @@ class Fundordergs extends Admin
             'icon'  => 'fa fa-fw fa-cny',
             'class' => 'btn btn-xs btn-danger',
             'href'  => url('access', ['ids' => '__id__'])
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
 
         return ZBuilder::make('table')
@@ -553,6 +574,7 @@ class Fundordergs extends Admin
             ->setRowList($data_list) // 设置表格数据
             ->addTopButton('custom', $btn_access)   // 添加批量买入处理按钮
             ->addTopButton('custom', $btn_dayorder) // 添加批量买入处理按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 
             ->fetch(); // 渲染模板
     }
@@ -587,6 +609,7 @@ class Fundordergs extends Admin
         $data_list = $res['list'] ?? [];
         foreach ($data_list as &$v) {
             $username       = empty($v['username']) ? '--' : $v['username'];
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
             $v['user_info'] = "<p>" . $username . "</p><p>" . $v['mobile'] . "</p>";
             if ($v['status'] == 2) {
                 $v['new_status'] = '<span style="color: #00ff8c">已卖出</span>';
@@ -629,6 +652,12 @@ class Fundordergs extends Admin
             'icon'  => 'fa fa-fw fa-cny',
             'class' => 'btn btn-xs btn-danger',
             'href'  => url('daybuyrecordsell', ['ids' => '__id__'])
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         return ZBuilder::make('table')
 //          ->setTableName('fund_dayline') // 设置数据表名
@@ -684,6 +713,7 @@ class Fundordergs extends Admin
             ->addTopButton('custem', $btn_recharge_sell)
             ->addTopButton('custem', $btn_recharge_finish)
             ->addTopButton('custom', $btn_position)  // 特殊用户批量调整仓位
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addRightButton('custom', $btn_access_right)
             ->replaceRightButton(['status' => '3'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
             ->replaceRightButton(['status' => 2], '<a title="" icon="fa fa-fw fa-cny" class="btn btn-xs btn-warning" href="' . url('fund/fundordergs/DailyTrading', ['ids' => '__id__']) . '" _tag="custom" data-toggle="tooltip" data-original-title="结算"><i class="fa fa-fw fa-cny"></i> 结算 </a>')
@@ -1026,6 +1056,7 @@ class Fundordergs extends Admin
             $this->success('编辑成功', cookie('__forward__'));
         }
         $info       = FundOrderGsModel::where('id', $id)->find();
+        $info['create_time'] = date('Y-m-d H:i', $info['create_time']);
         $Traderlist = [];
         $data_list  = TraderModel::where('status', 1)->select();
         foreach ($data_list as $v => $k) {
@@ -1317,6 +1348,7 @@ class Fundordergs extends Admin
                 $item->affect           = money_convert($item->affect);
                 $item->affect_activity  = money_convert($item->affect_activity);
                 $item->activity_account = money_convert($item->activity_account);
+                $item->mobile = privacy_info_switch('mobile',$item->mobile);
             });
         // 分页数据
         $page = $data_list->render();
@@ -1329,6 +1361,12 @@ class Fundordergs extends Admin
             $data_list[$key]['activity'] = "<p class='{$affect_activity}'>" . ($value['affect_activity']) . "</p><p class='{$activity_account}'>" . ($value['activity_account']) . "</p>";
             $data_list[$key]['account']  = "<p class='{$affect}'>" . ($value['affect']) . "</p><p class='{$account}'>" . ($value['account']) . "</p>";
         }
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
             ->setSearchArea([
                 ['text', 'sn', '订单号', 'like'],
@@ -1349,6 +1387,7 @@ class Fundordergs extends Admin
                            ['info', '信息'],
             ])
             ->hideCheckbox()
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->setExtraHtml('账户余额显示，把活动金也计算入内，可能有错误的情况。', 'toolbar_bottom')
             ->setTableName('money')
             ->addOrder('id,create_time')

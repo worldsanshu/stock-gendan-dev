@@ -22,11 +22,23 @@ class Interest extends Model
       ->join('interest_config c', 'c.id = i.interest_record_id')
       ->order($order)
       ->paginate();
-
     $res['list'] = $list;
     return $res ?: [];
   }
 
+
+  public static function getAll($map = [], $order = 'id desc')
+  {
+    $field = 'i.*,m.mobile,m.name as username,c.name as cname';
+    $data_list  = self::where($map)
+        ->field($field)
+        ->alias('i')
+        ->join('member m', 'm.id = i.uid')
+        ->join('interest_config c', 'c.id = i.interest_record_id')
+        ->order($order)
+        ->paginate();
+    return $data_list;
+  }
 
 
 //  收益明细

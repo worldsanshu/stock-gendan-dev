@@ -45,6 +45,7 @@ class Manager extends Admin
               $count = Db::name('member')->where(["agent_far" => $item['id']])->count();
               $item['count_num'] = $count ? $count : 0;
               $item['invitation_money'] = agents_back_money($item['id']);
+              $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
               return $item;
           });
         $domain = request()->domain();
@@ -52,6 +53,12 @@ class Manager extends Admin
         $ios_btn_report = ['title' => '下载IOS', 'icon' => 'fa fa-fw fa-arrow-down', 'href' => $domain ];
         // 分页数据
         $page = $data_list->render();
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
           ->setTableName('member')
 //          ->setSearch(['name' => '姓名', 'mobile' => '手机号'], '', '', true) // 设置搜索框
@@ -80,7 +87,9 @@ class Manager extends Admin
             ['create_time', '注册时间', 'datetime'],
             ['right_button', '操作', 'btn']
           ])
+
           ->addTopButton('add') // 批量添加顶部按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->addRightButtons(['edit']) // 批量添加右侧按钮
 //          ->addRightButton('custom', $apk_btn_report)
 //          ->addRightButton('custom', $ios_btn_report)
@@ -317,6 +326,10 @@ class Manager extends Admin
         if (!empty($info)) {
             $info['class'] = $arr[$info['agent_id']];
         }
+        $privacy = cookie('__privacy__');
+        if($privacy == 'close'){
+            $info['mobile'] = privacy_info_switch('mobile',$info['mobile']);
+        }
         $code_list = AgentCodeModel::where('status', 0)->column('name', 'code');
         if ($info['agent_id'] == 1) {
             return ZBuilder::make('form')
@@ -471,8 +484,19 @@ class Manager extends Admin
           ->where(['r.status' => 1])
 //            ->where('u.agent_id','<>',0)
           ->order($order)
-          ->paginate();
+          ->paginate()
+        ->each(function ($item, $key) {
+                $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
+                return $item;
+            });
+
         $page = $info->render();
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
           ->hideCheckbox()
             ->setSearchArea([
@@ -493,6 +517,7 @@ class Manager extends Admin
           ])
 //          ->addTimeFilter('r.create_time', [$beginday, $endday]) // 添加时间段筛选
 //          ->setSearch(['mobile' => '代理手机号'], '', '', true) // 设置搜索参数
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($info) // 设置表格数据
           ->setPages($page) // 设置分页数据
           ->fetch();
@@ -618,8 +643,16 @@ EOF;
             $balance = $user_balance['account'] / 100;//转为元
             $list[$key]['balance2'] = $balance;
             $list[$key]['invitation_money'] = get_back_money($value['id']);
+            $list[$key]['invitation_user'] = privacy_info_switch('mobile',$list[$key]['invitation_user']);
+            $list[$key]['mobile'] = privacy_info_switch('mobile',$list[$key]['mobile']);
         }
         $page = $list->render();
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
           ->hideCheckbox()
             ->setSearchArea([
@@ -641,6 +674,7 @@ EOF;
             ['agent_id', '代理等级', 'text', '', ['普通会员', '一级代理', '二级代理', '三级代理', '四级代理', '五级代理']],
           ])
 //          ->setSearch(['mobile' => '被邀请人','invitation_user' => '邀请人'], '', '', true) // 设置搜索参数
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($list) // 设置表格数据
           ->setPages($page) // 设置分页数据
           ->fetch();
@@ -675,10 +709,18 @@ EOF;
               $item['invitation_mid'] = $item['mobile'];
               $item['invitation_user'] = Db::name('member')->where('id', $item['agent_far'])->value('mobile');
               $item['invitation_money'] = get_back_money($item['id']);
+              $item['invitation_user'] = privacy_info_switch('mobile',$item['invitation_user']);
+              $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
               return $item;
           });
 
         $page = $info->render();
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
           ->hideCheckbox()
           ->setPageTitle('代理名下用户列表') // 设置页面标题
@@ -699,6 +741,7 @@ EOF;
             ['create_time', '邀请时间', 'datetime'],
             ['agent_id', '代理等级', 'text', '', ['普通会员', '一级代理', '二级代理', '三级代理', '四级代理', '五级代理']],
           ])
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($info) // 设置表格数据
           ->setPages($page) // 设置分页数据
           ->fetch();

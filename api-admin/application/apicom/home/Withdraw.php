@@ -166,4 +166,29 @@ class Withdraw extends Common
     ajaxmsg('获取成功', 1, $data, true, ['msgCode' => 'L0014']);
   }
 
+
+    /**
+     * Desc : 提现详情
+     * User : you name
+     * Date : 2024-06-22 20:58
+     */
+    public function withdrawRecordDetail()
+    {
+
+        $withdraw_id = input("withdraw_id");
+        $filter['r.mid'] =MID;
+        $filter['r.id'] =$withdraw_id;
+
+        $ret = Db::name('money_withdraw')
+            ->alias('r')
+            ->where($filter)->find();
+        $ret['money'] = bcdiv($ret['money'], 100, 2);
+        $ret['real_money'] = bcdiv($ret['real_money'], 100, 2);
+        $ret['fee'] = bcdiv($ret['fee'], 100, 2);
+        $ret['bank_text'] =$ret['bank'];
+        $ret['bank'] = explode('|',$ret['bank']);
+        $ret['create_time'] = date('Y-m-d H:i:s', $ret['create_time']);
+        ajaxmsg('获取成功', 1, $ret, true, ['msgCode' => 'L0014']);
+    }
+
 }

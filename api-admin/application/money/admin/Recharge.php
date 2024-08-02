@@ -60,6 +60,7 @@ class Recharge extends Admin
             if(empty($item->currency)){
                 $item->currency = '人民币';
             }
+            $item->mobile = privacy_info_switch('mobile',$item->mobile);
         });
         // 分页数据
         $page = $data_list->render();
@@ -75,6 +76,12 @@ class Recharge extends Admin
             'icon'  => 'fa fa-fw fa-download',
             //            'href' => url('/money/index/index_export?'.http_build_query([$map]),'','')
             'href'  => url($excel_url . http_build_query([$map]), '', '')
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         $totalsum = 0;
         foreach ($data_list as $k => $v) {
@@ -127,6 +134,7 @@ EOF;
 //          ->addTimeFilter('money_recharge.create_time', [date("Y-m-d"), date("Y-m-d")], ['开始时间', '结束时间'])
           ->hideCheckbox()
           ->addTopButton('custem', $btn_excel)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->addRightButton('edit', ['title' => '充值审核'], ['area' => ['800px', '90%'], 'title' => '充值审核']) // 批量添加右侧按钮
 //          ->replaceRightButton(['status' => '成功'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
 //          ->replaceRightButton(['status' => '失败'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
@@ -154,6 +162,7 @@ EOF;
             if(empty($v["currency"])){
                 $xlsData[$k]['currency'] = '人民币';
             }
+            $xlsData[$k]['mobile'] = privacy_info_switch('mobile',$xlsData[$k]['mobile']);
         }
         $title = "充值待审核记录";
         $arrHeader = array('ID', '订单号', '手机号', '姓名', '金额', '币种','状态', '充值方式', '充值时间');
@@ -195,6 +204,7 @@ EOF;
                 if(empty($item->currency)){
                     $item->currency = '人民币';
                 }
+                $item->mobile = privacy_info_switch('mobile',$item->mobile);
             });
         // 分页数据
         $page = $data_list->render();
@@ -211,6 +221,12 @@ EOF;
 //          'href' => url($excel_url, '', '')
             'href' => url($excel_url.http_build_query([$map]), '', '')
         ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         $totalsum = 0;
         foreach ($data_list as $k => $v) {
             $totalsum = $totalsum + $v['money'];
@@ -221,7 +237,7 @@ EOF;
         }
         $pay_type_list = Payment::$payType;
         $html = <<<EOF
-            <p>当前页面金额为：{$totalsum}元，\t可通过筛选条件快速快速筛选出对应数据。状态0为未处理，1为成功 2为失败</p>
+            <p>当前页面金额为：{$totalsum}元，\t可通过筛选条件快速筛选出对应数据。状态0为未处理，1为成功 2为失败</p>
 EOF;
         $btn_detail = ['title' => '审核详情', 'icon' => 'fa fa-fw fa-dollar', 'href' => url('detail', ['id' => '__id__'])];
         return ZBuilder::make('table')
@@ -264,6 +280,7 @@ EOF;
             ->hideCheckbox()
             ->addTopButton('custem', $btn_excel)
             ->addRightButton('btn_detail', $btn_detail,true)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //            ->addRightButton('detail', ['title' => '充值详情'], ['area' => ['800px', '90%'], 'title' => '充值详情']) // 批量添加右侧按钮
 //            ->replaceRightButton(['status' => '成功'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
 //            ->replaceRightButton(['status' => '失败'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
@@ -446,6 +463,7 @@ EOF;
             if(empty($v["currency"])){
                 $xlsData[$k]['currency'] = '人民币';
             }
+            $xlsData[$k]['mobile'] = privacy_info_switch('mobile',$xlsData[$k]['mobile']);
         }
         $title = "充值审核完成记录";
         $arrHeader = array('ID', '订单号', '手机号', '姓名', '金额', '币种','状态', '充值方式', '充值时间');

@@ -21,10 +21,22 @@ use app\apicom\service\TOpayService;
 use app\apicom\service\OKpayService;
 use app\apicom\service\WDpayService;
 use app\apicom\service\BFpayService;
+use app\apicom\service\SXYpayService;
 
 class PayNotify extends Controller
 {
-
+    public function sxyPay()
+    {
+        $params = request()->param();
+        Log::debug('sxy回调' . json_encode($params));
+        $orderNo = (new SXYpayService())->checkNotify($params);
+        
+        if($orderNo){
+            $this->handleOrder($orderNo);
+            echo 'success';exit();
+        };
+    }
+    
     public function hzPay()
     {
         $params = request()->param();

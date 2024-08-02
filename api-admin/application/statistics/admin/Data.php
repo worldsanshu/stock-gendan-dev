@@ -14,6 +14,8 @@ use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
 use app\fund\model\FundOrderGs;
 use app\fund\model\FundUserlevel as FundUserlevelModel;
+
+use app\interest\model\Interest;
 use app\member\model\Member;
 use app\member\model\MemberLoginRecord;
 use app\money\model\Money;
@@ -104,12 +106,24 @@ class Data extends Admin
             $data_list[$key]['month_strtotime_balance'] = FundOrderGs::where('create_time', '>', $value['create_time'])
                 ->where('status','=',3)
                 ->count();
+            $start_time = strtotime(date('Y-m-d', $value['create_time']) . '00:00:00');
+            $end_time = strtotime(date('Y-m-d', $value['create_time']) . '23:59:59');
+            $data_list[$key]['interest_tracking_total'] = Db::name('interest')
+                ->where('create_time', '>=', $start_time)
+                ->where('create_time', '<=', $end_time)
+                ->count();
 
         }
         // 分页数据
         $page = $data_list->render();
 //        $month_time = time()  - 30*24*3600; //一个月时间不登录的用户
         $day_start_time = strtotime(date('Y-m-d'));
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
           ->setTableName('data_report')
 //          ->setSearch(['create_time' => '时间'], '', '', true) // 设置搜索框
@@ -120,20 +134,26 @@ class Data extends Admin
             ['create_time', '日期', 'date'],
             ['purchase_tracking_total', '购买优投'],
             ['month_strtotime_balance', '结算优投'],
+            ['interest_tracking_total', '购买小金库', 'link', url('userInterest', ['create_time' => '__date_strtotime__']), '', ''],
 //            ['effective_contract', '有效合约(个)'],
 //            ['new_open_contract', '新开合约(个)', 'link', url('contract', ['status' => 1, 'create_time' => '__date_strtotime__']), '_blank', 'pop'],
 //            ['settlement_contract', '结算合约(个)', 'link', url('contract', ['status' => 2, 'create_time' => '__date_strtotime__']), '_blank', 'pop'],
             ['effective_user', '有效用户(个)'],
-            ['user_recharge', '用户充值(个)', 'link', url('userRecharge', ['create_time' => '__date_strtotime__']), '_blank', 'pop'],
+            ['user_recharge', '用户充值(个)', 'link', url('userRecharge', ['create_time' => '__date_strtotime__']), '', ''],
             ['user_first_recharge', '当日首充(个)'],
-            ['user_run', '用户跑(个)', 'link', url('userlist', ['last_login_time' => '__month_strtotime__']), '_blank', 'pop', '用信户息'],
-            ['new_reg', '新注册用户数(个)', 'link', url('userlist', ['create_time' => '__date_strtotime__']), '_blank', 'pop', '用户信息'],
-            ['oline', '当日在线(个)', 'link', url('userlistOnline', ['online_time' => '__date_strtotime__']), '_blank', 'pop', '用户信息'],
+            ['user_run', '用户跑(个)', 'link', url('userlist', ['last_login_time' => '__month_strtotime__']), '', '', '用信户息'],
+            ['new_reg', '新注册用户数(个)', 'link', url('userlist', ['create_time' => '__date_strtotime__']), '', '', '用户信息'],
+            ['oline', '当日在线(个)', 'link', url('userlistOnline', ['online_time' => '__date_strtotime__']), '', '', '用户信息'],
             ['day_recharge', '今日充值(元)'],
             ['recharge_cashback', '充值返现(元)'],
             ['withdraw', '提现(元)'],
             ['stock_price', '股市价值(元)'],
-          ])->addTimeFilter('create_time') // 添加时间段筛选
+          ])
+//            ->addTimeFilter('create_time') // 添加时间段筛选
+            ->setSearchArea([
+                ['daterange', 'create_time', '时间', '', '', ['format' => 'YYYY-MM-DD']],
+            ])
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($data_list) // 设置表格数据
           ->fetch(); // 渲染模板
     }
@@ -155,14 +175,17 @@ class Data extends Admin
         $map[]=['money_recharge.status','eq', 1];
         $order = $this->getOrder();
         empty($order) && $order = 'id desc';
+
         foreach ($map as $key => $value) {
             if($value[0] == 'create_time'){
                 unset( $map[$key] );
             }
         }
-
         // 数据列表
         $data_list = RechargeModel::getAll($map, $order);
+        foreach ($data_list as &$value){
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+        }
         return ZBuilder::make('table')
           ->setSearch(['mid' => '用户ID', 'member.name' => '姓名', 'member.mobile' => '手机号']) // 设置搜索框
           ->addColumns([ // 批量添加数据列
@@ -183,6 +206,42 @@ class Data extends Admin
           ->replaceRightButton(['status' => '成功'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
           ->setRowList($data_list)
           ->fetch(); // 渲染模板
+    }
+
+//    购买小金库
+    public function userInterest()
+    {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
+        // 获取查询条件
+        $map = $this->getMap();
+        $day_start_time = input('create_time');
+        $end_time = $day_start_time + 24 * 3600;
+        $map[]=['i.create_time','>=', $day_start_time];
+        $map[]=['i.create_time','<', $end_time];
+        $order = $this->getOrder();
+        foreach ($map as $key => $value) {
+            if($value[0] == 'create_time'){
+                unset( $map[$key] );
+            }
+        }
+        // 数据列表
+        $data_list = Interest::getAll($map, $order);
+        foreach ($data_list as &$value){
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+        }
+        return ZBuilder::make('table')
+            ->setSearch(['mid' => '用户ID', 'member.name' => '姓名', 'member.mobile' => '手机号']) // 设置搜索框
+            ->addColumns([ // 批量添加数据列
+                ['id', 'ID'],
+                ['order_number', '订单号'],
+                ['mobile', '手机号'],
+                ['username', '姓名'],
+                ['money', '金额'],
+                ['create_time', '时间', 'datetime'],
+            ])
+            ->hideCheckbox()
+            ->setRowList($data_list)
+            ->fetch(); // 渲染模板
     }
 
     //合约相关数据
@@ -259,6 +318,8 @@ class Data extends Admin
         foreach ($data_list as $key => $value) {
             $data_list[$key]['agent_name'] = $agent_list[$value['pid']] ?? '';
             $email = $value['email'] ?? '--';
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+            $value['id_card'] = privacy_info_switch('id_card',$value['id_card']);
             $data_list[$key]['user_us'] = "<p>" . $value['mobile'] . "</p><p>{$email}</p>";
             $data_list[$key]['user_info'] = "<p>" . $value['name'] . "</p><p>" . $value['id_card'] . "</p>";
             $data_list[$key]['invite'] = "<p>" . $value['invite_name'] . "</p><p>" . $value['invite_account'] . "</p>";
@@ -352,6 +413,8 @@ class Data extends Admin
         foreach ($data_list as $key => $value) {
             $data_list[$key]['agent_name'] = $agent_list[$value['pid']] ?? '';
             $email = $value['email'] ?? '--';
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+            $value['id_card'] = $value['id_card']?privacy_info_switch('id_card',$value['id_card']):'--';
             $data_list[$key]['user_us'] = "<p>" . $value['mobile'] . "</p><p>{$email}</p>";
             $data_list[$key]['user_info'] = "<p>" . $value['name'] . "</p><p>" . $value['id_card'] . "</p>";
             $data_list[$key]['invite'] = "<p>" . $value['invite_name'] . "</p><p>" . $value['invite_account'] . "</p>";
@@ -436,6 +499,8 @@ class Data extends Admin
         $data_list = RechargeModel::getAll($map, $order);
         $totalsum = 0;
         foreach ($data_list as $key => $value) {
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+            $value['id_card'] = $value['id_card']?privacy_info_switch('id_card',$value['id_card']):'--';
             $email = $value['email'] ?? '--';
             $data_list[$key]['user_us'] = "<p>" . $value['mobile'] . "</p><p>{$email}</p>";
             $data_list[$key]['user_info'] = "<p>" . $value['name'] . "</p><p>" . $value['id_card'] . "</p>";
@@ -458,6 +523,13 @@ class Data extends Admin
         $html = <<<EOF
             <br><p>总金额为：{$totalsum}元</p>
 EOF;
+
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
 
         return ZBuilder::make('table')
 //            ->setSearch(['member.name' => '姓名', 'member.mobile' => '手机号']) // 设置搜索框
@@ -484,6 +556,7 @@ EOF;
                 ['create_time', '充值时间', 'datetime'],
             ])
             ->addFilter('money_recharge.status') // 添加筛选
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->hideCheckbox()
             ->replaceRightButton(['status' => '成功'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
             ->setRowList($data_list)

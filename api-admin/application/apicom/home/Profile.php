@@ -151,9 +151,11 @@ class Profile extends Common
             'mobile'   => $mobile,
             'reg_code' => $reg_code,
         ];
-        $newid = Db::name('member')->where(["id" => $mid])->update($data);
-        if ($newid) ajaxmsg('修改成功', 1, '', true, ['msgCode' => 'L0134']);
-        else ajaxmsg(lang('L0127'), 0);
+        if(Member::syncUpdateMobile($data,$mid,1)){
+            ajaxmsg('修改成功', 1, '', true, ['msgCode' => 'L0134']);
+        }
+//        $newid = Db::name('member')->where(["id" => $mid])->update($data);
+        ajaxmsg(lang('L0127'), 0);
     }
 
     /**

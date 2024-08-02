@@ -86,6 +86,7 @@ class Profit extends Admin
         $data_list = $res['list'] ?? [];
         foreach ($data_list as &$v) {
             $username       = empty($v['username']) ? '--' : $v['username'];
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
             $v['user_info'] = "<p>" . $username . "</p><p>" . $v['mobile'] . "</p>";
             if ($v['status'] == 1) {
                 $v['new_status'] = '<span style="color: green">审核通过</span>';
@@ -97,7 +98,12 @@ class Profit extends Admin
         }
         // 分页数据
         $page             = $data_list->render();
-
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
             ->setSearchArea([
                 ['text', 'order_sn', '订单号', 'like'],
@@ -122,6 +128,7 @@ class Profit extends Admin
             ])
             ->setPrimaryKey('id')
 //            ->addRightButton('custom', $btn_access_right, ['area' => ['800px', '90%'], 'title' => '测试返利']) // 批量添加右侧按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addRightButton('edit', [], ['area' => ['800px', '90%'], 'title' => '审核']) // 批量添加右侧按钮
             ->addOrder('id,is_del')
             ->replaceRightButton(['status' => ['in', '1,2']], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
