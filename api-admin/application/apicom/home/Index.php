@@ -235,7 +235,7 @@ class Index extends Common
         $map['status'] = 1;
         $banner = Db::name('cms_slider')->where($map)->select();
         foreach ($banner as $key => $val) {
-            $banner[$key]['img_url'] = 'http://' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
+            $banner[$key]['img_url'] = 'https://' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
         }
         ajaxmsg('获取成功', 1, $banner);
     }

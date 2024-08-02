@@ -609,7 +609,7 @@ class User extends Common
 
             foreach ($banner as $key => $val) {
 
-                $domain        = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+                $domain        = $_SERVER['SERVER_NAME'] ? "https://" . $_SERVER['SERVER_NAME'] : "https://" . $_SERVER['HTTP_HOST'];
                 $banner[$key]['img_url'] = $domain . get_files_path($val['cover']);
 //                $banner[$key]['img_url'] = '//' . $_SERVER['HTTP_HOST'] . get_files_path($val['cover']);
             }

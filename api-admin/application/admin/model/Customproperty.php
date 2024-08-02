@@ -39,16 +39,16 @@ class Customproperty extends Model
         return $data_list;
     }
 
-    public function getImgurlTextAttr($value)
+    public static function getImgurlTextAttr($value)
     {
         $path   = Db::name('admin_attachment')->where('id', $value)->value('path');
         $domain = request()->domain();
         return $path ? $domain . '/' . $path : '';
     }
 
-    public function getPropertyArr()
+    public static function getPropertyArr()
     {
-        $domain = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+        $domain = $_SERVER['SERVER_NAME'] ? "//" . $_SERVER['SERVER_NAME'] : "//" . $_SERVER['HTTP_HOST'];
 
 
         $list = [
