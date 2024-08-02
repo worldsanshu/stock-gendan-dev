@@ -180,7 +180,7 @@ class Payment extends Admin
 ['text', 'app_id', '商户号 (把这个IP-[' . $ip['data'] . '] 添加到支付商平台IP白名单)'],
 ['text', 'app_secret', '密匙'],
 ['text', 'app_public_key', '公钥'],
-['text', 'specific_address', '商户网关API (非必填，需要特定网关才填写)'],
+['text', 'specific_address', '商户网关API (非必填，需要特定网关才填写)','例：https://qse123jdsz.okpay777.com    ,去掉多余的路径信息'],
 ['select', 'support_type', '支持类型（用户充值和提现的时候提供选择）', '', $support_type, '1'],
 ['select', 'withdrawal_param', '提现参数（用户提现的时候需要填写的信息）', '', $withdrawal_param, '1'],
 //['radio', 'is_auto', '是否自动到账', '', ['否', '是'], 1],
