@@ -1453,15 +1453,15 @@ class Index extends Admin
             }
         }
         $privacy = cookie('__privacy__');
-//        if($privacy == 'open'){
-//            $this->error('隐私信息已开启');
-//        }else{
+        if($privacy == 'open'){
+            $this->error('隐私信息已开启');
+        }else{
             return ZBuilder::make('form')
                 ->setPageTitle('查看隐私信息') // 设置页面标题
                 ->setPageTips('请输入密码验证！', 'danger')
                 ->addPassword('password', '登录密码')
                 ->fetch();
-//        }
+        }
 
 
     }
