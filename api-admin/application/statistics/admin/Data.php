@@ -134,7 +134,7 @@ class Data extends Admin
             ['create_time', '日期', 'date'],
             ['purchase_tracking_total', '购买优投'],
             ['month_strtotime_balance', '结算优投'],
-            ['interest_tracking_total', '购买小金库', 'link', url('userInterest', ['create_time' => '__date_strtotime__']), '', ''],
+//            ['interest_tracking_total', '购买小金库', 'link', url('userInterest', ['create_time' => '__date_strtotime__']), '', ''],
 //            ['effective_contract', '有效合约(个)'],
 //            ['new_open_contract', '新开合约(个)', 'link', url('contract', ['status' => 1, 'create_time' => '__date_strtotime__']), '_blank', 'pop'],
 //            ['settlement_contract', '结算合约(个)', 'link', url('contract', ['status' => 2, 'create_time' => '__date_strtotime__']), '_blank', 'pop'],
