@@ -82,7 +82,7 @@ class Customproperty extends Admin
                 return ZBuilder::make('table')
                     ->hideCheckbox()
                     ->addColumns([ // 批量添加数据列
-                        ['name', '名称'],
+                        ['name', '名称','text.edit'],
                         ['image', '图标', 'img_url'],
                         ['sort', '排序','text.edit'],
                     ])

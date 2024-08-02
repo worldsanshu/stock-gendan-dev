@@ -4,39 +4,36 @@
 // +----------------------------------------------------------------------
 namespace app\money\service;
 
-
-use app\apicom\model\MoneyRecharge;
-use app\money\model\Payment;
-use util\HttpClient;
-
 class OKpayService
 {
-    public function Remit($info) {
-        
-        $data = [
-            'sendid'=>$info['app_id'],
-            'orderid'=>$info['order_no'],
-            'amount'=>$info['real_money'],
-            'address'=>$info['address'],
+    public function Remit($info)
+    {
+
+        $data         = [
+            'sendid'  => $info['app_id'],
+            'orderid' => $info['order_no'],
+            'amount'  => $info['real_money'],
+            'address' => $info['address'],
         ];
-        $str = $data['sendid'].$data['orderid'].$data['amount'].$info['app_secret'];
+        $str          = $data['sendid'] . $data['orderid'] . $data['amount'] . $info['app_secret'];
         $data['sign'] = md5($str);
-        $host = $info['specific_address']?:'https://qse123jdsz.okpay777.com';
+        $host         = $info['specific_address'] ?: 'https://qse123jdsz.okpay777.com/createwd';
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
 //            CURLOPT_URL => 'https://qse123jdsz.okpay777.com/createwd',
-            URLOPT_URL => $host.'/createwd',
+            CURLOPT_URL            => $host,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_SSL_VERIFYHOST=>0,
-            CURLOPT_SSL_VERIFYPEER=>0,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>json_encode($data),
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => json_encode($data),
+            CURLOPT_HTTPHEADER     => array(
                 'Content-Type: application/json'
             ),
         ));
@@ -45,26 +42,20 @@ class OKpayService
 
         if (empty($res)) {
             return [
-                'code'=>500,
-                'message'=>'network error'
+                'code'    => 500,
+                'message' => 'network error'
             ];
         }
-        $res = json_decode($res,true);
-        //dump($res);
+        $res = json_decode($res, true);
         if (!empty($res) && $res['code'] == 1 && !empty($res['data'])) {
             return [
-                'code'=>200,
+                'code' => 200,
             ];
-        }else{
+        } else {
             return [
-                'code'=>500,
-                'message'=>$res['msg']
+                'code'    => 500,
+                'message' => $res['msg']
             ];
         }
-        
     }
-
-    
-    
-
 }

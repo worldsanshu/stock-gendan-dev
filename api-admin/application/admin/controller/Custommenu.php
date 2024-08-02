@@ -53,9 +53,9 @@ class Custommenu extends Admin
         $page = $data_list->render();
 
         $list_tab = [
-            'tab1' => ['title' => '首页导航', 'url' => url('index', ['group' => 'home'])],
-            'tab2' => ['title' => '用户中心图标导航', 'url' => url('index', ['group' => 'user'])],
-            'tab3' => ['title' => '用户中心列表导航', 'url' => url('index', ['group' => 'user_list'])],
+            'home' => ['title' => '首页导航', 'url' => url('index', ['group' => 'home'])],
+            'user' => ['title' => '用户中心图标导航', 'url' => url('index', ['group' => 'user'])],
+            'user_list' => ['title' => '用户中心列表导航', 'url' => url('index', ['group' => 'user_list'])],
         ];
         $role_name = array("home" => "首页", "user" => "用户中心图标", "user_list" => "用户中心列表");
         $btn_add = ['title' => '新增', 'icon' => 'fa fa-fw fa-users', 'href' => url('add', ['position' => $group])];
@@ -83,8 +83,8 @@ class Custommenu extends Admin
 
         $url_name = [
 //            '0' => '不跳转',
-            '1' => '内部路径',
-            '2' => '外部链接',
+'1' => '内部路径',
+'2' => '外部链接',
 
         ];
         switch ($group) {
@@ -97,16 +97,16 @@ class Custommenu extends Admin
                     ->addTopButton('custom', $btn_add)
                     ->addTopButton('custom', $btn_menu,true)
                     ->addColumns([ // 批量添加数据列
-                        ['position', '位置', $role_name],
-                        ['name', '名称'],
-                        ['image', '图标', 'img_url'],
-                        ['url', '路径'],
-                        ['url_level', '路由等级'],
-                        ['url_type', '路径类型',$url_name],
-                        ['is_default', '是否默认菜单',[ '0' => '否','1' => '是',]],
-                        ['sort', '排序','text.edit'],
-//                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
-//                        ['create_time', '修改时间', 'datetime', '', 'Y-m-d H:i:s'],
+                                   ['position', '位置', $role_name],
+                                   ['name', '名称', 'text.edit'],
+                                   ['image', '图标', 'img_url'],
+                                   ['url', '路径'],
+                                   ['url_level', '路由等级'],
+                                   ['url_type', '路径类型',$url_name],
+                                   ['is_default', '是否默认菜单',[ '0' => '否','1' => '是',]],
+                                   ['sort', '排序','text.edit'],
+                                   //                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
+                                   //                        ['create_time', '修改时间', 'datetime', '', 'Y-m-d H:i:s'],
                     ])
                     ->setColumnWidth('url', 200)
                     ->addColumn('status', '状态', 'switch')
@@ -127,16 +127,16 @@ class Custommenu extends Admin
                     ->addTopButton('custom', $btn_add)
                     ->addTopButton('custom', $btn_menu,true)
                     ->addColumns([ // 批量添加数据列
-                        ['position', '位置', $role_name],
-                        ['name', '名称'],
-                        ['image', '图标', 'img_url'],
-                        ['url', '路径'],
-                        ['url_level', '路由等级'],
-                        ['url_type', '路径类型',$url_name],
-                        ['is_default', '是否默认菜单',[ '0' => '否','1' => '是',]],
-                        ['sort', '排序','text.edit'],
-//                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
-//                        ['create_time', '修改时间', 'datetime', '', 'Y-m-d H:i:s'],
+                                   ['position', '位置', $role_name],
+                                   ['name', '名称', 'text.edit'],
+                                   ['image', '图标', 'img_url'],
+                                   ['url', '路径'],
+                                   ['url_level', '路由等级'],
+                                   ['url_type', '路径类型',$url_name],
+                                   ['is_default', '是否默认菜单',[ '0' => '否','1' => '是',]],
+                                   ['sort', '排序','text.edit'],
+                                   //                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
+                                   //                        ['create_time', '修改时间', 'datetime', '', 'Y-m-d H:i:s'],
                     ])
                     ->setColumnWidth('url', 200)
                     ->addColumn('status', '状态', 'switch')
@@ -157,16 +157,16 @@ class Custommenu extends Admin
                     ->addTopButton('custom', $btn_add)
                     ->addTopButton('custom', $btn_menu,true)
                     ->addColumns([ // 批量添加数据列
-                        ['position', '位置', $role_name],
-                        ['name', '名称'],
-                        ['image', '图标', 'img_url'],
-                        ['url', '路径'],
-                        ['url_level', '路由等级'],
-                        ['url_type', '路径类型',$url_name],
-                        ['is_default', '是否默认菜单',[ '0' => '否','1' => '是',]],
-                        ['sort', '排序','text.edit'],
-//                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
-//                        ['create_time', '修改时间', 'datetime', '', 'Y-m-d H:i:s'],
+                                   ['position', '位置', $role_name],
+                                   ['name', '名称', 'text.edit'],
+                                   ['image', '图标', 'img_url'],
+                                   ['url', '路径'],
+                                   ['url_level', '路由等级'],
+                                   ['url_type', '路径类型',$url_name],
+                                   ['is_default', '是否默认菜单',[ '0' => '否','1' => '是',]],
+                                   ['sort', '排序','text.edit'],
+                                   //                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
+                                   //                        ['create_time', '修改时间', 'datetime', '', 'Y-m-d H:i:s'],
                     ])
                     ->setColumnWidth('url', 200)
                     ->addColumn('status', '状态', 'switch')
@@ -216,19 +216,19 @@ class Custommenu extends Admin
 //        $url_name = array("url" => "内置路径", "custom" => "第三方路径");
         $url_name = [
 //            '0' => '不跳转',
-            '1' => '内部路径',
-            '2' => '外部链接',
+'1' => '内部路径',
+'2' => '外部链接',
 
         ];
         return ZBuilder::make('form')
             ->setPageTitle('新增') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
-                ['text', 'name', '名称', ''],
-                ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name,'1'],
-                ['text', 'url', '路径', ''],
-                ['radio','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
-                ['number', 'sort', '排序'],
-                ['radio', 'status', '显示状态', '', ['禁用', '启用'],'1'],
+                             ['text', 'name', '名称', ''],
+                             ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name,'1'],
+                             ['text', 'url', '路径', ''],
+                             ['radio','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
+                             ['number', 'sort', '排序'],
+                             ['radio', 'status', '显示状态', '', ['禁用', '启用'],'1'],
             ])
 //            ->addSwitch('status', '显示状态', '', '1')
             ->addImage('img_url', '图标')
@@ -268,39 +268,39 @@ class Custommenu extends Admin
 //        if($info['img_url']){
 //            $info['img_url'] = CustommenuModel::getImgurlTextAttr($info['img_url']);
 //        }else{
-            $info['img_url'] = $info['default_icon'];
+        $info['img_url'] = $info['default_icon'];
 //        }
 //        $url_name = array("url" => "内置路径", "custom" => "第三方路径");
         $url_name = [
 //            '0' => '不跳转',
-            '1' => '内部路径',
-            '2' => '外部链接',
+'1' => '内部路径',
+'2' => '外部链接',
 
         ];
 
         if($info['is_default'] == 1){
             return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
-                ['static', 'name', '名称'],
-                ['static', 'url', '路径'],
-                ['static', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name],
-                ['static','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
-                ['number', 'sort', '排序'],
-                ['radio', 'status', '显示状态', '', ['禁用', '启用']],
+                             ['static', 'name', '名称'],
+                             ['static', 'url', '路径'],
+                             ['static', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name],
+                             ['static','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
+                             ['number', 'sort', '排序'],
+                             ['radio', 'status', '显示状态', '', ['禁用', '启用']],
             ])
 
-//                ->addImage('img_url', '图标')
+                                     //                ->addImage('img_url', '图标')
                 ->setFormData($info) // 设置表单数据
                 ->fetch();
         }else{
             return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
-                ['text', 'name', '名称'],
-                ['text', 'url', '路径'],
-                ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name],
-                ['radio','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
-                ['number', 'sort', '排序'],
-                ['radio', 'status', '显示状态', '', ['禁用', '启用']],
+                             ['text', 'name', '名称'],
+                             ['text', 'url', '路径'],
+                             ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name],
+                             ['radio','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
+                             ['number', 'sort', '排序'],
+                             ['radio', 'status', '显示状态', '', ['禁用', '启用']],
             ])
 //            ->addSwitch('status', '显示状态')
                 ->addImage('img_url', '图标')
@@ -315,18 +315,18 @@ class Custommenu extends Admin
     {
         $url_name = [
 //            '0' => '不跳转',
-            '1' => '内部路径',
-            '2' => '外部链接',
+'1' => '内部路径',
+'2' => '外部链接',
 
         ];
 
         return ZBuilder::make('table')
             ->hideCheckbox()
             ->addColumns([ // 批量添加数据列
-                ['name', '名称'],
-                ['url_level', '路由等级'],
-                ['url_type', '路径类型',$url_name],
-                ['url', '路径'],
+                           ['name', '名称'],
+                           ['url_level', '路由等级'],
+                           ['url_type', '路径类型',$url_name],
+                           ['url', '路径'],
             ])
             ->setRowList(CustommenuModel::getMenuArr($group)) // 设置表格数据
             ->fetch(); // 渲染模板
