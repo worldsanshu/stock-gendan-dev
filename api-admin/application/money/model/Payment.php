@@ -32,6 +32,7 @@ class Payment extends Model
         'wdpay'=>'豌豆支付',
         'bfpay'=>'百冯支付',
         'hzpay'=>'华中支付',
+        'sxypay'=>'守信易支付',
     );
     public static $payTypeLogo = array(
         'alipay' => '/static/payment/logo/zhifubao-pay.png',
@@ -49,14 +50,15 @@ class Payment extends Model
         'wdpay'=>'/static/payment/logo/wdpay.png',
         'bfpay'=>'/static/payment/logo/bf.png',
         'hzpay'=>'/static/payment/logo/hzpay.png',
+        'sxypay'=>'/static/payment/logo/sxypay.png',
     );
     //线上支付的
     public static $online = array( 
-        'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay'
+        'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay','sxypay'
     );
     //线上提现的
     public static $online_sithdrawal = array(
-        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'
+        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay'
     );
     /**
      * 转意

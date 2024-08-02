@@ -20,6 +20,7 @@ use app\member\model\Member;
 use app\apicom\service\BDTpayService;
 use app\apicom\service\WDpayService;
 use app\apicom\service\BFpayService;
+use app\apicom\service\SXYpayService;
 
 class Payment extends Common
 {
@@ -113,6 +114,9 @@ class Payment extends Common
                 break;
             case 'hzpay':
                 $res = (new HZpayService())->pay($orderInfo);
+                break;
+            case 'sxypay':
+                $res = (new SXYpayService())->pay($orderInfo);
                 break;
             default:;
             break;
