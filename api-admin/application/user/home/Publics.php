@@ -176,6 +176,8 @@ class Publics extends Common
             UserModel::loginlogs(array_merge(array('username'=>$user['username']), input()),1,'登录验证成功，等待谷歌验证码');
             $this->success('验证成功', '', Cache::get('admin_uid_md5') . '-' . $data);
         }
+
+        cookie('__privacy__', 'close');  //隐私保护、登录默认是关闭状态 close关闭 open开
         UserModel::loginlogs(array_merge(array('username'=>$user['username']), input()),1,'登录成功，没谷歌认证');
         #前清除缓存
         systemwipeCache();

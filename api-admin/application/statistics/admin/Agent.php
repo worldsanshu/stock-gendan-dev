@@ -50,14 +50,22 @@ class Agent extends Admin
                 if ($webtype == 2) {
                     $where['for_user'] = for_user();
                 }
+                $info['mobile'] = privacy_info_switch('mobile',$info['mobile']);
                 $item['agent_far_name'] = $info['mobile'] ? $info['mobile'] : config('web_site_title');
                 $count = Db::name('agents_back_money')->where(['mid' => $item['id']])->where($where)->sum('affect');
                 $item['count_profit'] = round($count, 2);
                 $item['agent_back_rate'] = get_plus_rate($item['id']) . '%';
+                $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
                 return $item;
             });
         // 分页数据
         $page = $data_list->render();
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
             ->setTableName('member')
             ->setSearch(['mobile' => '代理商手机号', 'agent_far_name' => '所属代理', 'agent_id' => '代理商等级'], '', '', true) // 设置搜索框
@@ -74,6 +82,7 @@ class Agent extends Admin
                 ['agent_pro', '代理状态', [0 => '停止', 1 => '正常']],
                 ['create_time', '注册时间', 'datetime'],
             ])
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->setRowList($data_list) // 设置表格数据
             ->fetch(); // 渲染模板
     }
@@ -217,6 +226,7 @@ class Agent extends Admin
             ->each(function ($item, $key) {
                 $info = get_agents_info($item['agent_far']);
                 $item['agent_far_name'] = $info['mobile'] ? $info['mobile'] : config('web_site_title');
+                $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
                 return $item;
             });
         if (empty($_SERVER["QUERY_STRING"])) {
@@ -228,6 +238,12 @@ class Agent extends Admin
             'title' => '导出EXCEL表',
             'icon' => 'fa fa-fw fa-download',
             'href' => url($excel_url, '', '')
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         // 分页数据
         $page = $data_list->render();
@@ -257,6 +273,7 @@ class Agent extends Admin
                 ['deal_date', '卖出时间', 'date'],
             ])
             ->hideCheckbox()
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->setRowList($data_list) // 设置表格数据
             ->setPages($page) // 设置分页数据
             ->fetch();

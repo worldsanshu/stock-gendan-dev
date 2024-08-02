@@ -413,6 +413,42 @@ class Member extends Model
             return self::getTopLevel($old_uid,$get_one['re_id'], $level, $currentLevel + 1);
         }
     }
+
+
+
+    /**
+     * 同步修改其他关联的手机号
+     * @param  $data
+     * @param  $uid
+     * @param  $type  1用户修改  2管理员操作
+     */
+    public static function syncUpdateMobile($data,$uid,$type)
+    {
+        Db::startTrans();
+        try {
+            if($type == 1){
+                $data  = [
+                    'mobile'   => $data['mobile'],
+                    'reg_code' => $data['reg_code'],
+                ];
+                $res = Db::name('member')->where(["id" => $uid])->update($data);
+
+            }else{
+                $res =true;
+            }
+            if($res){
+                $fund['mobile'] = $data['mobile'];
+                Db::name('fund_order_gs')->where(["uid" => $uid])->update($fund);
+            }
+
+            Db::commit();
+
+        } catch (\Exception $e) {
+            Db::rollback();
+            return false;
+        }
+        return true;
+    }
 }
 
 ?>

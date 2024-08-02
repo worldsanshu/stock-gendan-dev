@@ -55,9 +55,17 @@ class Identity extends Admin
         }
         // 数据列表
         $data_list = MemberModel::where($map)->order($order)->paginate();
+        foreach ($data_list as &$value){
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+            $value['id_card'] = privacy_info_switch('id_card',$value['id_card']);
+        }
 
-
-
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         $btn_report = ['title' => '查看银行卡', 'icon' => 'fa fa-fw fa-cc-visa', 'href' => url('getBankList', ['uid' => '__id__']), 'target' => '_blank'];
         return ZBuilder::make('table')
 //          ->setSearch(['name' => '姓名', 'id_card' => '身份证']) // 设置搜索框
@@ -84,6 +92,7 @@ class Identity extends Admin
             ->setPageTips('系统已开启自动认证实名，当前列表出现处理中的账户是自动认证未通过的', 'warning')
             ->addRightButtons(['edit' => ['title' => '审核']]) // 批量添加右侧按钮
             ->addOrder('id,id_auth,reg_time')
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //          ->addTimeFilter('auth_time', [$beginday, $endday]) // 添加时间段筛选
             ->replaceRightButton(['id_auth' => ['in', '2,1']], '<button class="btn btn-danger btn-xs" type="button" disabled>已审核</button>')
             ->setRowList($data_list) // 设置表格数据
@@ -192,6 +201,13 @@ class Identity extends Admin
 //            <input type="hidden" name="card_pic_back_hidden" value="{$info['card_pic_back_hidden']}"/>
 //             <input type="hidden" name="passport_pic_text" value="{$info['passport_pic_text']}"/>
 //EOF;
+
+        //        开启才能看隐私信息
+        $privacy = cookie('__privacy__');
+        if($privacy == 'close'){
+            $info['id_card'] = privacy_info_switch('id_card',$info['id_card']);
+            $info['mobile'] = privacy_info_switch('mobile',$info['mobile']);
+        }
         return ZBuilder::make('form')
             ->setPageTitle('编辑') // 设置页面标题
             ->addFormItems([ // 批量添加表单项

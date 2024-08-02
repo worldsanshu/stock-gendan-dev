@@ -477,8 +477,15 @@ class Index extends Admin
             $results[$k]['w_fee_2'] = $w_fee_2 / 100;
             $results[$k]['r_money_1'] = $r_money_1 / 100;
             $results[$k]['r_money_2'] = $r_money_2 / 100;
+            $results[$k]['mobile'] = privacy_info_switch('mobile',$results[$k]['mobile']);
         }
         $data_list = $class::make($results, $listRows, $page, $total, $simple, $config);
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         // 分页数据
         return ZBuilder::make('table')
           ->hideCheckbox()
@@ -515,6 +522,7 @@ class Index extends Admin
           ])
           ->setTableName('member')
           ->addTopButton('custem', $btn_excel)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->addOrder('id,is_del')
           ->setColumnWidth([
             'operate_account'  => 120,
@@ -597,6 +605,7 @@ class Index extends Admin
             $results[$k]['r_money_2'] = $r_money_2 / 100;
             $is_del_arr = [0 => '正常', 1 => '注销/删除'];
             $results[$k]['is_del_str'] = $is_del_arr[$v['is_del']];
+            $results[$k]['mobile'] = privacy_info_switch('mobile',$results[$k]['mobile']);
         }
         $xlsData = $class::make($results, $listRows, $page, $total, $simple, $config);
         $title = "会员账户";

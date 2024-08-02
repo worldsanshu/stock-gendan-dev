@@ -13,6 +13,7 @@ class Message extends Admin
 {
     public function index()
     {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
         // 获取查询条件
         $map = $this->getMap();
         if (empty($map['create_time'][1][0])) {
@@ -32,8 +33,18 @@ class Message extends Admin
             ->join('member m', 'm.id = ms.mid')
             ->field('ms.*,m.name,m.mobile,m.role_name')
         ->order('id desc')->paginate();
+        foreach ($data_list as &$value){
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+        }
         // 分页数据
         $page = $data_list->render();
+
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
 //            ->setSearch(['mid' => '用户ID', 'title' => '消息标题', 'for_user' => '代理商id']) // 设置搜索框
             ->setSearchArea([
@@ -59,6 +70,7 @@ class Message extends Admin
           ->setTableName('member')
             ->addRightButtons(['delete'])
             ->addTopButtons('add,delete') // 批量添加顶部按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($data_list) // 设置表格数据
           ->setPages($page) // 设置分页数据
 //          ->addTimeFilter('create_time', [$beginday, $endday]) // 添加时间段筛选

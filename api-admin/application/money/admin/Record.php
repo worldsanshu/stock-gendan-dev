@@ -57,6 +57,7 @@ class Record extends Admin
             $item->affect_activity = money_convert($item->affect_activity);
             $item->activity_account = money_convert($item->activity_account);
             $item->type_str = $item->type;
+            $item->mobile = privacy_info_switch('mobile',$item->mobile);
         });
         // 实例化 MyClass
         $myClassInstance = new RecordModel();
@@ -79,6 +80,12 @@ class Record extends Admin
           'icon' => 'fa fa-fw fa-download',
 //          'href' => url($excel_url, '', '')
             'href' => url($excel_url.http_build_query([$map]), '', '')
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         foreach ($data_list as $key => $value) {
             $affect_activity = ($value['affect_activity']) >= 1 ? "danger" : "";
@@ -121,6 +128,7 @@ class Record extends Admin
           ->setExtraHtml('账户余额显示，把活动金也计算入内，可能有错误的情况。', 'toolbar_bottom')
           ->addTopButton('custem', $btn_excel)
           ->setTableName('money')
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //          ->addTimeFilter('r.create_time', [$beginday, $endday]) // 添加时间段筛选
           ->addOrder('id,create_time')
           ->setRowList($data_list)
@@ -135,8 +143,9 @@ class Record extends Admin
         empty($order) && $order = 'id desc';
         // 数据列表
         $xlsData = RecordModel::getAll($map, $order);
-        foreach ($xlsData as $k => $v) {
-            $v['create_times'] = date('Y-m-d h:i', $v['create_time']);
+        foreach ($xlsData as &$v) {
+            $v['create_time'] = date('Y-m-d h:i', $v['create_time']);
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
         }
         $title = "清算明细";
         $arrHeader = array('ID', '手机号', '姓名', '类型', '变动资金','变动活动金', '账户余额', '时间', '信息');

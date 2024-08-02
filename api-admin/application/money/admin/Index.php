@@ -67,6 +67,7 @@ class Index extends Admin
                 $item->operate_account  = money_convert($item->operate_account);
                 $item->bond_account     = money_convert($item->bond_account);
                 $item->freeze_activity  = money_convert($item->freeze_activity);
+                $item->mobile = privacy_info_switch('mobile',$item->mobile);
             });
         // 分页数据
         $page = $data_list->render();
@@ -126,7 +127,12 @@ class Index extends Admin
         $statistics[]      = format_money($temp['sum_activity_account']);
         $statistics[]      = format_money($temp['sum_freeze_activity']);
         $statisticsTable[] = $statistics;
-
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
 //          ->setSearch(['mid' => '用户ID', 'member.name' => '姓名', 'member.email' => '邮箱', 'member.mobile' => '手机号', 'account' => '余额']) // 设置搜索框
 //            ->setExtraHtmlFile('indexSearch', 'toolbar_top')
@@ -172,6 +178,7 @@ class Index extends Admin
             ->addTopButton('custem', $btn_recharge)
             ->addTopButton('custem', $btn_balance)
             ->addTopButton('custem', $btn_edit)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->setExtraHtml($this->tableHtml($statisticsTable), 'toolbar_bottom')
             //->addTopButtons('enable,disable') // 批量添加顶部按钮
             // ->addRightButtons(['edit']) // 批量添加右侧按钮
@@ -412,6 +419,9 @@ class Index extends Admin
         }
         // 数据列表
         $xlsData   = MoneyModel::getAll($map, $order);
+        foreach ($xlsData as &$v){
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
+        }
         $title     = "资金列表";
         $arrHeader = array('ID', '用户id', '手机号', '邮箱', '姓名', '可用资金', '冻结金额', '活动资金', '冻结活动金额', '操盘总额', '保证金总额');
         $fields    = array('id', 'mid', 'mobile', 'email', 'name', 'account', 'freeze', 'activity_account', 'freeze_activity', 'operate_account', 'bond_account');

@@ -34,10 +34,17 @@ class Index extends Admin
           ->order($order)
           ->paginate()
           ->each(function ($item, $key) {
+              $item['mobile'] = privacy_info_switch('mobile',$item['mobile']);
             return $item;
         });
         // 分页数据
         $page = $data_list->render();
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         !empty($_SERVER["QUERY_STRING"]) && $excel_url = URL("index_export") . '?' . $_SERVER["QUERY_STRING"];
         return ZBuilder::make('table')
 //          ->setSearch(['m.name' => '姓名', 'm.mobile' => '手机号'])// 设置搜索框
@@ -52,6 +59,7 @@ class Index extends Admin
           ['addtime', '签到时间', 'datetime'],])
           ->setTableName('member')
           ->addOrder('addtime')
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($data_list)// 设置表格数据
           ->hideCheckbox(true)
           ->fetch(); // 渲染模板

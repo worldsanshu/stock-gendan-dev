@@ -25,13 +25,13 @@ class Payment extends Model
         'cbpay' => 'CBpay',
         'jdpay' => 'JDpay',
         'mpay' => 'Mpay',
-        'bdtpay' => '八达通',
+//        'bdtpay' => '八达通',
         'usdtpay' => 'AApay',
         'topay' => 'TOpay钱包',
         'okpay' => 'OKpay钱包',
         'wdpay'=>'豌豆支付',
         'bfpay'=>'百冯支付',
-        'hzpay'=>'华中支付',
+//        'hzpay'=>'华中支付',
         'sxypay'=>'守信易支付',
     );
     public static $payTypeLogo = array(
@@ -48,17 +48,21 @@ class Payment extends Model
         'topay' => '/static/payment/logo/to.png',
         'okpay' => '/static/payment/logo/ok.png',
         'wdpay'=>'/static/payment/logo/wdpay.png',
-        'bfpay'=>'/static/payment/logo/bf.png',
+        'bfpay'=>'/static/payment/logo/bfpay.png',
         'hzpay'=>'/static/payment/logo/hzpay.png',
         'sxypay'=>'/static/payment/logo/sxypay.png',
     );
     //线上支付的
-    public static $online = array( 
-        'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay','sxypay'
+    public static $online = array(
+//        隐藏华中和八达通
+//        'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay','sxypay'
+        'kdpay', 'cbpay', 'jdpay', 'mpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','sxypay'
     );
     //线上提现的
     public static $online_sithdrawal = array(
-        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay'
+        //        隐藏华中和八达通
+//        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay'
+        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'
     );
     /**
      * 转意

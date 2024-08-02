@@ -47,6 +47,9 @@ class Transfer extends Admin
         }
         // 数据列表
         $data_list = TransferModel::getAll($map, $order);
+        foreach ($data_list as &$value){
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+        }
         // 分页数据
         $page = $data_list->render();
         if (empty($_SERVER["QUERY_STRING"])) {
@@ -61,6 +64,12 @@ class Transfer extends Admin
           'icon' => 'fa fa-fw fa-download',
 //          'href' => url($excel_url, '', '')
             'href' => url($excel_url.http_build_query([$map]), '', '')
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         return ZBuilder::make('table')
 //            ->setExtraHtmlFile('search', 'toolbar_top')
@@ -91,6 +100,7 @@ class Transfer extends Admin
           ->addTopButton('custem', $btn_excel)
           ->addOrder('id,create_time,user_id,money,order_no')
           ->setRowList($data_list)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //          ->addTimeFilter('money_transfer.create_time', [$beginday, $endday]) // 添加时间段筛选
           ->fetch(); // 渲染模板
     }
@@ -103,8 +113,9 @@ class Transfer extends Admin
         empty($order) && $order = 'id desc';
         // 数据列表
         $xlsData = TransferModel::getAll($map, $order);
-        foreach ($xlsData as $k => $v) {
+        foreach ($xlsData as &$v) {
             $v['create_times'] = date('Y-m-d h:i', $v['create_time']);
+            $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
         }
         $title = "转账管理";
         $arrHeader = array('订单号', '手机号', '姓名', '金额', '执行者', '详情', '时间', 'IP地址');

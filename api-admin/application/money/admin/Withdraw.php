@@ -69,11 +69,13 @@ class Withdraw extends Admin
             $item->money = money_convert($item->money);
             $item->fee = money_convert($item->fee);
             $item->real_money = money_convert($item->real_money);
+            $item->mobile = privacy_info_switch('mobile',$item->mobile);
             $item->name = "<p>" . $item->name . "</p><p>" .$item->mobile. "</p>";;
 //            $item->money = "<p>" . $item->money . "</p><p>" .$item->fee. "</p>";;
 //            $item->total = $item->fee + $item->money;
             $inviteUser = MemberModel::where('id', $item['partner_parent_id'])->find();
             $item->partner_parent = '';
+            $inviteUser['mobile'] = privacy_info_switch('mobile',$inviteUser['mobile']);
             if (!empty($inviteUser)) {
                 $item->partner_parent = "<p>(ID:{$item['partner_parent_id']})".$inviteUser['mobile']."</p><p>" .$inviteUser['name'].'</p>';
             }
@@ -124,6 +126,12 @@ class Withdraw extends Admin
             'data-title' => '确认提交转账信息吗？',
             'href' => url('edit_online',['id' => '__id__'])
         ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         return ZBuilder::make('table')
 //            ->setExtraHtmlFile('search', 'toolbar_top')
 //          ->setSearch(['order_no' => '订单号', 'member.name' => '姓名', 'member.mobile' => '手机号', 'member.email' => '邮箱']) // 设置搜索框
@@ -163,6 +171,7 @@ class Withdraw extends Admin
 
           ->addRightButton('edit', ['title' => '人工审核'], ['area' => ['800px', '90%'], 'title' => '提现审核']) // 批量添加右侧按钮
             ->addRightButton('btn_user', $btn_user)
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //          ->addRightButton('custom1', $btn_getWithdraw)
 //          ->addRightButton('custom2', $btn_getRecharge)
 //          ->replaceRightButton(['status' => '成功'], '<button class="btn btn-success btn-xs" type="button" disabled>审核成功</button>')
@@ -352,6 +361,7 @@ EOF;
             // $v['type']=$type_arr[$v['type']];
             // $v['status']=$status_arr[$v['status']];
             $xlsData[$k]['create_times'] = date('Y-m-d H:i:s', $v["create_time"]);
+            $xlsData[$k]['mobile'] = privacy_info_switch('mobile',$xlsData[$k]['mobile']);
         }
         $title = "提现待审核记录";
         $arrHeader = array('订单号', '手机号', '姓名', '金额', '银行信息', '状态', '申请时间');
@@ -585,12 +595,15 @@ EOF;
                 $item->money = money_convert($item->money);
                 $item->fee = money_convert($item->fee);
                 $item->real_money = money_convert($item->real_money);
+                $item->mobile = privacy_info_switch('mobile',$item->mobile);
+
                 $item->name = "<p>" . $item->name . "</p><p>" .$item->mobile. "</p>";;
 //            $item->money = "<p>" . $item->money . "</p><p>" .$item->fee. "</p>";;
 //                $item->total = $item->fee + $item->money;
                 $inviteUser = MemberModel::where('id', $item['partner_parent_id'])->find();
                 $item->partner_parent = '';
                 if (!empty($inviteUser)) {
+                    $inviteUser['mobile'] = privacy_info_switch('mobile',$inviteUser['mobile']);
                     $item->partner_parent = "<p>(ID:{$item['partner_parent_id']})".$inviteUser['mobile']."</p><p>" .$inviteUser['name'].'</p>';
                 }
                 $item->time = "<p>" . date('Y-m-d H:i',$item->create_time) . "</p><p>" .date('Y-m-d H:i',$item->examine_time). "</p>";
@@ -624,6 +637,12 @@ EOF;
             'icon' => 'fa fa-fw fa-gear',
 //          'href' => url($excel_url, '', '')
             'href'  => url('commission'),
+        ];
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
         ];
         $btn_getWithdraw = ['title' => '提现记录', 'icon' => 'fa fa-fw fa-paste', 'href' => url('getWithdraw', ['mid' => '__mid__'])];
         $btn_getRecharge = ['title' => '充值记录', 'icon' => 'fa fa-fw fa-dollar', 'href' => url('getRecharge', ['mid' => '__mid__'])];
@@ -663,6 +682,7 @@ EOF;
             ->hideCheckbox()
             ->addTopButton('custem', $btn_excel)
             ->addTopButton('custem', $btn_commission) // 批量添加顶部按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //            ->addRightButton('edit', ['title' => '编辑回退'], ['area' => ['800px', '90%'], 'title' => '提现审核']) // 批量添加右侧按钮
             ->addRightButton('btn_detail', $btn_detail,true)
 //          ->addRightButton('custom1', $btn_getWithdraw)
@@ -677,10 +697,11 @@ EOF;
             ->setRowList($data_list)
             ->setColumnWidth('withdraw_type', 80)
             ->setColumnWidth('address', 150)
+            ->setColumnWidth('partner_parent', 120)
 //            ->setColumnWidth('order_no', 50)
 //            ->setColumnWidth('right_button', 60)
 //            ->setColumnWidth('status,money', 20)
-//            ->setColumnWidth('create_time,name', 50)
+            ->setColumnWidth('time', 150)
             ->fetch(); // 渲染模板
     }
 
@@ -702,6 +723,7 @@ EOF;
             // $v['type']=$type_arr[$v['type']];
             // $v['status']=$status_arr[$v['status']];
             $xlsData[$k]['create_times'] = date('Y-m-d H:i:s', $v["create_time"]);
+            $xlsData[$k]['mobile'] = privacy_info_switch('mobile',$xlsData[$k]['mobile']);
         }
         $title = "提现审核完成记录";
         $arrHeader = array('订单号', '手机号', '姓名', '金额', '银行信息', '状态', '申请时间');

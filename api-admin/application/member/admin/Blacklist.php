@@ -28,12 +28,22 @@ class Blacklist extends Admin
      */
     public function index()
     {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
         // 查询
         $map = $this->getMap();
         // 排序
         $order = $this->getOrder('update_time desc');
         // 数据列表
         $data_list = MemberBlacklistModel::where($map)->order($order)->paginate();
+        foreach ($data_list as &$value){
+            $value['idcard'] = privacy_info_switch('id_card',$value['idcard']);
+        }
+        $btn_privacy = [
+            'title' => '查看隐私信息',
+            'icon'  => 'fa fa-fw fa-refresh',
+            'class'  => 'btn btn-info',
+            'href'  => url('member/index/privacy'),
+        ];
         $btn_getlog = ['title' => '使用详情', 'icon' => 'fa fa-fw fa-paste', 'href' => url('getlog', ['idcard' => '__idcard__'])];
         // 使用ZBuilder快速创建数据表格
         return ZBuilder::make('table')
@@ -47,6 +57,7 @@ class Blacklist extends Admin
             ['right_button', '操作', 'btn']
           ])
           ->addTopButtons('add,delete') // 批量添加顶部按钮
+            ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->addRightButtons(['edit', 'delete' => ['data-tips' => '删除后无法恢复。']]) // 批量添加右侧按钮
           ->addRightButton('custom', $btn_getlog)
           ->addOrder('id,title,type,create_time,update_time')
@@ -140,11 +151,20 @@ class Blacklist extends Admin
             }
         }
         $info = MemberBlacklistModel::get($id);
+        //        开启才能看隐私信息
+        $privacy = cookie('__privacy__');
+        if($privacy == 'close'){
+            $info['idcard'] = privacy_info_switch('id_card',$info['idcard']);
+            $privacy_id_card = ['static', 'idcard', '身份证号码'];
+        }else{
+            $privacy_id_card = ['text', 'idcard', '身份证号'];
+        }
         // 显示编辑页面
         return ZBuilder::make('form')
           ->addFormItems([
             ['hidden', 'id'],
-            ['text', 'idcard', '身份证号码'],
+//            ['text', 'idcard', '身份证号码'],
+              $privacy_id_card,
             ['text', 'remarks', '备注'],
           ])
           ->setTrigger('type', 2, 'logo')

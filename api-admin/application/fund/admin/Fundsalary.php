@@ -46,7 +46,16 @@ class Fundsalary extends Admin
       ->join('member m', 'm.id = o.uid', 'left')
       ->order($order)
       ->paginate();
+      foreach ($data_list as &$v){
+          $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
+      }
     $infoBtn   = ['title' => '详情', 'icon' => 'fa fa-fw fa-th-list', 'href' => url('/fund/fund_salary_content/index', ['salary_id' => '__id__'])];
+      $btn_privacy = [
+          'title' => '查看隐私信息',
+          'icon'  => 'fa fa-fw fa-refresh',
+          'class'  => 'btn btn-info',
+          'href'  => url('member/index/privacy'),
+      ];
     return ZBuilder::make('table')
       ->setSearchArea([
         ['text:2', 'm.name', '用户名', 'like'],
@@ -74,6 +83,7 @@ class Fundsalary extends Admin
                      ['right_button', '操作', 'btn']
       ])->setTableName('fund')
       ->addTopButtons('add,delete') // 批量添加顶部按钮
+        ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
                                     //->addTopButton('js',['title'=>'结算分成'])
       ->addRightButtons(['edit', 'delete']) // 批量添加右侧按钮
       ->addRightButton('custom', $infoBtn)
