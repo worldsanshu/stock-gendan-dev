@@ -107,37 +107,24 @@ class Payment extends Admin
                 $data['is_online'] = 1;
                 if ($data['type'] == 'wdpay') {
                     $data['extra'] = [
-                        ["max" => 200, "min" => 100, "title" => "微信", "value" => 1001, "multiple" => 100],
-                        ["max" => 15000, "min" => 200, "title" => "支付宝", "value" => 2008, "multiple" => 1],
+//                        ["max" => 200, "min" => 100, "title" => "微信", "value" => 1001, "multiple" => 100],
+//                        ["max" => 15000, "min" => 200, "title" => "支付宝", "value" => 2008, "multiple" => 1],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "微信", "value" => 1001, "multiple" => 100],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "支付宝", "value" => 2008, "multiple" => 1],
                     ];
                 }
                 if ($data['type'] == 'bfpay') {
                     $data['extra'] = [
-                        ["max" => 15000, "min" => 1, "title" => "网银支付", "value" => "bank", "multiple" => 1],
-                        ["max" => 15000, "min" => 1, "title" => "支付宝", "value" => "alipay", "multiple" => 1],
+//                        ["max" => 15000, "min" => 1, "title" => "网银支付", "value" => "bank", "multiple" => 1],
+//                        ["max" => 15000, "min" => 1, "title" => "支付宝", "value" => "alipay", "multiple" => 1],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "网银支付", "value" => "bank", "multiple" => 1],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "支付宝", "value" => "alipay", "multiple" => 1],
                     ];
                 }
             } else {
                 $data['is_online'] = 0;
             }
 
-            if (in_array($data['type'], PaymentModel::$online)) {//是否是线上打款的
-                $data['is_online'] = 1;
-                if ($data['type'] == 'wdpay') {
-                    $data['extra'] = [
-                        ["max" => 200, "min" => 100, "title" => "微信", "value" => 1001, "multiple" => 100],
-                        ["max" => 15000, "min" => 200, "title" => "支付宝", "value" => 2008, "multiple" => 1],
-                    ];
-                }
-                if ($data['type'] == 'bfpay') {
-                    $data['extra'] = [
-                        ["max" => 15000, "min" => 1, "title" => "网银支付", "value" => "bank", "multiple" => 1],
-                        ["max" => 15000, "min" => 1, "title" => "支付宝", "value" => "alipay", "multiple" => 1],
-                    ];
-                }
-            } else {
-                $data['is_online'] = 0;
-            }
             if ($payment = PaymentModel::create($data)) {
                 // 记录行为
                 action_log('payment_add', 'cms_link', $payment['id'], UID, $data['name']);
@@ -215,14 +202,19 @@ class Payment extends Admin
                 $data['is_online'] = 1;
                 if ($data['type'] == 'wdpay') {
                     $data['extra'] = [
-                        ["max" => 200, "min" => 100, "title" => "微信", "value" => 1001, "multiple" => 100],
-                        ["max" => 15000, "min" => 200, "title" => "支付宝", "value" => 2008, "multiple" => 1]
+//                        ["max" => 200, "min" => 100, "title" => "微信", "value" => 1001, "multiple" => 100],
+//                        ["max" => 15000, "min" => 200, "title" => "支付宝", "value" => 2008, "multiple" => 1]
+
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "微信", "value" => 1001, "multiple" => 100],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "支付宝", "value" => 2008, "multiple" => 1]
                     ];
                 }
                 if ($data['type'] == 'bfpay') {
                     $data['extra'] = [
-                        ["max" => 15000, "min" => 1, "title" => "网银支付", "value" => "bank", "multiple" => 1],
-                        ["max" => 15000, "min" => 1, "title" => "支付宝", "value" => "alipay", "multiple" => 1],
+//                        ["max" => 15000, "min" => 1, "title" => "网银支付", "value" => "bank", "multiple" => 1],
+//                        ["max" => 15000, "min" => 1, "title" => "支付宝", "value" => "alipay", "multiple" => 1],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "网银支付", "value" => "bank", "multiple" => 1],
+                        ["max" => $data['max_money'], "min" => $data['min_money'], "title" => "支付宝", "value" => "alipay", "multiple" => 1],
                     ];
                 }
             } else {

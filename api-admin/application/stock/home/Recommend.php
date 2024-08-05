@@ -91,8 +91,7 @@ class Recommend extends Home
             $r = Db::name('stock_task_record')->where(['task_id' => 1, 'mid' => $mid])->find();
             $state[1]['name'] = '实名认证';
             $state[1]['note'] = '真实身份实名信息认证';
-//            $state[1]['money'] = '+100佣金抵扣券';
-            $state[1]['money'] =env('task.text')?env('task.text'):'+100佣金抵扣券';
+            $state[1]['money'] = '+100佣金抵扣券';
             $state[1]['id'] = 1;
             $state[1]['is_show'] =1;
             if (!empty($r)) {
@@ -273,23 +272,12 @@ class Recommend extends Home
                 $this->rec_money($mid, 18800, '完成注册奖励');
                 break;
             case 1:
-//                临时配置获取
-                if (!env('task.text')){
-                    $r2 = Db::name('member')->where(['id_auth' => 1, 'id' => $mid])->find();
-                    if (!empty($r2)) {
-                        $this->rec_money($mid, 10000, '完成实名认证奖励');
-                    } else {
-                        ajaxmsg('条件不满足', 0, '', true, ['msgCode' => 'L0101']);
-                    }
-                }else{
-                    $r2 = Db::name('member')->where(['id_auth' => 1, 'id' => $mid])->find();
-                    if (!empty($r2)) {
-                        $this->rec_money_new($mid, env('task.money'), '完成实名认证奖励');
-                    } else {
-                        ajaxmsg('条件不满足', 0, '', true, ['msgCode' => 'L0101']);
-                    }
+                $r2 = Db::name('member')->where(['id_auth' => 1, 'id' => $mid])->find();
+                if (!empty($r2)) {
+                    $this->rec_money($mid, 10000, '完成实名认证奖励');
+                } else {
+                    ajaxmsg('条件不满足', 0, '', true, ['msgCode' => 'L0101']);
                 }
-
                 break;
             case 2:
                 $r2 = Db::name('money_recharge')->where(['status' => 1, 'mid' => $mid])->find();
@@ -383,23 +371,6 @@ class Recommend extends Home
         $info = "新手任务奖励";
         $obj = ['affect' => 0, 'account' => $money['account'], 'affect_activity' => $fee, 'activity_account' => $affteractivity, 'sn' => ''];
         $record->saveData($mid, 0, $money['account'], 35, $info, '', '', $obj);
-    }
-
-//    临时配置实名认证
-    public function rec_money_new($mid, $fee, $info)
-    {
-        $money = Db::name('money')->where(array("mid" => $mid))->find();
-        $affect = $fee*100;
-        $afftermoney = bcadd($money['account'], $affect);
-        //更新资金
-        $money_res = Db::table(config('database.prefix') . 'money')->where('mid', $mid)->update(['account' => $afftermoney]);
-
-//
-        // 更新资金日志表信息
-        $record = new RecordModel;
-        $info = "新手任务奖励";
-        $obj = ['affect' => $affect, 'account' => $afftermoney, 'affect_activity' => 0, 'activity_account' => 0, 'sn' => ''];
-        $record->saveData($mid, 0, $money['account'], 112, $info, '', '', $obj);
     }
 
     public function active()

@@ -54,15 +54,16 @@ class Payment extends Model
     );
     //线上支付的
     public static $online = array(
-//        隐藏华中和八达通
         'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay','sxypay'
-//        'kdpay', 'cbpay', 'jdpay', 'mpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','sxypay'
     );
     //线上提现的
     public static $online_sithdrawal = array(
-        //        隐藏华中和八达通
         'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay','hzpay'
-//        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'
+    );
+
+    //钱包-多支付渠道
+    public static $payment_channels = array(
+        'bfpay','wdpay'
     );
 
 
