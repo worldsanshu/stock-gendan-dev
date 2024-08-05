@@ -912,7 +912,7 @@ class Fundordergs extends Admin
         if (empty($ids)) {
             $this->error('请选择要操作的数据');
         }
-        $settlementorders = FundOrderGsModel::settlementorders($ids);
+        $settlementorders = FundOrderGsModel::settlementorders($ids,true);
         if ($settlementorders['code']) {
             $this->success($settlementorders['msg'], cookie('__forward__'));
         }
@@ -1458,7 +1458,7 @@ class Fundordergs extends Admin
                 $this->error('买入日期不是交易日');
             }
             if ($data['position'] > 100|| $data['position'] < 0) {
-                $this->error('仓位比例不能为0或者操作100');
+                $this->error('仓位比例不能为0或者大于100');
             }
             $data['date'] = date('Y-m-d', strtotime($data['date']));
             $mobile_list  = explode(PHP_EOL, $data['mobile_list']);

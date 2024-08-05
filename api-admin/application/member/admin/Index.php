@@ -183,7 +183,7 @@ class Index extends Admin
             ['from_to', '来源'],
             ['level', '会员级别', 'select', $level_list],
 //            ['remarks', '备注', 'select', $remarksdata], 暂时不知为什么是下拉框
-            ['remarks', '备注', $remarksdata],
+            ['remarks', '备注', 'text.edit'],
             ['role_name', '白名单', 'select', $role_name],
             ['account', '账户余额/活动金余额'],
             ['account2', '冻结金额/保证金金额'],
@@ -193,7 +193,8 @@ class Index extends Admin
             ['is_buy', '是否投资', ['未投资', '已投资']],
             //['invite', '邀请人姓名/邀请人账号'],
               ['partner_parent', '邀请人账号/邀请人姓名'],
-              ['partner_num', '直属人数/团队人数'],
+              ['partner_directly_num', '直属人数', 'link', url('partner_directly_num', ['uid' => '__id__']), '', ''],
+              ['partner_team_num', '团队人数', 'link', url('tree', ['uid' => '__id__']), '', ''],
             ['login', '最后登录设备/最后登录IP'],
             ['time', '注册时间/最后登陆时间'],
             ['status', '登录状态', 'switch'],
@@ -1120,6 +1121,54 @@ class Index extends Admin
         }
         return $result;
     }
+
+    //推荐路径
+    public function partner_directly_num()
+    {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
+        $uid = input('uid',0);
+        $level_array = Funduserlevelarray();
+
+        $us = MemberModel::where('id', $uid)->field('id,0 as pid,name as username,mobile as name,mobile,is_buy,level,partner_parent_net,partner_parent_level,partner_parent_id')->find();
+        $parentId = $us->partner_parent_id;
+        $path = $us->partner_parent_net . ',' . $us->id;
+        $us->mobile = privacy_info_switch('mobile',$us->mobile);
+
+        $list = MemberModel::where('1=1')
+            ->field('id,partner_parent_id as pid,name as username,mobile as name,mobile,is_buy,level')
+            ->where([['partner_parent_id', '=', $uid]])
+            ->order('partner_parent_id asc')
+            ->select()
+            ->toArray();
+
+        foreach ($list as &$value) {
+            $value['not_in'] = 0;
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+        }
+        //加入自己当第一级
+        $list[] = $us->toArray();
+
+
+        foreach ($list as &$value) {
+            $isBuy = '否';
+            if ($value['is_buy'] == 1) {
+                $isBuy = '是';
+            }
+            if (empty($value['username'])) {
+                $value['username'] = '未设置';
+            }
+            $value['title'] = "[用户id:{$value['id']}]-[账户:{$value['mobile']}]-[是否投资:{$isBuy}]-[合伙人级别:{$level_array[$value['level']]}]-[姓名:{$value['username']}]";
+            if ($value['not_in'] == 1) {
+                $value['title'] = 'XXX';
+            }
+        }
+        unset($value);
+        $menus = Tree::toLayer($list);
+        $menus = $this->buildJsTree($menus);
+        $this->assign('menus', $menus);
+        $this->assign('parents_url', url('member/index/tree', ['uid' => $parentId]));
+        return $this->fetch();
+    }
     
     
     //推荐路径
@@ -1189,7 +1238,7 @@ class Index extends Admin
                 $isBuy = '是';
             }
             if (empty($value['username'])) {
-                $value['username'] = '未认证';
+                $value['username'] = '未设置';
             }
             $value['title'] = "[用户id:{$value['id']}]-[账户:{$value['mobile']}]-[是否投资:{$isBuy}]-[合伙人级别:{$level_array[$value['level']]}]-[姓名:{$value['username']}]";
             if ($value['not_in'] == 1) {

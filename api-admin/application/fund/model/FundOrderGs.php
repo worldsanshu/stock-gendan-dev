@@ -506,7 +506,7 @@ class FundOrderGs extends Model
      * 结算
      * @return void
      */
-    public static function settlementorders($id = '')
+    public static function settlementorders($id = '',$special=false)
     {
         $specificDate = date('Y-m-d');
 
@@ -518,12 +518,16 @@ class FundOrderGs extends Model
             $where         = [
                 ['id', '=', $id],
                 ['status', '=', 1],
-                ['fundendtime', '<=', $nextDayTimeStamp]
+
             ];
+            if($special==false){
+                $where['fundendtime']      =$nextDayTimeStamp;
+            }
+
+
             $orderinfolist = self::where($where)->find();
 
             if (!$orderinfolist) {
-
                 return ['code' => false, 'msg' => '只有未持仓状态且已到合约结束日期才可以结算'];
             }
             processing_settlement($id, $orderinfolist);

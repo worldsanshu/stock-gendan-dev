@@ -9,7 +9,9 @@
 // | 开源协议 ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 use AlibabaCloud\Client\AlibabaCloud;
+use AlibabaCloud\Client\Exception\ServerException;
 use app\apicom\model\JWT;
+use app\common\model\Area;
 use app\fund\model\FundDayline as FundDaylineModel;
 use app\fund\model\FundOrderGs as FundOrderGsModel;
 use app\fund\model\FundUserlevelConfig as FundUserlevelConfigModel;
@@ -32,10 +34,7 @@ use think\facade\Env;
 use think\facade\Lang;
 use think\facade\Request;
 use think\facade\Session;
-use think\helper\Hash;
 use util\Logs;
-use AlibabaCloud\Client\Exception\ServerException;
-use app\common\model\Area;
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE); //太多未定义数组索引错误了
 // 应用公共文件
@@ -60,7 +59,7 @@ function Funduserlevelarray()
 //        10 => '股东合伙人'
 //    ];
     $level_array = FundUserlevelConfigModel::select()->toArray();
-    $list = [];
+    $list        = [];
     foreach ($level_array as $key => $value) {
         $list[$value['level']] = $value['name'];
     }
@@ -106,11 +105,10 @@ function processing_settlement($id, $orderinfo)
     $d_where = [['order_sn', '=', $orderinfo['order_sn']], ['status', 'in', '0,1,2']];
     $list    = FundDaylineModel::where($d_where)->select();
 
-    if (count($list)>0) {
+    if (count($list) > 0) {
         printlog('', '存在持仓数据', 'jiesuan-end');
         return false;
     }
-
 
     #获取总利润
     $FundDaylineinfolist = FundDaylineModel::where(['order_id' => $id])
@@ -2309,7 +2307,7 @@ function SendSMSCode($mobile, $reg_code = '86', $content = '')
         $_CFG = 'AliSMS_internationality';
     }
     switch ($_CFG) {
-        case "AliSMS_cn":
+        case "ALISMS":
             $content = '您的验证码为：' . $validate . '，该验证码5分钟内有效，请勿泄漏于他人';
             //待测试
             $code = alisendSMSInternal($mobile, $validate, 'validate');
@@ -2547,7 +2545,7 @@ function sendSMSzhonglian($phone, $validate)
 
         return ['status' => $code['returnstatus'] == "Success", 'msg' => '操作成功'];
     } else {
-        return ['status' => false, 'msg' => $code['remark']];
+        return ['status' => false, 'msg' => $code['message']];
     }
 }
 
@@ -2783,30 +2781,34 @@ function alisendSMSInternal($mobile = '', $code = '', $param = '')
     $accessKeySecret = $_CFG['internal_secret'];
     $sign            = $_CFG['internal_sign'];
     $template_code   = $_CFG['AliSMS_template_code']['captcha'];
-    AlibabaCloud::accessKeyClient($accessKeyId, $accessKeySecret)->regionId('cn-hangzhou')->asDefaultClient();
-    $query = ['query' => [
-        'RegionId'      => "cn-hangzhou",
-        'PhoneNumbers'  => $mobile,
-        'SignName'      => $sign,
-        'TemplateCode'  => $template_code,
-        'TemplateParam' => json_encode(['code' => $code])
-    ]
-    ];
-
-    $result = AlibabaCloud::rpc()
-        ->product('Dysmsapi')
-        ->version('2017-05-25')
-        ->action('SendSms')
-        ->method('POST')
-        ->host('dysmsapi.aliyuncs.com')
-        ->options($query)->request();
-
-    $res = empty($result) ? $result : $result->toArray();
-    $log = ['mobile' => $mobile, 'template_code' => $template_code, 'param' => $param, 'res' => $res];
-    Logs::log('AliSendSMSInternal', $log, 'SMS');
-    printlog($res, '阿里云短信', 'smssend');
-    return ['status' => $res['Code'] == 'OK', 'msg' => $res['Message']];
     try {
+        AlibabaCloud::accessKeyClient($accessKeyId, $accessKeySecret)->regionId('cn-hangzhou')->asDefaultClient();
+        $query = ['query' => [
+            'RegionId'      => "cn-hangzhou",
+            'PhoneNumbers'  => $mobile,
+            'SignName'      => $sign,
+            'TemplateCode'  => $template_code,
+            'TemplateParam' => json_encode(['code' => $code])
+        ]
+        ];
+
+        $result = AlibabaCloud::rpc()
+            ->product('Dysmsapi')
+            ->version('2017-05-25')
+            ->action('SendSms')
+            ->method('POST')
+            ->host('dysmsapi.aliyuncs.com')
+            ->options($query)->request();
+
+
+        printlog($result, '阿里云短信', 'smssend');
+        $res = empty($result) ? $result : $result->toArray();
+
+        $log = ['mobile' => $mobile, 'template_code' => $template_code, 'param' => $param, 'res' => $res];
+        Logs::log('AliSendSMSInternal', $log, 'SMS');
+        printlog($res, '阿里云短信', 'smssend');
+        return ['status' => $res['Code'] == 'OK', 'msg' => $res['Message']];
+
     } catch (ServerException $e) {
 
         return ['status' => false, 'msg' => $e->getMessage()];
@@ -2840,10 +2842,10 @@ function aliSendSMSGlobe($mobile = '', $content = '')
         $res = empty($result) ? $result : $result->toArray();
         $log = ['mobile' => $mobile, 'content' => $content, 'res' => $res];
         Logs::log('AliSendSMSGlobe', $log, 'SMS');
-       
+
         if ($res['ResponseDescription'] == 'OK') {
-            return ['status' => true ,  'msg' => '成功'];
-        }else{
+            return ['status' => true, 'msg' => '成功'];
+        } else {
             //dump($res);
             return ['status' => false, 'msg' => $res['ResponseDescription']];
         }
@@ -4016,7 +4018,7 @@ if (!function_exists('webType')) {
 //     }
     function webType()
     {
-        $header = request()->header();
+        $header  = request()->header();
         $webtype = 2;
         if (in_array($header['host'], config('root_domain'))) {
             $webtype = 1;
@@ -4750,11 +4752,11 @@ function AllowedDomain()
 //     $ALLOWED_domain = config('web_type');
 //     // 提取数组的键名
 //     $ALLOWED_domain = array_keys($ALLOWED_domain);
-    
+
     $ALLOWED_domain = config('root_domain');
-    $ALLOWED_domain = array_merge($ALLOWED_domain,config('agent_domain'));
-    
-    $domain         = $_SERVER['HTTP_HOST'];
+    $ALLOWED_domain = array_merge($ALLOWED_domain, config('agent_domain'));
+
+    $domain = $_SERVER['HTTP_HOST'];
 
     //如果是许可的域名访问前端的，强制跳转
     if (in_array($domain, $ALLOWED_domain)) {
@@ -4790,49 +4792,47 @@ if (!function_exists('generate_order_no')) {
     }
 }
 
-
 /**
  * 隐私信息显示隐藏
  *
  * @param string $type 类型 mobile id_card
  * @param string $value 值
- *
  */
-function privacy_info_switch($type,$value) {
+function privacy_info_switch($type, $value)
+{
     $privacy = cookie('__privacy__');
-        if($privacy == 'close'){
-            switch ($type) {
-                case 'mobile':
-                    $result = substr_replace($value, '****', 3, 4);
-                    break;
-                case 'id_card':
-                    $result = substr_replace($value, '********', 4, 8);
-                    break;
-                default:
-                    $result = '';
-            }
-        }else{
-            $result = $value;
+    if ($privacy == 'close') {
+        switch ($type) {
+            case 'mobile':
+                $result = substr_replace($value, '****', 3, 4);
+                break;
+            case 'id_card':
+                $result = substr_replace($value, '********', 4, 8);
+                break;
+            default:
+                $result = '';
         }
+    } else {
+        $result = $value;
+    }
 
     return $result;
 }
 
-
 /**
  * 记录查看隐私信息
- *
  */
-function ce_privacy_log($log) {
+function ce_privacy_log($log)
+{
 
-    $data['user_id'] =UID;
-    $data['remark'] =$log['remark'];
-    $data['status'] =$log['status'];
-    $data['create_time'] =time();
-    $d_info = Db::name("privacy_log")->insert($data);
-    if($d_info){
+    $data['user_id']     = UID;
+    $data['remark']      = $log['remark'];
+    $data['status']      = $log['status'];
+    $data['create_time'] = time();
+    $d_info              = Db::name("privacy_log")->insert($data);
+    if ($d_info) {
 //        验证成功在开启
-        if($log['status'] ==1){
+        if ($log['status'] == 1) {
             cookie('__privacy__', 'open');  //隐私保护、登录默认是关闭状态 close关闭 open开
         }
         return true;
