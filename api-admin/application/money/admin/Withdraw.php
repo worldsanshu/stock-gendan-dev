@@ -59,7 +59,7 @@ class Withdraw extends Admin
         $online_sithdrawal = PaymentModel::$online_sithdrawal;
         // 数据列表
         $data_list = WithdrawModel::view('money_withdraw', true)
-        ->view('member', 'mobile, name, id_card,email,partner_parent_id,role_name', 'member.id=money_withdraw.mid', 'left')
+        ->view('member', 'mobile, name, id_card,email,partner_parent_id,role_name,remarks', 'member.id=money_withdraw.mid', 'left')
         ->view('wallet', 'payment_id', 'wallet.id=money_withdraw.wallet_id', 'left')
         ->where($map)
         ->where('money_withdraw.status','=',0)
@@ -150,6 +150,7 @@ class Withdraw extends Admin
           ->addColumns([ // 批量添加数据列
             ['order_no', '订单号'],
             ['name', '姓名/手机号'],
+            ['remarks', '备注'],
               ['role_name', '白名单', $this->user_role_name],
               ['partner_parent', '邀请人账号/邀请人姓名'],
             ['money', '提现金额'],
@@ -586,7 +587,7 @@ EOF;
         }
         // 数据列表
         $data_list = WithdrawModel::view('money_withdraw', true)
-            ->view('member', 'mobile, name, id_card,email,partner_parent_id,role_name', 'member.id=money_withdraw.mid', 'left')
+            ->view('member', 'mobile, name, id_card,email,partner_parent_id,role_name,remarks', 'member.id=money_withdraw.mid', 'left')
             ->where($map)
             ->where('money_withdraw.status','>',0)
             ->order($order)
@@ -665,6 +666,7 @@ EOF;
             ->addColumns([ // 批量添加数据列
                 ['order_no', '订单号'],
                 ['name', '姓名/手机号'],
+                ['remarks', '备注'],
                 ['role_name', '白名单', $this->user_role_name],
                 ['partner_parent', '邀请人账号/邀请人姓名'],
                 ['money', '提现金额'],

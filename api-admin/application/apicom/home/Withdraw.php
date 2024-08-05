@@ -64,6 +64,13 @@ class Withdraw extends Common
         $data['banks'] = $list;
         $data['wallets'] = $wallets_list;
         $data['default_bank'] = isset($list[0])?$list[0]:[];
+        $money_withdraw_config = Db::name('money_withdraw_config')->field('min_money,ratio')->find();
+        if($money_withdraw_config){
+            $data['config'] = $money_withdraw_config;
+        }else{
+            $data['config']['ratio'] = 0;
+            $data['config']['min_money'] = 100;
+        }
 //        $data['bankSetting'] = config("web_bank");
         ajaxmsg('线下提现信息', 1, $data, true, ['msgCode' => 'L0002']);
     }

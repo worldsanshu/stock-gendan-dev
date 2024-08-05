@@ -75,6 +75,7 @@ class Record extends Model
       '109' => '提取优投盈利',
       '110' => '彩金',
       '111' => '系统存入活动金',
+      '112' => '任务领取',
     ];
 
     public function getTypeAttr($value)

@@ -25,13 +25,13 @@ class Payment extends Model
         'cbpay' => 'CBpay',
         'jdpay' => 'JDpay',
         'mpay' => 'Mpay',
-//        'bdtpay' => '八达通',
+        'bdtpay' => '八达通',
         'usdtpay' => 'AApay',
         'topay' => 'TOpay钱包',
         'okpay' => 'OKpay钱包',
         'wdpay'=>'豌豆支付',
         'bfpay'=>'百冯支付',
-//        'hzpay'=>'华中支付',
+        'hzpay'=>'华中支付',
         'sxypay'=>'守信易支付',
     );
     public static $payTypeLogo = array(
@@ -55,15 +55,42 @@ class Payment extends Model
     //线上支付的
     public static $online = array(
 //        隐藏华中和八达通
-//        'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay','sxypay'
-        'kdpay', 'cbpay', 'jdpay', 'mpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','sxypay'
+        'kdpay', 'cbpay', 'jdpay', 'mpay', 'bdtpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','hzpay','sxypay'
+//        'kdpay', 'cbpay', 'jdpay', 'mpay', 'usdtpay', 'topay', 'okpay','wdpay','bfpay','sxypay'
     );
     //线上提现的
     public static $online_sithdrawal = array(
         //        隐藏华中和八达通
-//        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay'
-        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'
+        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay','hzpay'
+//        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'
     );
+
+
+//    提现方式支持的类型
+    public static function WithdrawalTypeSelect($field)
+    {
+//        没有加入的，暂时不支持线上提现，默认钱包地址人工转账
+//        二维码和收款账号
+        $payment_code = ['alipay','wechatpay'];
+//        钱包地址
+        $payment_address = ['kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'];
+//        银行卡信息
+        $payment_bank = ['bdtpay', 'hzpay','bank'];
+        // 检查是否在支付方式代码中
+        if (in_array($field, $payment_code)) {
+            return 'code';
+        }
+        // 检查是否在钱包地址中
+        if (in_array($field, $payment_address)) {
+            return 'address';
+        }
+        // 检查是否在银行卡信息中
+        if (in_array($field, $payment_bank)) {
+            return 'bank';
+        }
+        // 如果都不匹配  默认用钱包地址
+        return 'address'; // 或者 '未知支付方式'
+    }
     /**
      * 转意
      * @param $cate

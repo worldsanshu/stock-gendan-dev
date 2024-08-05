@@ -174,7 +174,10 @@ class Partner extends Common
 
           // 计算百分比
           $percentage = ($data['team_num_directly'] / $next_level->min_num) * 100;
-
+          if($percentage >100){
+//              超出人数上限的话
+              $percentage = 100;
+          }
           // 格式化百分比（可选，根据需要调整）
           $formatted_percentage = round($percentage);
 

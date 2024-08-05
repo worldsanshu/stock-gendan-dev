@@ -178,7 +178,7 @@ class Payment extends Admin
 ['text', 'exchange_rate', '汇率 (数字货币必填)'],
 ['text', 'agreement', '协议 (数字货币必填)'],
 ['text', 'app_id', '商户号 (把这个IP-[' . $ip['data'] . '] 添加到支付商平台IP白名单)'],
-['text', 'app_secret', '密匙'],
+['text', 'app_secret', '秘钥（或者Md5Key）'],
 ['text', 'app_public_key', '公钥'],
 ['text', 'specific_address', '商户网关API (非必填，需要特定网关才填写)','例：https://qse123jdsz.okpay777.com    ,去掉多余的路径信息'],
 ['select', 'support_type', '支持类型（用户充值和提现的时候提供选择）', '', $support_type, '1'],

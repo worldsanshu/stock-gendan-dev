@@ -118,7 +118,7 @@ class Index extends Admin
                 5) . "_export?" . $_SERVER["QUERY_STRING"] . '&';
         }
 
-        $excel_url = 'index_export';
+        //$excel_url = 'index_export';
         $btn_excel = [
             'title' => '导出EXCEL表',
             'icon'  => 'fa fa-fw fa-download',
@@ -1374,6 +1374,7 @@ class Index extends Admin
                 $this->success('添加成功', cookie('__forward__'));
             }
         }
+        $agent_list = MemberModel::where('agent_id', '>', 0)->column('name', 'id');
         return ZBuilder::make('form')
             ->setPageTitle('新增用户') // 设置页面标题
             ->setPageTips('此操作添加真实用户，手机号不可更改，请填写真实号码！', 'danger')
@@ -1390,6 +1391,13 @@ class Index extends Admin
 //                ['radio', 'status', '登录状态', '', ['禁用', '启用'],'1'],
 //                ['radio', 'is_del', '账户状态', '', ['正常', '注销/删除'],'0'],
                 ['radio', 'id_auth', '认证状态', '', ['未认证', '已认证'],'1'],
+            ])
+            ->addSelect('agent_far', '选择代理商', '请选择代理商', $agent_list)
+            ->addSelectAjax('re_id', '邀请人', '上级推荐用户', [
+                'table' => 'member',
+                'id' => 'id',
+                'name' => 'mobile',
+                'search' => 'name|mobile'
             ])
             ->fetch();
     }
@@ -1428,7 +1436,7 @@ class Index extends Admin
             $this->success('添加成功'.$n.'个账户', cookie('__forward__'));
 
         }
-
+        $agent_list = MemberModel::where('agent_id', '>', 0)->column('name', 'id');
         return ZBuilder::make('form')
             ->setPageTitle('批量添加') // 设置页面标题
             ->setPageTips('批量添加仅作为测试用户使用！', 'danger')
@@ -1440,6 +1448,13 @@ class Index extends Admin
 //                ['radio', 'status', '登录状态', '', ['禁用', '启用'],'1'],
 //                ['radio', 'is_del', '账户状态', '', ['正常', '注销/删除'],'0'],
                 ['radio', 'id_auth', '认证状态', '', ['未认证', '已认证'],'1'],
+            ])
+            ->addSelect('agent_far', '选择代理商', '请选择代理商', $agent_list)
+            ->addSelectAjax('re_id', '邀请人', '上级推荐用户', [
+                'table' => 'member',
+                'id' => 'id',
+                'name' => 'mobile',
+                'search' => 'name|mobile'
             ])
             ->fetch();
     }

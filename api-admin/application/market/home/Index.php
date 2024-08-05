@@ -70,6 +70,11 @@ class Index extends Common
                 $res[$k]['code'] = $v['code'];
                 $res[$k]['name'] = $v['title'];
                 $res[$k]['pin'] = $v['pinyin'];
+                $count = Db::name('stock_subaccount_self')->where('gupiao_code', $v['code'])->count();
+                $res[$k]['is_self'] = 0;
+                if ($count > 0){
+                    $res[$k]['is_self'] = 1;
+                }
             }
         }
         return json(['data' => $res, 'status' => 1, 'message' => '操作成功']);

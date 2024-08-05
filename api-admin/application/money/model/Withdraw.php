@@ -6,7 +6,9 @@ use app\apicom\home\Wallet;
 use app\apicom\model\MoneyRecharge;
 use app\member\model\Bank as BankModel;
 use app\member\model\MemberMessage as MemberMessageModel;
+use app\money\service\BDTpayService;
 use app\money\service\CBpayService;
+use app\money\service\HZpayService;
 use app\money\service\JDpayService;
 use app\money\service\KdpayService;
 use app\money\service\MpayService;
@@ -340,6 +342,10 @@ class Withdraw extends Model
             'app_secret' => $payment['app_secret'],
             'app_public_key' => $payment['app_public_key'],
             'specific_address' => $payment['specific_address'],
+//            后期重构钱包、充值提前后，在重新调整参数配置，现在默认都使用所有参数
+            'bank_code' => $get_wallet['bank_code'],  //银行编码
+            'bank_number' => $get_wallet['bank_number'], //银行卡号
+            'bank_owner' => $get_wallet['bank_owner'], //开户姓名
 
         ];
         return self::onlineRemit($orderInfo);
@@ -364,6 +370,12 @@ class Withdraw extends Model
                 break;
             case 'cbpay':
                 $res = (new CBpayService())->Remit($orderInfo);
+                break;
+            case 'bdtpay':
+                $res = (new BDTpayService())->Remit($orderInfo);
+                break;
+            case 'hzpay':
+                $res = (new HZpayService())->Remit($orderInfo);
                 break;
             default:;
                 break;

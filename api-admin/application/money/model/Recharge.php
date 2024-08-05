@@ -44,6 +44,16 @@ class Recharge extends Model
         return $data_list;
     }
 
+    public static function gettotalsum($map = [])
+    {
+        $data_list = self::view('money_recharge', true)
+            ->view('member', 'mobile, name, id_card,role_name', 'member.id=money_recharge.mid', 'left')
+            ->view('money_payment', 'name as payment_name,unit', 'money_payment.id=money_recharge.payment_id', 'left')
+            ->where($map)
+            ->sum('money_recharge.money');
+        return $data_list;
+    }
+
     /**
      * 充值审核信息保存
      * @return [type] [description]

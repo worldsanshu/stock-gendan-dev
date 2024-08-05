@@ -39,16 +39,16 @@ class Custommenu extends Model
         return $data_list;
     }
 
-    public function getImgurlTextAttr($value)
+    public static function getImgurlTextAttr($value)
     {
         $path   = Db::name('admin_attachment')->where('id', $value)->value('path');
         $domain = request()->domain();
         return $path ? $domain . '/' . $path : '';
     }
 
-    public function getMenuArr($key='')
+    public static function getMenuArr($key='')
     {
-        $domain = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+        $domain = $_SERVER['SERVER_NAME'] ? "https://" . $_SERVER['SERVER_NAME'] : "https://" . $_SERVER['HTTP_HOST'];
         $list['home'] = [
             [
                 'name' => '股票',

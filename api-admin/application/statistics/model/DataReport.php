@@ -46,10 +46,10 @@ class DataReport extends Model
     }
 
     //获取当天的报表数据
-    public static function getDayData($type = 1)
+    public static function getDayData($type = 1,$role_name='普通会员')
     {
         $day_start_time = strtotime(date('Y-m-d'));
-        $ids = Member::where('role_name', '白名单')->column('id');
+        $ids = Member::where('role_name', $role_name)->column('id');
         $where = 'status >=1 and status <=2';
         $data['effective_contract'] = Borrow::where($where)->where('create_time', '>=', $day_start_time)->where('member_id', 'not in', $ids)->count();
         $data['new_open_contract'] = Borrow::where('status', 1)->where('create_time', '>=', $day_start_time)->where('member_id', 'not in', $ids)->count();

@@ -48,7 +48,8 @@ class Customproperty extends Model
 
     public static function getPropertyArr()
     {
-        $domain = $_SERVER['SERVER_NAME'] ? "//" . $_SERVER['SERVER_NAME'] : "//" . $_SERVER['HTTP_HOST'];
+//        $domain = $_SERVER['SERVER_NAME'] ? "//" . $_SERVER['SERVER_NAME'] : "//" . $_SERVER['HTTP_HOST'];
+        $domain = $_SERVER['SERVER_NAME'] ? "https://" . $_SERVER['SERVER_NAME'] : "https://" . $_SERVER['HTTP_HOST'];
 
 
         $list = [

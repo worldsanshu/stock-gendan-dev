@@ -315,6 +315,7 @@ if (!function_exists('getTypeNameForMoney')) {
           '109' => lang('money_type_109'),//'提取盈利'
           '110' => lang('money_type_110'),//'彩金'
           '111' => lang('money_type_111'),//系统存入活动金
+          '112' => lang('money_type_112'),//任务领取
         ];
         return $type[$type_id];
     }

@@ -223,9 +223,9 @@ class Custommenu extends Admin
         return ZBuilder::make('form')
             ->setPageTitle('新增') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
-                             ['text', 'name', '名称', ''],
+                             ['text', 'name', '名称', '导航的显示名称'],
                              ['select', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name,'1'],
-                             ['text', 'url', '路径', ''],
+                             ['text', 'url', '路径', '导航跳转的页面路径'],
                              ['radio','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
                              ['number', 'sort', '排序'],
                              ['radio', 'status', '显示状态', '', ['禁用', '启用'],'1'],
@@ -281,9 +281,9 @@ class Custommenu extends Admin
         if($info['is_default'] == 1){
             return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
-                             ['static', 'name', '名称'],
-                             ['static', 'url', '路径'],
+                             ['static', 'name', '名称','导航的显示名称'],
                              ['static', 'url_type', '路径类型', '(内置路径：从列表页点击查看内置路径)',$url_name],
+                             ['static', 'url', '路径','导航跳转的页面路径'],
                              ['static','url_level', '路由等级', '(一级路由：多为底部导航，二级路由：通常为部分页面里的子页面)', ['1' => '一级路由', '2' => '二级路由'], '1'],
                              ['number', 'sort', '排序'],
                              ['radio', 'status', '显示状态', '', ['禁用', '启用']],

@@ -2229,7 +2229,11 @@ class Crond extends Home
     public function autoDailyTrading()
     {
         $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-
+//        if ($ids) {
+//            $list = FundDaylineModel::where(['id' => $ids])->where('status', 2)->limit(50)->select();
+//        } else {
+//            $list = FundDaylineModel::where('status', 2)->limit(50)->select();
+//        }
 
         //计算收入
         echo FundOrderGsModel::settlementFundgs($ids);

@@ -317,6 +317,7 @@ return array(
   'money_type_109' => '提取盈利',
   'money_type_110' => '彩金',
     'money_type_111' => '系统转入活动金',
+    'money_type_112' => '任务领取',
     //messege 公告
   'messege_1' => '充值审核通知',
   'messege_2' => '充值通知',
