@@ -24,14 +24,17 @@ class Wallet extends Common
           ->where(['mid' => MID, 'is_delete' => 0])
           ->field('id,card,bank')
           ->select();
+        $bank = config('web_bank');
+
         foreach ($bank_list as $k => $v) {
             $bank_list[$k]['card'] = '****' . substr($v['card'], -4);
+            $bank_list[$k]['bank_name'] = $bank[$v['bank']];
         }
         $wallet_list = Db::name('wallet')
           ->alias('w')
           ->join('money_payment p ', 'w.payment_id = p.id', 'LEFT')
           ->join('admin_attachment tt', 'p.logo = tt.id', 'LEFT')
-          ->field('w.id,p.name,w.alias,w.address,p.agreement,tt.path as logo,p.type')
+          ->field('w.id,p.name,w.alias,w.address,p.agreement,tt.path as logo,p.type,w.bank_code,w.bank_number,w.bank_owner')
           ->where(['w.mid' => MID, 'w.is_delete' => 0, 'p.status' => 1])
           ->select();
         foreach ($wallet_list as $k => $v) {
@@ -102,6 +105,9 @@ class Wallet extends Common
         $address = $post['address'];
         $alias = $post['alias'];
         $payment_code = $post['payment_code'];
+        $bank_code = $post['bank_code'];
+        $bank_number = $post['bank_number'];
+        $bank_owner = $post['bank_owner'];
         if (empty($payment_id)) {
             ajaxmsg('参数错误', 0, '', true, ['msgCode' => 'L0020']);
         }
@@ -109,6 +115,7 @@ class Wallet extends Common
         if ($id_auth !== 1) {
             ajaxmsg('您还没有实名认证', 0, '', true, ['msgCode' => 'L0074']);
         }
+
         //校验是否重复
         $map = [
           'mid' => MID,
@@ -126,6 +133,9 @@ class Wallet extends Common
         $data['alias'] = $alias;
         $data['address'] = $address;
         $data['payment_code'] = $payment_code;
+        $data['bank_code'] = $bank_code;
+        $data['bank_number'] = $bank_number;
+        $data['bank_owner'] = $bank_owner;
         $data['create_time'] = time();
         $ret = Db::name('wallet')->insert($data);
         if ($ret) {
@@ -153,9 +163,12 @@ class Wallet extends Common
               'id' => $id,
               'mid' => MID
             ];
+//            $ret = Db::name('member_bank')
+//              ->where($map)
+//              ->update(['is_delete' => 1]);
             $ret = Db::name('member_bank')
-              ->where($map)
-              ->update(['is_delete' => 1]);
+                ->where($map)
+                ->delete();
             if ($ret)
                 ajaxmsg('删除成功', 1, '', true, ['msgCode' => 'L0103']);
             else
@@ -166,9 +179,12 @@ class Wallet extends Common
               'id' => $id,
               'mid' => MID
             ];
+//            $ret = Db::name('wallet')
+//              ->where($map)
+//              ->update(['is_delete' => 1]);
             $ret = Db::name('wallet')
-              ->where($map)
-              ->update(['is_delete' => 1]);
+                ->where($map)
+                ->delete();
             if ($ret)
                 ajaxmsg('删除成功', 1, '', true, ['msgCode' => 'L0103']);
             else

@@ -114,6 +114,7 @@ class Index extends Admin
         ];
         $btn_money    = ['title' => '客户客损', 'icon' => 'fa fa-fw fa-th', 'href' => url('detail', ['uid' => '__mid__'], '')];
         $btn_edit       = ['title' => '资金批量操作', 'icon' => 'fa fa-fw fa-balance-scale', 'href' => url('moneyUpdate')];
+        $btn_wallet       = ['title' => '用户钱包', 'icon' => 'si si-wallet', 'href' => url('wallet', ['uid' => '__mid__'])];
         $statisticsTable   = [];
         $statisticsTable[] = ['可用资金', '冻结金额', '活动资金', '冻结活动金额'];
         $statistics        = [];
@@ -179,12 +180,174 @@ class Index extends Admin
             ->addTopButton('custem', $btn_balance)
             ->addTopButton('custem', $btn_edit)
             ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
+            ->addRightButton('custem', $btn_wallet)
             ->setExtraHtml($this->tableHtml($statisticsTable), 'toolbar_bottom')
             //->addTopButtons('enable,disable') // 批量添加顶部按钮
             // ->addRightButtons(['edit']) // 批量添加右侧按钮
             ->addOrder('id,account,freeze,status,operate_account,bond_account')
             ->setRowList($data_list)
             ->fetch(); // 渲染模板
+    }
+
+    public function wallet($group = 'wallet')
+    {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
+        // 获取查询条件
+        $map        = $this->getMap();
+        $uid        = input('uid', '');
+        $map['mid'] = $uid;
+        $order      = $this->getOrder();
+        empty($order) && $order = 'id desc';
+        // 数据列表
+        $table = $group;
+
+        $list_tab = [
+            'wallet' => ['title' => '用户钱包地址', 'url' => url('wallet', ['uid' => $uid,'group' => 'wallet'])],
+            'member_bank' => ['title' => '用户银行卡包', 'url' => url('wallet', ['uid' => $uid,'group' => 'member_bank'])],
+        ];
+        $btn_risk  = [
+            'title' => '编辑钱包',
+            'icon'  => 'fa fa-fw fa-balance-scale',
+            'href'  => url('wallet_edit', ['id' => '__id__','group' => $group])
+        ];
+        switch ($group) {
+            case 'wallet':
+                $data_list = Db($table)->order('create_time desc')
+                    ->where($map)
+                    ->where('is_delete',0)
+                    ->paginate()
+                    ->each(function ($item,$key) {
+                       $money_payment = Db::name('money_payment')->where('id',$item['payment_id'])->find();
+                       $item['pay_name'] = $money_payment['name'];
+                       return $item;
+                    });
+                // 分页数据
+                $page = $data_list->render();
+
+                return ZBuilder::make('table')
+                    ->setTabNav($list_tab,  $group)
+                    ->setPageTips('首页导航显示', 'danger')
+                    ->hideCheckbox()
+                    ->addColumns([ // 批量添加数据列
+                        ['pay_name', '支付类型'],
+                        ['alias', '别名'],
+                        ['address', '钱包地址'],
+                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
+                    ])
+                    ->addColumn('right_button', '操作', 'btn')
+//                    ->addRightButtons('edit') // 批量添加右侧按钮  ,last_login_time
+                    ->addRightButton('risk', $btn_risk) // 添加子账户风控设置按钮
+                    ->setRowList($data_list) // 设置表格数据
+                    ->setPages($page) // 设置分页数据
+                    ->fetch(); // 渲染模板
+                break;
+            case 'member_bank':
+                $data_list = Db($table)->order('create_time desc')
+                    ->where($map)
+                    ->where('is_delete',0)
+                    ->paginate()
+                    ->each(function ($item,$key) {
+                        $item['province'] = Db::name('area')->where('id',$item['province'])->value('name');
+                        $item['city'] = Db::name('area')->where('id',$item['city'])->value('name');
+                        return $item;
+                    });
+                // 分页数据
+                $page = $data_list->render();
+                return ZBuilder::make('table')
+                    ->setTabNav($list_tab,  $group)
+                    ->setPageTips('用户中心图标导航显示', 'danger')
+                    ->hideCheckbox()
+                    ->addColumns([ // 批量添加数据列
+                        ['bank', '所属银行'],
+                        ['branch', '支行'],
+                        ['card', '卡号'],
+                        ['province', '省'],
+                        ['city', '市'],
+                        ['create_time', '创建时间', 'datetime', '', 'Y-m-d H:i:s'],
+                    ])
+                    ->setColumnWidth('url', 200)
+                    ->addColumn('right_button', '操作', 'btn')
+                    ->addRightButton('risk', $btn_risk) // 添加子账户风控设置按钮
+//                    ->addRightButtons(['edit']) // 批量添加右侧按钮  ,last_login_time
+                    ->setRowList($data_list) // 设置表格数据
+                    ->fetch(); // 渲染模板
+                break;
+        }
+    }
+
+
+
+    //    钱包修改
+    public function wallet_edit($id = null, $group = null)
+    {
+        if ($id === null) $this->error('缺少参数');
+        if ($group === null) $this->error('缺少参数');
+        // 保存数据
+        if ($this->request->isPost()) {
+            $data             = input();
+            switch ($group) {
+                case 'wallet':
+                    $edit = [
+                        'address' => $data['address'],
+                        'alias' => $data['alias'],
+                    ];
+                    Db::name('wallet')->where('id',$id)->update($edit);
+                    // 记录行为 后续需要在添加行为
+//                    action_log('member_edit', 'member', UID, UID,'修改钱包地址:'.$data['address']);
+                    break;
+                case 'member_bank':
+                    $edit = [
+                        'card' => $data['card'],
+                        'bank' => $data['bank'],
+                        'branch' => $data['branch'],
+                    ];
+                    Db::name('member_bank')->where('id',$id)->update($edit);
+                    // 记录行为 后续需要在添加行为
+//                    action_log('member_edit', 'member', UID, UID,'修改银行信息:'.$data['bank'].'/n/n'.$data['card']);
+                    break;
+            }
+            $this->success('编辑成功', cookie('__forward__'));
+
+        }
+        switch ($group) {
+            case 'wallet':
+                $info = Db::name('wallet')
+                    ->alias('w')
+                    ->join('money_payment p ', 'w.payment_id = p.id')
+                    ->field('w.id,p.name as pay_name,w.alias,w.address,p.agreement')
+                    ->where(['w.id' => $id, 'w.is_delete' => 0])
+                    ->find();
+                return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
+                ->addFormItems([ // 批量添加表单项
+                    ['hidden', 'id'],
+                    ['static', 'pay_name', '支付类型', ''],
+                    ['text', 'alias', '别名', ''],
+                    ['text', 'address', '钱包地址', ''],])
+                    ->setFormData($info) // 设置表单数据
+                    ->fetch();
+
+                break;
+            case 'member_bank':
+                $info = Db::name('member_bank')
+                    ->where(['id' => $id, 'is_delete' => 0])
+                    ->field('id,card,bank,branch')
+                    ->find();
+                $bank = config('web_bank');
+
+                return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
+                ->addFormItems([ // 批量添加表单项
+                    ['hidden', 'id'],
+                    ['text', 'card', '卡号', ''],
+                    ['select', 'bank', '所属银行', '',$bank],
+                    ['text', 'branch', '分行', ''],
+//                    ['text', 'bank', '所属银行', ''],
+                    ])
+//                    ->addSelect('bank', '所属银行', '请选择', $bank)
+                    ->setFormData($info) // 设置表单数据
+                    ->fetch();
+
+                break;
+        }
     }
 
     public function detail()
@@ -581,4 +744,5 @@ class Index extends Admin
             ])
             ->fetch();
     }
+
 }

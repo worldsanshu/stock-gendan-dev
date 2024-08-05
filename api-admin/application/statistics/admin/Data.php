@@ -13,6 +13,7 @@ namespace app\statistics\admin;
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
 use app\fund\model\FundOrderGs;
+use app\fund\model\FundOrderGs as FundOrderGsModel;
 use app\fund\model\FundUserlevel as FundUserlevelModel;
 
 use app\interest\model\Interest;
@@ -33,6 +34,15 @@ class Data extends Admin
         cookie('__forward__', $_SERVER['REQUEST_URI']);
         // 获取查询条件
         $map = $this->getMap();
+        $role_name = '普通会员';
+        if($map){
+            foreach ($map as $key=>$value){
+                if ($value[0] == 'role_name') {
+                    $role_name = $value[2];
+                    unset($map[$key]);
+                }
+            }
+        }
         $for_user = Db::name('admin_user')->where('id', UID)->value('for_user');
         $where = [];
         if ($for_user) {
@@ -47,7 +57,7 @@ class Data extends Admin
           ->where($where)
           ->order($order)
           ->paginate();
-        $day_data_report = DataReportModel::getDayData();//当天的报表数据
+        $day_data_report = DataReportModel::getDayData(1,$role_name);//当天的报表数据
         foreach ($data_list as $key => $value) {
             if ($value['create_time'] == $day_start_time) { //当天的数据读取实时的
 //                $data_list[$key]['effective_contract'] = $day_data_report['effective_contract'];
@@ -59,15 +69,18 @@ class Data extends Admin
                 $data_list[$key]['stock_price'] = $day_data_report['stock_price'];
             }else{
                 $oneMonthAgo = strtotime('-1 month', $value['create_time']);
-                $user_run = Member::where('last_login_time', '<=', $oneMonthAgo)->count();
+                $user_run = Member::where('last_login_time', '<=', $oneMonthAgo)->where('role_name', $role_name)->count();
                 $data_list[$key]['user_run'] = $user_run;
 
                 $startOfDay = strtotime(date('Y-m-d', $value['create_time']).' 00:00:00'); // 当天开始的时间戳
                 $endOfDay = strtotime(date('Y-m-d', $value['create_time']).' 23:59:59'); // 当天结束的时间戳
 
-                $user_oline = MemberLoginRecord::where('login_time', '>=', $startOfDay)
-                    ->where('login_time', '<=', $endOfDay)
-                    ->group('mid')
+                $user_oline = MemberLoginRecord::alias('a')
+                    ->join('member m', 'a.mid = m.id')
+                    ->where('m.role_name', $role_name)
+                    ->where('a.login_time', '>=', $startOfDay)
+                    ->where('a.login_time', '<=', $endOfDay)
+                    ->group('a.mid')
                     ->count(); // 直接计算满足条件的记录数
                 $data_list[$key]['oline'] = $user_oline;
             }
@@ -99,18 +112,34 @@ class Data extends Admin
             $data_list[$key]['date_strtotime'] = $value['create_time'];
             $data_list[$key]['month_strtotime'] = $value['create_time'] - 30 * 24 * 3600; //一个月时间不登录的用户
 
-//            跟单
-            $data_list[$key]['purchase_tracking_total'] = FundOrderGs::where('create_time', '>', $value['create_time'])
-                ->where('status','>',0)
-                ->count();
-            $data_list[$key]['month_strtotime_balance'] = FundOrderGs::where('create_time', '>', $value['create_time'])
-                ->where('status','=',3)
-                ->count();
             $start_time = strtotime(date('Y-m-d', $value['create_time']) . '00:00:00');
             $end_time = strtotime(date('Y-m-d', $value['create_time']) . '23:59:59');
+//            跟单
+//            购买的、
+            $data_list[$key]['purchase_tracking_total'] = FundOrderGs::alias('o')
+                ->join('member m', 'o.uid = m.id')
+                ->where('m.role_name', $role_name)
+                ->where('o.create_time', '>=', $start_time)
+                ->where('o.create_time', '<=', $end_time)
+//                ->where('o.status','>',0)
+                ->whereIn('o.status', [1, 3, 6])
+                ->count();
+//            结算的
+            $data_list[$key]['month_strtotime_balance'] = FundOrderGs::alias('o')
+                ->join('member m', 'o.uid = m.id')
+                ->where('m.role_name', $role_name)
+                ->where('o.create_time', '>=', $start_time)
+                ->where('o.create_time', '<=', $end_time)
+                ->where('o.status','=',3)
+                ->count();
+
+
             $data_list[$key]['interest_tracking_total'] = Db::name('interest')
-                ->where('create_time', '>=', $start_time)
-                ->where('create_time', '<=', $end_time)
+                ->alias('i')
+                ->join('member m', 'i.uid = m.id')
+                ->where('m.role_name', $role_name)
+                ->where('i.create_time', '>=', $start_time)
+                ->where('i.create_time', '<=', $end_time)
                 ->count();
 
         }
@@ -132,14 +161,14 @@ class Data extends Admin
           ->addColumns([ // 批量添加数据列
 //                ['id', 'ID'],
             ['create_time', '日期', 'date'],
-            ['purchase_tracking_total', '购买优投'],
-            ['month_strtotime_balance', '结算优投'],
-//            ['interest_tracking_total', '购买小金库', 'link', url('userInterest', ['create_time' => '__date_strtotime__']), '', ''],
+            ['purchase_tracking_total', '购买优投', 'link', url('fundlist', ['status' => 1,'create_time' => '__date_strtotime__','role_name' => $role_name]), '', ''],
+            ['month_strtotime_balance', '结算优投', 'link', url('fundlist', ['status' => 2,'create_time' => '__date_strtotime__','role_name' => $role_name]), '', ''],
+            ['interest_tracking_total', '购买小金库', 'link', url('userInterest', ['create_time' => '__date_strtotime__','role_name' => $role_name]), '', ''],
 //            ['effective_contract', '有效合约(个)'],
 //            ['new_open_contract', '新开合约(个)', 'link', url('contract', ['status' => 1, 'create_time' => '__date_strtotime__']), '_blank', 'pop'],
 //            ['settlement_contract', '结算合约(个)', 'link', url('contract', ['status' => 2, 'create_time' => '__date_strtotime__']), '_blank', 'pop'],
             ['effective_user', '有效用户(个)'],
-            ['user_recharge', '用户充值(个)', 'link', url('userRecharge', ['create_time' => '__date_strtotime__']), '', ''],
+            ['user_recharge', '用户充值', 'link', url('userRecharge', ['create_time' => '__date_strtotime__','role_name' => $role_name]), '', ''],
             ['user_first_recharge', '当日首充(个)'],
             ['user_run', '用户跑(个)', 'link', url('userlist', ['last_login_time' => '__month_strtotime__']), '', '', '用信户息'],
             ['new_reg', '新注册用户数(个)', 'link', url('userlist', ['create_time' => '__date_strtotime__']), '', '', '用户信息'],
@@ -152,6 +181,7 @@ class Data extends Admin
 //            ->addTimeFilter('create_time') // 添加时间段筛选
             ->setSearchArea([
                 ['daterange', 'create_time', '时间', '', '', ['format' => 'YYYY-MM-DD']],
+                ['select', 'role_name', '白名单', '', '', $this->user_role_name],
             ])
             ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
           ->setRowList($data_list) // 设置表格数据
@@ -169,6 +199,7 @@ class Data extends Admin
         // 获取查询条件
         $map = $this->getMap();
         $day_start_time = input('create_time');
+        $role_name = urldecode(input('role_name'));
         $end_time = $day_start_time + 24 * 3600;
         $map[]=['money_recharge.create_time','>=', $day_start_time];
         $map[]=['money_recharge.create_time','<', $end_time];
@@ -181,6 +212,7 @@ class Data extends Admin
                 unset( $map[$key] );
             }
         }
+        $map[]=['member.role_name','=', $role_name];
         // 数据列表
         $data_list = RechargeModel::getAll($map, $order);
         foreach ($data_list as &$value){
@@ -208,6 +240,69 @@ class Data extends Admin
           ->fetch(); // 渲染模板
     }
 
+//    购买优投/结算
+    public function fundlist()
+    {
+        cookie('__forward__', $_SERVER['REQUEST_URI']);
+        // 获取查询条件
+        $map = $this->getMap();
+        $day_start_time = input('create_time');
+        $status = input('status');
+        $role_name = urldecode(input('role_name'));
+        if($status==1){
+            $map[]     = ['o.status', 'in', [1, 3, 6]];
+        }else{
+            $map[]=['o.status','=', 3];
+        }
+        $map[]=['m.role_name','=', $role_name];
+        $end_time = $day_start_time + 24 * 3600;
+        $map[]=['o.create_time','>=', $day_start_time];
+        $map[]=['o.create_time','<', $end_time];
+        $order = $this->getOrder();
+        foreach ($map as $key => $value) {
+            if($value[0] == 'create_time'){
+                unset( $map[$key] );
+            }
+        }
+        // 数据列表
+//        $data_list = Interest::getAll(1,$map, $order);
+        $res       = FundOrderGsModel::getFollowList(1,$map, $order);
+        $data_list = $res['list'] ?? [];
+        foreach ($data_list as &$value){
+            $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
+            $value['user_info'] = "<p>{$value['username']}</p><p>" . $value['mobile'] . "</p>";
+            $value['codetype']     = $this->documentary_array[$value['order_type']];
+        }
+        return ZBuilder::make('table')
+            ->setPageTitle('持仓优投订单（合约）')
+            ->setSearchArea([
+                ['text', 'order_sn', '订单号', 'like'],
+                ['text', 'm.name', '姓名', 'like'],
+                ['text', 'o.mobile', '手机号', 'like'],
+            ])
+            ->addColumns([ // 批量添加数据列
+                ['id', 'id'],
+                ['order_sn', '订单号'],
+                ['codetype', '订单类型'],
+                ['user_info', '姓名/手机号码'],
+                ['role_name', '白名单', $this->user_role_name],
+                ['trader_texta', '操盘师'],
+                ['commission', '佣金比'],
+                ['create_time', '开始时间', 'datetime'],
+                ['fundendtime', '结束时间', 'datetime'],
+                ['confirm_time', '确认时间', 'datetime'],
+                ['money', '合约金额'],
+                ['fund_contract', '合约天数'],
+                ['balance', '持有收益'],
+                ['settlement_last_time', '上次结算时间', 'datetime'],
+                ['settlement_time', '结算时间', 'datetime'],
+                ['settlement_amount', '结算收益'],
+            ])->setTableName('FundOrder')
+            ->setRowList($data_list) // 设置表格数据
+            ->hideCheckbox()
+            ->fetch(); // 渲染模板
+    }
+
 //    购买小金库
     public function userInterest()
     {
@@ -215,6 +310,7 @@ class Data extends Admin
         // 获取查询条件
         $map = $this->getMap();
         $day_start_time = input('create_time');
+        $role_name = urldecode(input('role_name'));
         $end_time = $day_start_time + 24 * 3600;
         $map[]=['i.create_time','>=', $day_start_time];
         $map[]=['i.create_time','<', $end_time];
@@ -224,13 +320,14 @@ class Data extends Admin
                 unset( $map[$key] );
             }
         }
+        $map[]=['m.role_name','=', $role_name];
         // 数据列表
         $data_list = Interest::getAll($map, $order);
         foreach ($data_list as &$value){
             $value['mobile'] = privacy_info_switch('mobile',$value['mobile']);
         }
         return ZBuilder::make('table')
-            ->setSearch(['mid' => '用户ID', 'member.name' => '姓名', 'member.mobile' => '手机号']) // 设置搜索框
+            ->setSearch(['m.name' => '姓名', 'mobile' => '手机号']) // 设置搜索框
             ->addColumns([ // 批量添加数据列
                 ['id', 'ID'],
                 ['order_number', '订单号'],
@@ -515,11 +612,14 @@ class Data extends Admin
             $data_list[$key]['top_name'] = Member::getTopLevel($value['mid'],$value['mid']);
             $totalsum = $totalsum + $value['money'];
         }
-        $totalsum = RechargeModel::
-                alias('money_recharge')
-            ->where('money_recharge.status',1)
-            ->where('money_recharge.is_first',1)
-            ->sum('money');
+
+//        $totalsum = RechargeModel::
+//                alias('money_recharge')
+//            ->where($map)
+//            ->where('money_recharge.status',1)
+//            ->where('money_recharge.is_first',1)
+//            ->sum('money');
+        $totalsum = RechargeModel::gettotalsum($map);
         $html = <<<EOF
             <br><p>总金额为：{$totalsum}元</p>
 EOF;

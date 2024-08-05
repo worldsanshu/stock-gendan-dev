@@ -743,6 +743,12 @@ class Builder extends ZBuilder
             }
             $url_value = $url_value[0] . '/' . $url_value[1] . '/' . $url_value[2];
             $url_value = strtolower($url_value);
+            //去掉?后的参数 
+            $pos = strpos($url_value, '?');
+            if ($pos !== false) { 
+                $url_value = substr($url_value, 0, $pos);
+            } 
+            
             return Role::checkAuth($url_value, true);
         }
         return true;

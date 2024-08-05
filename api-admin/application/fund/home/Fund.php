@@ -1891,9 +1891,30 @@ class Fund extends Common
         if (empty($row)) {
             ajaxmsg('未找到优投', 0);
         }
-        if ($row->status != 1 && $row->status != 6) {
-            ajaxmsg('状态错误', 0);
+//        判断是否追加过
+        if($row['add_money'] > 0){
+            $old_money = $row['money'] - $row['add_money'];  //原合约金额
+            if($old_money < ($money + $row['add_money'])){
+                ajaxmsg('已超过最大追加金额！', 0);
+            }
+        }else{
+            if($row['money'] < $money){
+                ajaxmsg('已超过最大追加金额！', 0);
+            }
         }
+
+
+//        2每日跟单  3一键跟单
+        if($row['order_type'] == 2){
+            if ($row->status != 0) {
+                ajaxmsg('已确认订单无法追加！', 0);
+            }
+        }elseif ($row['order_type'] == 3){
+            if ($row->status != 1 && $row->status != 6) {
+                ajaxmsg('订单状态暂不支持追加！', 0);
+            }
+        }
+
 
         $user_balance = Money::getMoney($uid);
         $balance      = $user_balance['account'] / 100;//转为元
@@ -1901,6 +1922,8 @@ class Fund extends Common
         if ($balance < $money) {
             ajaxmsg('余额不足', 0);
         }
+//        获取最高金额--目前跟单表只有通过天数去获取周期信息，后期建议调整
+//        $fund_viptrade_list = Db('fund_viptrade')->where('cycle', $row['fund_contract'])->where('traderid', $trader_id)->find();
 
         $row->add_money += $money;
         $row->money     += $money;

@@ -76,6 +76,10 @@ class Recharge extends Common
                     ['support_type','in',[2, 3]] //仅提现
                     ];
                 $list = PaymentModel::where($map)->field($filed)->order('sort asc ,id desc')->select();
+//                添加提现方式
+                foreach ($list as &$value){
+                    $value['WithdrawalTypeSelect'] = PaymentModel::WithdrawalTypeSelect($value['type']);
+                }
             }elseif ($type=='currency'){
                 $map = [['status', 'eq', 1],['type','eq', $type]];
                 $list = PaymentModel::where($map)->field($filed)->order('sort asc ,id desc')->select();

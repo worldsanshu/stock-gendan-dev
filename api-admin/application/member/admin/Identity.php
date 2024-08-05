@@ -126,6 +126,7 @@ class Identity extends Admin
     public function edit($id = null)
     {
         if ($id === null) $this->error('缺少参数');
+        $privacy = cookie('__privacy__');
         // 保存数据
         if ($this->request->isPost()) {
             $data = input();
@@ -140,7 +141,13 @@ class Identity extends Admin
                 $data["card_pic_back"] = null;
                 $data["card_pic_hand"] = null;
                 $data["passport_pic"] = null;
+            }else{
+                if($privacy == 'close'){
+                    unset($data['mobile']);
+                    unset($data['id_card']);
+                }
             }
+
             if (MemberModel::update($data)) {
                 $member = MemberModel::get($data['id']);
                 Hook::listen('member_id_auth', $member);
@@ -203,7 +210,6 @@ class Identity extends Admin
 //EOF;
 
         //        开启才能看隐私信息
-        $privacy = cookie('__privacy__');
         if($privacy == 'close'){
             $info['id_card'] = privacy_info_switch('id_card',$info['id_card']);
             $info['mobile'] = privacy_info_switch('mobile',$info['mobile']);
