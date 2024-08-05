@@ -1058,7 +1058,7 @@ class Fund extends Common
         $order         = 'id desc';
         $page_size     = 20;
         $field         = '*,headimgurl headimgurl_text';
-        $domain        = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+        $domain        = $_SERVER['SERVER_NAME'] ? "https://" . $_SERVER['SERVER_NAME'] : "https://" . $_SERVER['HTTP_HOST'];
 
         if (isset($trader_list_type) && $trader_list_type == 1) {
             unset($map['type']);
@@ -1207,7 +1207,7 @@ class Fund extends Common
             ->order('to.create_time desc')
             ->limit(5)
             ->select()->toArray();
-        $domain           = $_SERVER['SERVER_NAME'] ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['HTTP_HOST'];
+        $domain           = $_SERVER['SERVER_NAME'] ? "https://" . $_SERVER['SERVER_NAME'] : "https://" . $_SERVER['HTTP_HOST'];
         $form['head_img'] = $form['headimgurl_text'] ?: $domain . '/uploads/default/user.jpg';
 
         foreach ($list as $k => $v) {

@@ -310,24 +310,7 @@ return [
         'stock_loss_close'                    => '尊敬的会员#var#,您的订单号#order_id#的配资的操盘资金低于平仓线，已自动平仓',
     ],
     //支付
-    'alipay'               => [
-        //应用ID,您的APPID。
-        'app_id'               => "2019041663951167",
-        //商户私钥, 请把生成的私钥文件中字符串拷贝在此
-        'merchant_private_key' => "MIIEowIBAAKCAQEAoKN6QppJXZj1ZSAwES0l3sRU0zLxFa9ocv/gpFpdws/HenpclUHrLBjpjk3T+9QGZ9KoY9wH0y66BYLTLRoGeoe9mPljz69XXtDeIvKHY56QA8nOfhfy18qynpIJhSaFGqNLTXsy0vYnVBNanb4jYTcdbS04PwnZfOBTWKuZug//FwZ2ckvS1NZ6iElpB/NJRUHdWCuyK8zyFQS7XzeDiHdhYaxxtzzs9hPWF1orcQzQQ3UamvJ4Saq8ssTW2xFttK17LVYdHyAVvCXsdVMKq8JY1SbwJ01S8GOA/mcuqEJyMkRtrDNk25vCcWvNHBkbc28DhlBy0rfv7+vqavp3tQIDAQABAoIBAQCNBHYDmeXl4K0sBUGtEnE4Sioc7Y9udfm/WpkeLqY4qqZ3AovcC24j3ArL/c6mN88XvXpNj47e+RocVGiGI16kmhz6+ZOBcm/EsJ8RFs97yGqsqLA5SVTJ0wtS4OiylsoqREeK0Sggwi5sREE8UPpGEVgny5ag4Eios1T3dk0RZC022x/R0NoY81kZOtANlclSLW6WwmSYCAdUgIuNg/dykcuzeQq8YNVJ1ZIlHFmrVVKzvylT/C+B9UQPKYdTDlxFc3IlV3NZU3eH7jutU/GOmKYjwu7UD+pnXhGATN2dOwPnHMOK11az1TxiS5S8OJs+8XO7QIrmuAVhiXj3dZ2BAoGBANNMglfZGAuTN+W8Dxo44P2GiNCTumjbmgcGrvv/Rv9O6HOmiZDLgGNL22OcnsCnOVS9z1NahNMIlkMFeHSUStFpGuCQX7Qyu6k5vsuiLk6xyNJkSL6GZYen1D5U7xd0lV6tW+Ac11pKZN4mbdLSmoMTd7eP8ROk3X6pBfJ45YHZAoGBAMKfUSHDL8YlEFL+OZcWhoJQ9pg84fATwF42OPwGHHUaNYhzQuyk2IcgKQ0jk/+NVR6txoqGp9T/s5r1cpY6gUT5pWa55XHNMj7Jdy852B2OUVvh1QQV/dFozxU/KgjPpOI+HqG1wapeU/TLZInje9IrZy+R9+XZGanRF91+E189AoGAbivXTmywX+Cr5YovqbF8hlQuY+qS6HeQERfIBzasUxRWmW59DdU9pQh5ZK/WCodmmiu5vTFWTh6NEnb4vnhPpm6SCALfE7rcJDkqpUxzrq5+Ek0drNGwgJHeVX29iFJOS6ZCYFFJbBecDkSlQKZ0z+FHq5tOzLpKju8cXbfxmskCgYAuKEi+oCMZdDrd5AtWiPIXwAnr6yyOmrCZ53Q2WWCwaSnfFa7+ns33pin2QsTb6/IPF5mpyuvM+WPoUWP+uxtjd23B4j7HcaoD+BX7LlXSFKm5B+NUV77dxmSunk9izZRGUANFyOyIclypBv/uL/Ry0PZk8tJ/QbDzdHKbhkYj5QKBgCNFJIiQPadg449y5Cz5wEZDp/pvnEqa3kQkpz8jQLUa//fz0t4b6QmN2TzL9ynrUvymWDD4Vwkqq7VlKixq+BtMlFPspNDe5YQLFbhAe4EfGhbG8xQVDMMEvpd7PPWbqDyUR8PK1pxZMkg6lXsbq6A7swk5LwziJoOHlcgbKK7e",
-        //异步通知地址
-        'notify_url'           => "http://" . $_SERVER['HTTP_HOST'] . "/index/notify/alipay.html",
-        //同步跳转
-        'return_url'           => "http://" . $_SERVER['HTTP_HOST'] . "/wap/member/index",
-        //编码格式
-        'charset'              => "UTF-8",
-        //签名方式
-        'sign_type'            => "RSA2",
-        //支付宝网关
-        'gatewayUrl'           => "https://openapi.alipay.com/gateway.do",
-        //支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
-        'alipay_public_key'    => "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoKN6QppJXZj1ZSAwES0l3sRU0zLxFa9ocv/gpFpdws/HenpclUHrLBjpjk3T+9QGZ9KoY9wH0y66BYLTLRoGeoe9mPljz69XXtDeIvKHY56QA8nOfhfy18qynpIJhSaFGqNLTXsy0vYnVBNanb4jYTcdbS04PwnZfOBTWKuZug//FwZ2ckvS1NZ6iElpB/NJRUHdWCuyK8zyFQS7XzeDiHdhYaxxtzzs9hPWF1orcQzQQ3UamvJ4Saq8ssTW2xFttK17LVYdHyAVvCXsdVMKq8JY1SbwJ01S8GOA/mcuqEJyMkRtrDNk25vCcWvNHBkbc28DhlBy0rfv7+vqavp3tQIDAQAB",
-    ],
+
     'Email'                => [
         'host'        => Env::get('Email.host','smtp.gmail.com'),
         'charSet'     => 'UTF-8',

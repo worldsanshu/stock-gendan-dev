@@ -183,7 +183,7 @@ class Index extends Admin
             ['from_to', '来源'],
             ['level', '会员级别', 'select', $level_list],
 //            ['remarks', '备注', 'select', $remarksdata], 暂时不知为什么是下拉框
-            ['remarks', '备注', $remarksdata],
+            ['remarks', '备注', 'text.edit'],
             ['role_name', '白名单', 'select', $role_name],
             ['account', '账户余额/活动金余额'],
             ['account2', '冻结金额/保证金金额'],
@@ -1155,7 +1155,7 @@ class Index extends Admin
                 $isBuy = '是';
             }
             if (empty($value['username'])) {
-                $value['username'] = '未认证';
+                $value['username'] = '未设置';
             }
             $value['title'] = "[用户id:{$value['id']}]-[账户:{$value['mobile']}]-[是否投资:{$isBuy}]-[合伙人级别:{$level_array[$value['level']]}]-[姓名:{$value['username']}]";
             if ($value['not_in'] == 1) {
@@ -1238,7 +1238,7 @@ class Index extends Admin
                 $isBuy = '是';
             }
             if (empty($value['username'])) {
-                $value['username'] = '未认证';
+                $value['username'] = '未设置';
             }
             $value['title'] = "[用户id:{$value['id']}]-[账户:{$value['mobile']}]-[是否投资:{$isBuy}]-[合伙人级别:{$level_array[$value['level']]}]-[姓名:{$value['username']}]";
             if ($value['not_in'] == 1) {

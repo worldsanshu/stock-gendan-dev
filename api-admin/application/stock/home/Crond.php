@@ -2130,7 +2130,8 @@ class Crond extends Home
      */
     public function getkuaixun()
     {
-        $url  = 'https://zhibo.sina.com.cn/api/zhibo/feed?page=1&page_size=20&zhibo_id=152&tag_id=0&dire=f&dpc=1&pagesize=20&id=3640889&type=1';
+
+        $url  = 'https://zhibo.sina.com.cn/api/zhibo/feed?zhibo_id=152&id=&tag_id=0&page=1&page_size=20&type=0';
         $data = http_request($url);
         if ($data) {
             $data      = json_decode($data, true);
@@ -2228,25 +2229,11 @@ class Crond extends Home
     public function autoDailyTrading()
     {
         $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
-        if ($ids) {
-            $list = FundDaylineModel::where(['id' => $ids])->where('status', 2)->select();
-        } else {
-            $list = FundDaylineModel::where('status', 2)->select();
-        }
-
-        foreach ($list as $info) {
-
-            if ($info['position']) {
-                $position = $info['position'] / 100;
-            } else {
-                $position = 1;
-            }
 
 
-            //计算收入
-            echo FundOrderGsModel::settlementFundgs($ids);
-            echo "\r\n结算成功\r\n";
-        }
+        //计算收入
+        echo FundOrderGsModel::settlementFundgs($ids);
+        echo "\r\n结算成功\r\n";
     }
 
     /**
