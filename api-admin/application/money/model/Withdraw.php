@@ -84,6 +84,7 @@ class Withdraw extends Model
             return false;
         }
         $withdraw = Db('money_withdraw')->where('id', $id)->find();
+        if($withdraw['status'] != 0)return ['status' => false, 'msg' => '订单已审核'];
         $user_mobile = Db('member')->where('id', $withdraw['mid'])->value('mobile');
         $up_withdraw['status'] = $status;
         $up_withdraw['id'] = $id;
@@ -171,6 +172,9 @@ class Withdraw extends Model
           ->find();
         $type = isset($parameter['type']) ? $parameter['type'] : 0;
         $bank_id = $parameter['bank_id'];
+
+        $data['mid'] = $parameter['mid'];
+        $money = $parameter['money'] * 100;  //提现金额
         //提现到银行卡
         if ($type == 0) {
             $bank = BankModel::bankInfo($bank_id);
@@ -181,13 +185,20 @@ class Withdraw extends Model
             $wallet = Db::name('wallet')
               ->alias('w')
               ->join('money_payment p', 'w.payment_id=p.id', 'LEFT')
-              ->field('p.name,w.address')
+              ->field('p.name,w.address,p.exchange_rate')
               ->where(['w.id' => $bank_id])
               ->find();
             $data['bank'] = $wallet['name'] . "|" . $wallet['address'] . "|" . $names['name'];
+//            如果有汇率
+            $data['exchange_rate'] = $wallet['exchange_rate'];
+            $data['exchange_rate_money'] = 0; //汇率金额
+            if($wallet['exchange_rate'] > 0){
+                $data['exchange_rate_number'] = $parameter['money'] / $wallet['exchange_rate'];
+//                $data['exchange_rate_number'] = sprintf("%.2f", $data['exchange_rate_number']);// 保留两位小数
+                $data['exchange_rate_number'] = sprintf("%.2f", floor($data['exchange_rate_number'] * 100) / 100); // 保留两位小数，不四舍五入
+            }
         }
-        $data['mid'] = $parameter['mid'];
-        $money = $parameter['money'] * 100;  //提现金额
+
 //        $data['money'] = $parameter['money'] * 100;  //提现金额
 //        查询手续费,如果用户单独设置暗扣
         if($names['withdrawal_commission'] > 0){
@@ -199,6 +210,7 @@ class Withdraw extends Model
         }
         $data['money'] = $money;
         $data['real_money'] = bcsub($money, $data['fee']);  //扣除手续费用之后的金额
+        $data['real_money'] = bcsub($data['real_money'], $data['exchange_rate_money']);  //在扣除汇率金额
         $data['order_no'] = 'tx' . generate_rand_str(10, 3);
         $data['create_time'] = time();
         $data['create_ip'] = get_client_ip(1);
@@ -246,6 +258,7 @@ class Withdraw extends Model
             return false;
         }
         $withdraw = Db('money_withdraw')->where('id', $id)->find();
+        if($withdraw['status'] != 0)return ['status' => false, 'msg' => '订单已审核'];
         $user_mobile = Db('member')->where('id', $withdraw['mid'])->value('mobile');
         $up_withdraw['status'] = 1;
         $up_withdraw['id'] = $id;

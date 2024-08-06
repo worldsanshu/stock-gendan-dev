@@ -89,11 +89,14 @@ class Profit extends Common
         $interest_config['profit_start_time'] = config('profit_start_time');
         $interest_config['profit_end_time'] = config('profit_end_time');
         $currentTime = strtotime(date('H:i:s', time()));
-
-
-        if($interest_config['profit_start_time'] > $currentTime || $interest_config['profit_end_time'] < $currentTime){
+        $profitStartTime = strtotime(date('H:i:s', $interest_config['profit_start_time'])); //取时间部分
+        $profitEndTime = strtotime(date('H:i:s', $interest_config['profit_end_time'])); //取时间部分
+        if($profitStartTime > $currentTime || $profitEndTime < $currentTime){
             ajaxmsg('非提盈时间', 0);
         }
+//        if($interest_config['profit_start_time'] > $currentTime || $interest_config['profit_end_time'] < $currentTime){
+//            ajaxmsg('非提盈时间', 0);
+//        }
         if ($data['money'] < 0) {
             ajaxmsg('提取金额错误！', 0);
         }

@@ -144,6 +144,7 @@ class Index extends Admin
             ->addFormItems([ // 批量添加表单项
                 ['text', 'name', '名称'],
                 ['text', 'buy_num', '每日可购买次数', '0 为不限制购买'],
+                ['number', 'buy_number', '虚拟购买人数', '在客户端会加上实际购买人数显示'],
             ])
             ->addRadio('white_buy', '限制白名单购买', '', ['0' => '限制购买', '1' => '允许购买'])
             ->addImage('banner', '图片')
@@ -173,9 +174,13 @@ class Index extends Admin
 
         $res       = Interest::getList($page, $map, $order);
         $data_list = $res['list'] ?? [];
+        // 初始化总和变量
+        $totalmoney = 0;
+        $totalinterest = 0;
+        $totalsum = 0;
         foreach ($data_list as &$v) {
             $v['mobile'] = privacy_info_switch('mobile',$v['mobile']);
-
+            $v['total_money'] = sprintf("%.2f", $v['money'] + $v['interest']);
             $username       = empty($v['username']) ? '--' : $v['username'];
             $v['user_info'] = "<p>" . $username . "</p><p>" . $v['mobile'] . "</p>";
             if ($v['status'] == 1) {
@@ -183,7 +188,15 @@ class Index extends Admin
             } else {
                 $v['new_status'] = '<span style="color:green">返利</span>';
             }
+            $totalmoney += $v['money'];
+            $totalinterest += $v['interest'];
+            $totalsum += $v['total_money'];
         }
+
+        $html = <<<EOF
+            <p>金额总计为：{$totalmoney}元<br>利息总计为：{$totalinterest}元<br>
+              总和为：{$totalsum}元</p>
+EOF;
         // 分页数据
         $page             = $data_list->render();
 
@@ -215,6 +228,7 @@ class Index extends Admin
                 ['money', '买入金额'],
                 ['user_info', '姓名/手机号'],
                 ['interest', '利息(元)'],
+                ['total_money', '总和(元)'],
                 ['new_status', '状态', ],
                 ['buy_time', '购买时间', 'datetime'],
                 ['rebate_time', '返利时间', 'datetime'],
@@ -227,6 +241,7 @@ class Index extends Admin
             ->addOrder('id,is_del')
             ->replaceRightButton(['status' => '2'], '<button class="btn btn-danger btn-xs" type="button" disabled>不可操作</button>')
             ->setRowList($data_list) // 设置表格数据
+            ->setExtraHtml($html, 'table_bottom')
             ->fetch(); // 渲染模板
     }
 

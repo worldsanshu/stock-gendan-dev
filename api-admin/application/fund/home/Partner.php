@@ -126,10 +126,17 @@ class Partner extends Common
       
       $data['my_directly_ordinary'] = Member::where('partner_parent_id',$uid)->where(['is_buy'=>1,'level'=>0])->count(); //普通合伙人数
       $data['my_directly_first']  = Member::where('partner_parent_id',$uid)->where(['is_buy'=>1,'level'=>1])->count(); //一级合伙人数
-      
-      $data['my_invest_total']  = FundOrderGs::where($map)->where('status', '>', 0)->count();//总优投数
-      $data['my_invest_today']  = FundOrderGs::where($map)->where('status', '>', 0)->whereTime('create_time', 'today')->count();//今日优投
 
+      $todayEnd = strtotime(date('Y-m-d 23:59:59')); //今天的结束时间
+      $data['my_invest_total']  = FundOrderGs::where($map)
+//          ->where('status', '>', 0)
+          ->whereIn('status', [1, 6, 7])
+          ->count();//总优投数
+      $data['my_invest_today']  = FundOrderGs::where($map)
+//          ->where('status', '>', 0)
+          ->whereIn('status', [1, 6, 7])
+          ->where('fundendtime', '>=', $todayEnd)
+          ->count();//今日优投
       //团队用户
       $path = $user->partner_parent_net . ',' . $user->id;
       $level = $user->partner_parent_level + 3; //计算三层团队
@@ -139,8 +146,19 @@ class Partner extends Common
       ->where('is_buy', 1)
       ->column('id');
       $data['team_recharge_today'] = Recharge::whereIn('mid',$teamIds)->whereTime('create_time', 'today')->where('is_first',1)->group('mid')->count();
-      $data['team_invest_today']  = FundOrderGs::whereIn('uid',$teamIds)->where('status', '>', 0)->whereTime('create_time', 'today')->count();//今日优投数
-      $data['team_invest_week']  = FundOrderGs::whereIn('uid',$teamIds)->where('status', '>', 0)->whereTime('create_time', 'week')->group('uid')->count();//一周优投人数
+      $data['team_invest_today']  = FundOrderGs::whereIn('uid',$teamIds)
+//          ->where('status', '>', 0)
+          ->whereIn('status', [1, 6, 7])
+          ->where('fundendtime', '>=', $todayEnd)
+//          ->whereTime('create_time', 'today')
+//          ->group('uid')
+          ->count();//今日优投数
+      $data['team_invest_week']  = FundOrderGs::whereIn('uid',$teamIds)
+//          ->where('status', '>', 0)
+          ->whereIn('status', [1, 6, 7])
+          ->whereTime('create_time', 'week')
+//          ->whereTime('fundendtime','week')
+          ->group('uid')->count();//一周优投人数
       
       $teamIncome = round($teamIncome , 2);
       $data['team_income'] = $teamIncome;//团队收益
@@ -212,8 +230,10 @@ class Partner extends Common
       ->where('is_buy', 1)
       ->column('id');
       $list = FundOrderGs::whereIn('uid',$teamIds)
-      ->where('status', '>', 0)
+//      ->where('status', '>', 0)
+          ->whereIn('status', [1, 6, 7])
       ->whereTime('create_time', 'week')
+//      ->whereTime('fundendtime', 'week')
       ->group('uid')
       ->order('id desc')
       ->paginate()->each(function($iteam){
@@ -234,10 +254,13 @@ class Partner extends Common
       ->where([['partner_parent_level', '<=', $level]])
       ->where('is_buy', 1)
       ->column('id');
+      $todayEnd = strtotime(date('Y-m-d 23:59:59')); //今天的结束时间
       $list = FundOrderGs::whereIn('uid',$teamIds)
-      ->where('status', '>', 0)
-      ->whereTime('create_time', 'today')
-      //->group('uid')
+//      ->where('status', '>', 0)
+          ->whereIn('status', [1, 6, 7])
+      ->where('fundendtime', '>=', $todayEnd)
+//      ->whereTime('fundendtime', 'today')
+//      ->group('uid')
       ->order('id desc')
       ->paginate()->each(function($iteam){
           $iteam->user_info = Member::where('id', $iteam->uid)->find();

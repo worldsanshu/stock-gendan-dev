@@ -1646,7 +1646,6 @@ class Fund extends Common
         } else {
             $map[] = ['order_type', 'neq', 1];
         }
-
         $today = input('is_today', 0);
         //总收益
         $field        = '*,create_time create_time_text';
@@ -1656,10 +1655,14 @@ class Fund extends Common
             ->field($field)
             ->where(function ($query) use ($today) {
                 if (!empty($today)) {
-                    $query->whereTime('create_time', 'today');
+//                    $query->whereTime('create_time', 'today');
+                    $todayEnd = strtotime(date('Y-m-d 23:59:59')); //今天的结束时间
+                    $query->where('fundendtime', '>=', $todayEnd);
+
                 }
             })
-            ->where('status', '>', 0)
+            ->whereIn('status', [1, 6, 7])
+//            ->where('status', '>', 0)
             ->order($order)
             ->paginate(['page' => $page, 'list_rows' => $page_size]);
         $data['list'] = $list;

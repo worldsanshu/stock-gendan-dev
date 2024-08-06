@@ -68,6 +68,7 @@ class Recharge extends Model
             return ['status' => false, 'msg' => '缺少主键'];
         }
         $charge              = Db('money_recharge')->where('id', $id)->find();
+        if($charge['status'] != 0)return ['status' => false, 'msg' => '订单已审核'];
         $up_charge['status'] = $status;
         $up_charge['remark'] = $remark;
         $up_charge['id']     = $id;

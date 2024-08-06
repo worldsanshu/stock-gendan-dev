@@ -81,9 +81,8 @@ class Invite extends Common
         $rande = randerode($mid);
         $shareurl =   $this->http() . config('share_domain') . "/index/share/index?url=" . $rande;//邀请链接
 
-//        $shareurl = $this->http() .config('share_domain') . "/index/index/inviteuser?recom_id=" . $rande;
-//        新链接，在前端处理
-        $shareurl = "/pages/login/login?type=1&recom_id=" . $rande;
+        $shareurl = $this->http() .config('share_domain') . "/index/index/inviteuser?recom_id=" . $rande;
+
 
 
         $qrcode =  $this->http() . config('share_domain') . "/index/share/index?url=" . $shareurl;//二维码

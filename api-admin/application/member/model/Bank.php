@@ -51,7 +51,7 @@ class Bank extends Model
         $wallets = Db::name('wallet')
           ->alias('w')
           ->join('money_payment p ', 'w.payment_id = p.id')
-          ->field('w.id,p.name,w.alias,w.address,p.agreement,w.payment_code')
+          ->field('w.id,p.name,w.alias,w.address,p.agreement,w.payment_code,p.exchange_rate')
           ->where(['w.mid' => $mid, 'w.is_delete' => 0, 'p.status' => 1])
           ->select();
         return $wallets;

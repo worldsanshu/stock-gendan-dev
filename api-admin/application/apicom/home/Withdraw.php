@@ -57,6 +57,7 @@ class Withdraw extends Common
             $new_w['bank'] = $w['name'];
             $new_w['card'] = $w['address'];
             $new_w['type'] = 1;
+            $new_w['exchange_rate'] = $w['exchange_rate'];
             $new_w['payment_code'] = $w['payment_code']?get_img_url($w['payment_code']):'';
             $wallets_list[] = $new_w;
         }

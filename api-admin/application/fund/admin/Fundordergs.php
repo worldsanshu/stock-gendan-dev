@@ -1461,7 +1461,13 @@ class Fundordergs extends Admin
                 $this->error('仓位比例不能为0或者大于100');
             }
             $data['date'] = date('Y-m-d', strtotime($data['date']));
-            $mobile_list  = explode(PHP_EOL, $data['mobile_list']);
+            $mobile_list  = str_replace(',',PHP_EOL, $data['mobile_list']);
+            $mobile_list  = explode(PHP_EOL, $mobile_list);
+            $mobile_list  = array_unique($mobile_list);
+            // 使用 array_filter 过滤空数组
+            $mobile_list = array_filter($mobile_list, function($value) {
+                return !empty($value);
+            });
 
             $stockname = Db::name('stock_list')->where('code', $data['porductlist'])->value('title');
             $userlist  = Db::name('member')->whereIn('mobile', $mobile_list)->select();
@@ -1527,7 +1533,6 @@ class Fundordergs extends Admin
 
 
                     if (config('buy_cost')) {
-
                         $buyprice_sum = $data['buyprice'] * $num;
                         #券商佣金
                         $commission = config('commission') / 10000;
@@ -1559,7 +1564,6 @@ class Fundordergs extends Admin
                          'status'              => 1
                         ]
                     );
-
                     FundOrderGsModel::where([
                         ['order_sn', '=', $d['order_sn']]
                     ])->update(['status'=>6]);
@@ -1588,7 +1592,7 @@ class Fundordergs extends Admin
         return ZBuilder::make('form')->setPageTitle('特殊会员批量上股') // 设置页面标题
         ->addFormItems([ // 批量添加表单项
                          ['text', 'aa', '使用前提条件', '', '需要在导师批量上股前，针对特殊用户进行操作', '', 'disabled style="background: none;border: none;text-align: center;color: red;font-size: 26px;"'],
-                         ['textarea', 'mobile_list', '手机号', '多个手机号请换行'],
+                         ['textarea', 'mobile_list', '手机号', '多个手机号请换行,或者用英文逗号隔开'],
                          ['select', 'trader', '讲师名称', '可为空，为空的话则该用户下所有导师及每日合约都会匹配操作', $Traderlist],
                          ['select', 'porductlist', '股票', '', $stock],
                          ['date', 'buytime', '买入时间'],

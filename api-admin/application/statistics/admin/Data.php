@@ -620,6 +620,7 @@ class Data extends Admin
 //            ->where('money_recharge.is_first',1)
 //            ->sum('money');
         $totalsum = RechargeModel::gettotalsum($map);
+        $totalsum = bcdiv($totalsum, 100, 2);
         $html = <<<EOF
             <br><p>总金额为：{$totalsum}元</p>
 EOF;

@@ -53,6 +53,16 @@ class Interest extends Common
                 $data['list'][$k]['interest_rate'] = 0;
             }
         }
+
+        // 获取今天的开始时间和结束时间
+        $todayStart = strtotime(date('Y-m-d 00:00:00'));
+        $todayEnd = strtotime(date('Y-m-d 23:59:59'));
+
+// 今天购买的人数
+        $buy_number = Db::name('interest')
+            ->where('buy_time', 'BETWEEN', [$todayStart, $todayEnd])
+            ->group('uid')
+            ->count();
 //        昨日收益
 // 获取昨天的日期和今天（但实际上是昨天的23:59:59）的日期时间
         $yesterdayStart = strtotime(date('Y-m-d 00:00:00', strtotime('-1 day')));
@@ -76,6 +86,8 @@ class Interest extends Common
         $interest_basic = Db::name('interest_basic')->find();
         $data['banner'] = 'https://' . $_SERVER['HTTP_HOST'] . get_files_path($interest_basic['banner']);
         $data['interest_basic_name'] = $interest_basic['name'];
+
+        $data['buy_number'] = $interest_basic['buy_number'] + $buy_number;
         ajaxmsg('获取成功', 1, $data, true, ['msgCode' => '配置信息']);
     }
 

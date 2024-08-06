@@ -34,7 +34,7 @@ class Wallet extends Common
           ->alias('w')
           ->join('money_payment p ', 'w.payment_id = p.id', 'LEFT')
           ->join('admin_attachment tt', 'p.logo = tt.id', 'LEFT')
-          ->field('w.id,p.name,w.alias,w.address,p.agreement,tt.path as logo,p.type,w.bank_code,w.bank_number,w.bank_owner')
+          ->field('w.id,p.name,w.alias,w.address,p.agreement,tt.path as logo,p.type,w.bank_code,w.bank_number,w.bank_owner,p.exchange_rate')
           ->where(['w.mid' => MID, 'w.is_delete' => 0, 'p.status' => 1])
           ->select();
         foreach ($wallet_list as $k => $v) {

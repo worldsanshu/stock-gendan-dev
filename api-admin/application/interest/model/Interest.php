@@ -26,6 +26,19 @@ class Interest extends Model
     return $res ?: [];
   }
 
+  public static function gettotalsum($map = [], $order = 'id desc')
+  {
+    $field = 'i.*,m.mobile,m.name as username,c.name as cname';
+    $res  = self::where($map)
+        ->field($field)
+        ->alias('i')
+        ->join('member m', 'm.id = i.uid')
+        ->join('interest_config c', 'c.id = i.interest_record_id')
+        ->sum('i.money + i.interest');
+
+    return $res;
+  }
+
 
   public static function getAll($map = [], $order = 'id desc')
   {

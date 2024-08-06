@@ -254,7 +254,7 @@ class FundOrderGs extends Model
                 #规费
                 $stock_trading_fees = config('stock_trading_fees') / 1000;
                 if (config('buy_cost')) {
-                    #买入成本
+                    #买入成本=买入总价*券商佣金+买入总价*过户费+买入总价*规费
                     $buy_cost = $buyprice_sum * $commission + $buyprice_sum * $transfer_fee + $buyprice_sum * $stock_trading_fees;
                 } else {
                     $buy_cost = 0;

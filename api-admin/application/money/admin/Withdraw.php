@@ -92,6 +92,10 @@ class Withdraw extends Admin
             }else{
                 $item->payment_type = 'not_payment_type';
             }
+//            如果有汇率
+            if($item->exchange_rate > 0){
+                $item->exchange_rate_money = "<p>" . $item->exchange_rate . "</p><p>" .$item->exchange_rate_number. "</p>";;
+            }
 
 
         });
@@ -156,6 +160,8 @@ class Withdraw extends Admin
             ['money', '提现金额'],
             ['real_money', '实际到账'],
             ['fee', '手续费'],
+            ['exchange_rate', '汇率'],
+            ['exchange_rate_number', '到账数量'],
             ['withdraw_type', '提现方式'],
 //            ['withdraw_type', '提现渠道'],
             ['address', '账号信息'],
@@ -672,6 +678,8 @@ EOF;
                 ['money', '提现金额'],
                 ['real_money', '实际到账'],
                 ['fee', '手续费'],
+                ['exchange_rate', '汇率'],
+                ['exchange_rate_number', '到账数量'],
                 ['withdraw_type', '提现方式'],
 //            ['withdraw_type', '提现渠道'],
                 ['address', '账号信息'],
