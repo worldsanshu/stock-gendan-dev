@@ -6,5 +6,5 @@
   "--": "第三方股票接口的baseURL: ",
   "stockBaseURL": "https://t.jiaoyisuo.xyz/stock/",
   "---": "第三方股票接口的WebSocket URL: ",
-  "stockWSURL": "wss://103.214.22.145:9527"
+  "stockWSURL": "wss://t.jiaoyisuo.xyz:9527"
 }

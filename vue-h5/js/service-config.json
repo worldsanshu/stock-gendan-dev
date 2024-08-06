@@ -6,5 +6,5 @@
   "--": "第三方股票接口的baseURL",
   "stockBaseURL": "https://data.001ghsp.com/stock/api/",
   "---": "第三方股票接口的WebSocket URL",
-  "stockWSURL": "ws://103.214.22.145:9527"
+  "stockWSURL": "wss://t.jiaoyisuo.xyz:9527"
 }
