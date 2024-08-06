@@ -4,7 +4,7 @@
     "https://gentou1.0p0.cn/"
   ],
   "--": "第三方股票接口的baseURL: ",
-  "stockBaseURL": "http://t.jiaoyisuo.xyz/",
+  "stockBaseURL": "http://t.jiaoyisuo.xyz/stock/",
   "---": "第三方股票接口的WebSocket URL: ",
   "stockWSURL": "ws://103.214.22.145:9527"
 }
