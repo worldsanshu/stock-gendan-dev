@@ -234,7 +234,7 @@ class Index extends Admin
         foreach ($recharge_wait as $k=> $item){
             $recharge_wait[$k]['create_time'] = date("Y-m-d H:i:s",$item['create_time']);
             $recharge_wait[$k]['mobile'] = privacy_info_switch('mobile',$recharge_wait[$k]['mobile']);
-
+            $recharge_wait[$k]['money'] = $recharge_wait[$k]['money']/100;
         }
         $this->assign('recharge_wait',$recharge_wait);
         $this->assign('recharge_wait_count',count($recharge_wait));
@@ -247,6 +247,7 @@ class Index extends Admin
             ->where('w.status',0)->select();
         foreach ($withdraw_wait as $k=> $item){
             $withdraw_wait[$k]['mobile'] = privacy_info_switch('mobile',$withdraw_wait[$k]['mobile']);
+            $withdraw_wait[$k]['money'] = $withdraw_wait[$k]['money']/100;
         }
         $this->assign('withdraw_wait',$withdraw_wait);
         $this->assign('withdraw_wait_count',count($withdraw_wait));
