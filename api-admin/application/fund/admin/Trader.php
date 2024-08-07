@@ -132,6 +132,12 @@ class Trader extends Admin
                     foreach ($data['project']['cycle'] as $key => $SFDM) {
                         $prodctdata               = [];
                         $prodctdata['cycle']      = intval($SFDM);
+                        if($prodctdata['cycle'] == 0){
+                            $this->error('交易日内容填写有误!');
+                        }
+                        if($prodctdata['cycle'] > 1000){
+                            $this->error('交易日最高不能超过1000!');
+                        }
                         $prodctdata['cycle_text'] = $SFDM . '个交易日';
                         $prodctdata['commission'] = $data['project']['commission'][$key];
                         $Userlevel = [];
@@ -259,6 +265,12 @@ class Trader extends Admin
                     foreach ($data['project']['cycle'] as $key => $SFDM) {
                         $prodctdata               = [];
                         $prodctdata['cycle']      =intval($SFDM);
+                        if($prodctdata['cycle'] == 0){
+                            $this->error('交易日内容填写有误!');
+                        }
+                        if($prodctdata['cycle'] > 1000){
+                            $this->error('交易日最高不能超过1000!');
+                        }
                         $prodctdata['cycle_text'] = $SFDM . '个交易日';
                         $prodctdata['commission'] = $data['project']['commission'][$key];
                         $Userlevel = [];

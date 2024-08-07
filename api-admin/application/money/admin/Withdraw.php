@@ -92,10 +92,7 @@ class Withdraw extends Admin
             }else{
                 $item->payment_type = 'not_payment_type';
             }
-//            如果有汇率
-            if($item->exchange_rate > 0){
-                $item->exchange_rate_money = "<p>" . $item->exchange_rate . "</p><p>" .$item->exchange_rate_number. "</p>";;
-            }
+
 
 
         });
@@ -544,6 +541,11 @@ EOF;
         // 保存数据
         if ($this->request->isPost()) {
             $data = input();
+            if($data['is_trading']=='on'){
+                $data['is_trading']=1;
+            }else{
+                $data['is_trading']=0;
+            }
             $data['min_money'] = $data['min_money'] < 1 ? 1 : $data['min_money'];
             $result = Db::name('money_withdraw_config')->where("id", 1)->find();
             if ($result){
@@ -561,7 +563,11 @@ EOF;
             ->addFormItems([ // 批量添加表单项
                 ['number', 'ratio', '手续费', '费率按 百分比%'],
                 ['number', 'min_money', '最低提现金额', '数值最少为 1'],
+//                ['radio', 'is_trading', '交易日提现开关', '开启后仅交易日才能提现',['1' => '开启', '0' => '关闭'],'0'],
+                ['switch', 'is_trading', '交易日提现开关', '开启后仅交易日才能提现',''],
+                ['textarea', 'trading_text', '交易日提现文案', '开启交易日提现后显示',''],
             ])
+//            ->setTrigger('is_trading', '1', 'trading_text')
             ->setFormData($info) // 设置表单数据
             ->fetch();
     }

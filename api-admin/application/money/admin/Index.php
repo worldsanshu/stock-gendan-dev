@@ -393,6 +393,40 @@ class Index extends Admin
             ->fetch(); // 渲染模板
     }
 
+
+//    资金批量操作
+    public function moneyUpdate()
+    {
+        // 保存数据
+        if ($this->request->isPost()) {
+            $data             = input();
+            $moneyUpdate = MoneyModel::moneyUpdate($data);
+            if($moneyUpdate['code'] == 0){
+                $this->success($moneyUpdate['message'], cookie('__forward__'));
+            }else{
+                $this->error($moneyUpdate['message']);
+            }
+        }
+        $money_type = ['1' => '余额', '2' => '活动金', '3' => '彩金'];
+        // 使用ZBuilder快速创建表单
+        return ZBuilder::make('form')
+            ->setPageTitle('金额操作') // 设置页面标题
+//            ->addSelect('money_type', '选择操作资金类型', '', $money_type,'1')
+            ->addFormItems([ // 批量添加表单项
+                ['select:7', 'money_type', '选择操作资金类型', '',$money_type,'1'],
+                ['textarea:7', 'mobile_list', '扣款手机号', '多个手机号请换行'],
+//                ['number:6', 'new_account', '需增加金额/元', '负数为扣除，正数为增加'],
+                ['number:7', 'new_account', '余额操作金额/元（负数为扣款，正数为增加余额）', '负数为扣款，正数为增加余额'],
+                ['number:7', 'new_activity_account', '活动金操作金额/元（负数为扣款，正数为增加金额）', '负数为扣款，正数为增加金额'],
+                ['number:7', 'winnings', '彩金操作金额/元（只允许正数）', '只允许正数'],
+                ['textarea', 'remark', '转账说明'],
+            ])
+            ->setTrigger('money_type', '3', 'winnings')
+            ->setTrigger('money_type', '2', 'new_activity_account')
+            ->setTrigger('money_type', '1', 'new_account')
+            ->fetch();
+    }
+
     public function money($id = null)
     {
         if ($id === null) $this->error('缺少参数');
@@ -684,65 +718,5 @@ class Index extends Admin
         }
     }
 
-//    资金批量操作
-    public function moneyUpdate()
-    {
-        // 保存数据
-        if ($this->request->isPost()) {
-            $data             = input();
-            $mobile_list = explode('|', $data['mobile_list']);
-            $errors = [];
-            $result = 0;
-                foreach ($mobile_list as $key => $value){
-                    $user_info             = Db::name('member')->where("mobile", $value)->find();
-
-                    $info             = Db::name('money')->where("mid", $user_info['id'])->find();
-                    if(!$user_info){
-                        $this->error($value . '：号码不存在');
-                    }
-
-                    $account          = $data['new_account'] * 100;
-                    $money1           = ($account + $info['account']);
-
-                    if ($money1 < 0 ) {
-                        $this->error('余额不能为负数');
-                    }
-                    $infos  = Db::name('money')->where("mid", $user_info['id'])->update(['account' => $money1 ?? 0]);
-                    $remark = $data['remark'];
-
-                    if ($infos) {
-                        if ($info['account'] != $money1) {
-                            $straccount = "余额的变化金额：" . ($info['account'] / 100) . "=>" . ($money1 / 100) . "元";
-                        } else {
-                            $straccount = "余额未变化";
-                        }
-
-                        $obj     = ['affect' => $account, 'account' => $money1, 'affect_activity' => 0, 'activity_account' => 0, 'sn' => ''];
-                        $details = "(管理员：" . UID . " ，向uid为：" . $user_info['id'] . " 的资金账户做操作，{$straccount}, 备注：" . $remark . ')';
-
-                        RecordModel::saveData($user_info['id'], '', '', 35, $details, '', 0, $obj);
-
-                        action_log('transfer_add', 'money_transfer', $user_info['id'], UID, $details);
-                    } else {
-                        $this->error('余额更新失败');
-                        continue; // 跳过当前循环迭代
-                    }
-                }
-
-
-                $this->success('编辑成功', cookie('__forward__'));
-
-
-        }
-        // 使用ZBuilder快速创建表单
-        return ZBuilder::make('form')
-            ->setPageTitle('金额操作') // 设置页面标题
-            ->addFormItems([ // 批量添加表单项
-                ['textarea', 'mobile_list', '扣款手机号', '多个手机号用 | 隔开'],
-                ['number:4', 'new_account', '余额需增加金额/元', '负数为扣除余额，正数为增加余额'],
-                ['textarea', 'remark', '转账说明'],
-            ])
-            ->fetch();
-    }
 
 }
