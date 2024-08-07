@@ -79,7 +79,7 @@ class Invite extends Common
         $count_m = Db::name('member_invitation_relation')->where(['mid' => $mid])->count();//邀请用户人数
         $count = Db::name('agents_back_money')->where(['mid' => $mid])->sum('affect');//已赚取佣金
         $rande = randerode($mid);
-        $shareurl =   $this->http() . config('share_domain') . "/index/share/index?url=" . $rande;//邀请链接
+       # $shareurl =   $this->http() . config('share_domain') . "/index/share/index?url=" . $rande;//邀请链接
 
         $shareurl = $this->http() .config('share_domain') . "/index/index/inviteuser?recom_id=" . $rande;
 

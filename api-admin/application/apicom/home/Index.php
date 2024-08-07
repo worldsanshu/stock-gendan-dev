@@ -344,4 +344,5 @@ class Index extends Common
         $data['list'] = $list;
         ajaxmsg('获取成功', 1, $data);
     }
+
 }

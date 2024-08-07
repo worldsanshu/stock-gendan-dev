@@ -580,7 +580,6 @@ class FundOrderGs extends Model
         }
         if ($uid) {
             $wherelist[] = ['uid', '=', $uid];
-
             $list = self::where($wherelist)->select();
         } else {
             $list = self::where($wherelist)->select();
@@ -603,6 +602,7 @@ class FundOrderGs extends Model
             $infodata = FundDaylineModel::where($where)->find();
             //如果有则跳过
             if ($infodata) {
+                printlog($where, "已经存在数据", 'buy');
                 continue;
             }
             $data          = [

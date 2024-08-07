@@ -40,6 +40,7 @@ return [
     'SMS_channel'=>Env::get('SMS.SMS_channel', 'zhonglian'),
     'SMS_channel_config'=>[
         //阿里云 国内短信配置
+        //https://cn.aliyun.com/product/sms?from_alibabacloud=&spm=5176.21213303.J_qCOwPWspKEuWcmp8qiZNQ.1.70532f3dX0J8yQ&scm=20140722.S_product@@%E4%BA%91%E4%BA%A7%E5%93%81@@80687._.ID_product@@%E4%BA%91%E4%BA%A7%E5%93%81@@80687-RL_%E7%9F%AD%E4%BF%A1-LOC_llm-OR_ser-V_3-RE_new2@@cardOld-P0_0
         'AliSMS_cn'               => [
             'internal_sign'   => Env::get('ALISMS.internal_sign', '阿里云短信测试'),//国内 签名
             'internal_key'    => Env::get('ALISMS.internal_key', 'LTAI5tEj3iqz2TPYoYBu7GzV'),//国内 key
@@ -270,7 +271,7 @@ return [
     'paginate'             => [
         'type'      => 'bootstrap',
         'var_page'  => 'page',
-        'list_rows' => 15,
+        'list_rows' => 20,
     ],
     /*每分钟*/
     /*每小时 某分*/

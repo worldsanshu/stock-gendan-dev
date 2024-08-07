@@ -448,7 +448,18 @@ class Fundordergs extends Admin
                 }
                 #把冻结金额返还或扣除冻结金额   ------旧
                 $user_balance = Money::getMoney($Orderinfo['uid']);
-                Money::where('mid', $Orderinfo['uid'])->setDec('freeze', $Orderinfo['money'] * 100);
+//                Money::where('mid', $Orderinfo['uid'])->setDec('freeze', $Orderinfo['money'] * 100);
+
+
+
+                $freeze=$user_balance['freeze']-$Orderinfo['money'] * 100<0 ?0:$user_balance['freeze']-$Orderinfo['money'];
+
+
+
+                Money::where('mid', $Orderinfo['uid'])->update(['freeze'=>$freeze]);
+                // Money::where('mid', $Orderinfo['uid'])->setDec('freeze', $Orderinfo['money'] * 100);
+
+
                 if ($data['status'] == 1) {
                     $info    = $Orderinfo['order_sn'] . '审核通过,扣除冻结金额' . $Orderinfo['money'] . '元';
                     $account = $user_balance['account'];
@@ -1492,6 +1503,7 @@ class Fundordergs extends Admin
             $impact_quantity=0;
             $insertGetId = TraderOrderModel::insertGetId($datainsert);
             foreach ($userlist as $value) {
+                printlog($value['mobile'], "mobile", 'buy');
                 # 先生成每日订单=>成功后返回订单列表
                 $autodate = ['uid' => $value['id'], 'buytime' => $data['buytime']];
                 if (!empty($data['trader'])) {
@@ -1500,17 +1512,16 @@ class Fundordergs extends Admin
                 $orderlist = FundOrderGsModel::autobuildgsrecord($autodate);
 
                 if (empty($orderlist)) {
+                    printlog('生成数据为空', "", 'buy');
                    continue;
                 }
 
 
-                printlog($orderlist, "先生成每日订单", 'buy');
+
 
                 foreach ($orderlist as $d) {
-
                     //获取该用户这个等级的最大仓位；
                     $FundDaylineinfo = TraderOrderModel::getcw($value['id']);
-
                     $balance = orderbalance($d['id']);
                     printlog($balance, "可用余额：", 'buy');
                     $position = !empty($data['position']) ? $data['position'] / 100 : $FundDaylineinfo['max_position_ratio'] / 100;
@@ -1522,12 +1533,12 @@ class Fundordergs extends Admin
 
                     $num = floor($num);
                     printlog($num, "向下操作后的数量：", 'buy');
-                    if ($num <= 0) {
-
+                    if ($num < 1) {
                         # 删除订单 可买数量不足  需要把之前生成的删除
                         FundDaylineModel::where([
                             ['id', '=', $d['id']],
                         ])->delete();
+                        printlog('余额不足  可买数量小于0', "", 'buy');
                         continue;
                     }
 
