@@ -194,12 +194,7 @@ class Withdraw extends Model
             $data['bank'] = $wallet['name'] . "|" . $wallet['address'] . "|" . $names['name'];
 //            如果有汇率
             $data['exchange_rate'] = $wallet['exchange_rate'];
-            $data['exchange_rate_money'] = 0; //汇率金额
-            if($wallet['exchange_rate'] > 0){
-                $data['exchange_rate_number'] = $parameter['money'] / $wallet['exchange_rate'];
-//                $data['exchange_rate_number'] = sprintf("%.2f", $data['exchange_rate_number']);// 保留两位小数
-                $data['exchange_rate_number'] = sprintf("%.2f", floor($data['exchange_rate_number'] * 100) / 100); // 保留两位小数，不四舍五入
-            }
+
         }
 
 //        $data['money'] = $parameter['money'] * 100;  //提现金额
@@ -213,6 +208,13 @@ class Withdraw extends Model
         }
         $data['money'] = $money;
         $data['real_money'] = bcsub($money, $data['fee']);  //扣除手续费用之后的金额
+        if($type == 1){
+            $data['exchange_rate_money'] = 0; //汇率金额
+            if($wallet['exchange_rate'] > 0){
+                $data['exchange_rate_number'] = $data['real_money'] / $wallet['exchange_rate'];
+                $data['exchange_rate_number'] = sprintf("%.2f", floor($data['exchange_rate_number']) / 100); // 保留两位小数，不四舍五入
+            }
+        }
         $data['real_money'] = bcsub($data['real_money'], $data['exchange_rate_money']);  //在扣除汇率金额
         $data['order_no'] = 'tx' . generate_rand_str(10, 3);
         $data['create_time'] = time();
