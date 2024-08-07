@@ -452,7 +452,7 @@ class Fundordergs extends Admin
 
 
 
-                $freeze=$user_balance['freeze']-$Orderinfo['money'] * 100<0 ?0:$user_balance['freeze']-$Orderinfo['money'];
+                $freeze=$user_balance['freeze']-$Orderinfo['money'] * 100<0 ?0:$user_balance['freeze']-$Orderinfo['money']* 100;
 
 
 
@@ -1472,14 +1472,27 @@ class Fundordergs extends Admin
                 $this->error('仓位比例不能为0或者大于100');
             }
             $data['date'] = date('Y-m-d', strtotime($data['date']));
-            $mobile_list  = str_replace(',',PHP_EOL, $data['mobile_list']);
-            $mobile_list  = explode(PHP_EOL, $mobile_list);
-            $mobile_list  = array_unique($mobile_list);
-            // 使用 array_filter 过滤空数组
-            $mobile_list = array_filter($mobile_list, function($value) {
-                return !empty($value);
-            });
-
+//            ----------------旧
+//            $mobile_list  = str_replace(',',PHP_EOL, $data['mobile_list']);
+//            $mobile_list  = explode(PHP_EOL, $mobile_list);
+//            $mobile_list  = array_unique($mobile_list);
+//            // 使用 array_filter 过滤空数组
+//            $mobile_list = array_filter($mobile_list, function($value) {
+//                $value=trim($value);
+//                return !empty($value);
+//            });
+            //            -------------旧
+            //                --------------------------测试用
+            // 首先，将逗号替换为换行符
+            $mobile_list_str = str_replace(',', PHP_EOL, $data['mobile_list']);
+// 然后，使用换行符分割字符串
+            $mobile_list_array = explode(PHP_EOL, $mobile_list_str);
+// 对每个元素进行 trim 操作，移除可能的前后空格
+            $mobile_list_array = array_map('trim', $mobile_list_array);
+// 过滤掉空字符串
+            $mobile_list = array_filter($mobile_list_array);
+            //               -------------- 测试用
+            printlog($mobile_list, "用户列表", 'buy');
             $stockname = Db::name('stock_list')->where('code', $data['porductlist'])->value('title');
             $userlist  = Db::name('member')->whereIn('mobile', $mobile_list)->select();
             if (!$userlist) {
@@ -1511,7 +1524,7 @@ class Fundordergs extends Admin
                 }
                 $orderlist = FundOrderGsModel::autobuildgsrecord($autodate);
 
-                if (empty($orderlist)) {
+                if (count($orderlist)<1) {
                     printlog('生成数据为空', "", 'buy');
                    continue;
                 }

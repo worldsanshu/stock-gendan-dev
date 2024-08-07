@@ -7,6 +7,7 @@ use app\apicom\service\CBpayService;
 use app\apicom\service\HZpayService;
 use app\apicom\service\JDpayService;
 use app\apicom\service\KdpayService;
+use app\apicom\service\XSFpayService;
 use app\member\model\Member;
 use app\money\model\Record;
 use app\statistics\model\DataReport;
@@ -25,6 +26,17 @@ use app\apicom\service\SXYpayService;
 
 class PayNotify extends Controller
 {
+    public function xsfPay()
+    {
+        $params = request()->param();
+        printlog($params, 'xsfPay回调', 'log');
+        $orderNo = (new XSFpayService())->checkNotify($params);
+
+        if($orderNo){
+            $this->handleOrder($orderNo);
+            echo 'success';exit();
+        };
+    }
     public function sxyPay()
     {
         $params = request()->param();

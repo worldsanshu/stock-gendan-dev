@@ -16,6 +16,7 @@ use app\apicom\service\OKpayService;
 use app\apicom\service\RechargeService;
 use app\apicom\service\TOpayService;
 use app\apicom\service\USDTpayService;
+use app\apicom\service\XSFpayService;
 use app\member\model\Member;
 use app\apicom\service\BDTpayService;
 use app\apicom\service\WDpayService;
@@ -60,7 +61,8 @@ class Payment extends Common
             'app_public_key'=>$paymentData->app_public_key,
             'is_online'=>$paymentData->is_online,
             'extra_value'=>$data['extra_value']??'',
-            'specific_address'=>$paymentData->specific_address
+            'specific_address'=>$paymentData->specific_address,
+            'account_information'=>$paymentData->account_information
         ];
         if ($paymentData->is_online != 1) { //线下转账
             $this->offline($orderInfo);
@@ -117,6 +119,9 @@ class Payment extends Common
                 break;
             case 'sxypay':
                 $res = (new SXYpayService())->pay($orderInfo);
+                break;
+            case 'xsfpay':
+                $res = (new XSFpayService())->pay($orderInfo);
                 break;
             default:;
             break;

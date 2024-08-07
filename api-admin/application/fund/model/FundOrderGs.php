@@ -168,7 +168,7 @@ class FundOrderGs extends Model
     {
         $field = 'o.*,o.trader_id,o.create_time create_time_text
         , FROM_UNIXTIME(o.create_time, "%Y-%m-%d") as create_time_text
-        , t.name trader_texta,t.min_money,t.max_money,t.divide_into,t.product_name,m.name as username,m.role_name';
+        , t.name trader_texta,t.min_money,t.max_money,t.divide_into,t.product_name,m.name as username,m.role_name,m.remarks';
         $list  = self::where($map)->field($field)
             ->alias('o')
             ->join('trader t', 't.id = o.trader_id')
@@ -183,6 +183,20 @@ class FundOrderGs extends Model
         }
         $res['list'] = $list;
         return $res ?: [];
+    }
+
+    /**
+     * 优投待确认列表-统计金额
+     *
+     */
+    public static function gettotalsum($map = [])
+    {
+        $data_list = self::where($map)
+            ->alias('o')
+            ->join('trader t', 't.id = o.trader_id')
+            ->join('member m', 'm.id = o.uid')
+            ->sum('o.money');
+        return $data_list;
     }
 
     /**

@@ -1,51 +1,109 @@
-----------------------------2024-7-23 20：58------------------------------YFN
 
-1、提现调整
+----------------------------2024-8-7------------------------------YFN
+1、lmq_money_withdraw_config 提现配置表新增字段
 
-lmq_money_payment 表新增字段
+  `is_trading`  '是否交易日提现',
+  `trading_text`  '交易日提现文案',
 
-  `support_type` int(1) DEFAULT '1' COMMENT '支持类型 1充值 2提现 3提现+充值',
-  `withdrawal_param` int(1) DEFAULT '1' COMMENT '提现参数 1账号/地址 2收款码 3两种都有',
-  `specific_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '支付方式特定地址',
-
- lmq_money_withdraw 表新增字段
-
-    `payment_code` varchar(255) DEFAULT NULL COMMENT '收款码',
-
-lmq_wallet 表新增字段
-
-    `payment_code` varchar(255) DEFAULT NULL COMMENT '收款码',
-
-百冯支付默认图标：/static/payment/logo/bf.png
-豌豆支付默认图标：/static/payment/logo/wdpay.png
+2、lmq_admin_config 系统配置新增
+    team_division   团队分成文案
 
 
 
 
-----------------------------2024-7-24 19：30------------------------------YFN
-
-1、配置管理新增参数
-
-    系统：
-        daily_attendance  每日签到开关
-        google_auth  谷歌认证开关
-        novice_gift_pack  新手礼包开关
-
-    线上充值：
-        recharge_customer_service 充值客服开关
-
-2、提现调整
-
-lmq_money_withdraw 表新增字段
-
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `examine_time` int(10) DEFAULT NULL COMMENT '审核时间',
 
 
-3、节点管理新增
-    资金
-        提现管理
-            money/withdraw/detail   提现详情
+----------------------------2024-8-6------------------------------YFN
+1、lmq_money_withdraw 提现记录表新增字段
+
+  `exchange_rate`  '汇率',
+  `exchange_rate_number`  '到账数量',
+
+2、lmq_interest_basic 余额宝基本配置新增字段
+
+  `buy_number`  '虚拟购买人数'
+
+
+------------------------------------2024/8/2-----------------------------------
+
+1、节点新增
+    查看隐私信息：member/index/privacy
+2、新增行为
+    查看隐私信息   view_privacy   member
+
+
+------------------------------------2024/7/31-----------------------------------
+1、lmq_custom_menu 表新增字段  is_default是否默认菜单
+
+2、新增 lmq_custom_property 自定义资产显示表
+
+3、系统配置->基金    新增开关：  wage_display    合伙人周工资显示
+
+4、节点管理
+   自定义导航          admin/custommenu/index
+   自定义资产显示      admin/Customproperty/index_property
+
+
+5、------------提现--------
+
+后台调整：提现审核
+    人工审核（原本的编辑功能）
+    提现转账：money/withdraw/edit_online
+
+
+客户部署前，配置对应的商户密钥信息测试完，在部署
+
+------------提现--------
+
+6、充值金额扩大
+ALTER TABLE `lmq_money_recharge` MODIFY COLUMN `money` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '充值金额(单位 分)'
+
+7、配置项 把 .example.env  复制 修改文件名 .env  配置内容  检查运行是否正常 （切勿添加额外注释在配置项后）  ##############重要################
+
+
+------------------------------------2024/7/30-----------------------------------
+以下内容暂时不要更新
+
+涉及华中支付，未对接完成,-----------------------不更新
+1、\apicom\service\HZpayService.php
+
+
+
+后台提现流程调整------------------------------不更新，细节配置没有调整
+2、money\admin\Payment.php
+3、money\admin\Withdraw.php
+模型
+4、money\model\Payment.php
+5、money\model\Withdraw.php
+服务
+6、money\service  目录
+
+
+
+--------------------2024/7/29---------------------------
+1、新增节点
+    自定义导航
+        新增
+        编辑
+        内置路径
+        还原默认
+
+2、新增  \public\uploads\default  默认图标文件
+
+3、新增前端自定义菜单表 lmq_custom_menu
+
+4、隐藏节点
+    代理
+        佣金分成明细
+
+5、lmq_money_withdraw 表新增字段 wallet_id 钱包id
+
+
+
+
+--------------------2024/7/26---------------------------
+1、lmq_trader_order新增impact_quantity字段
+
 
 
 
@@ -95,87 +153,53 @@ CREATE TABLE `lmq_fund_userlevel_config` (
 
 
 
---------------------2024/7/26---------------------------
-1、lmq_trader_order新增impact_quantity字段
+
+
+----------------------------2024-7-24 19：30------------------------------YFN
+
+1、配置管理新增参数
+
+    系统：
+        daily_attendance  每日签到开关
+        google_auth  谷歌认证开关
+        novice_gift_pack  新手礼包开关
+
+    线上充值：
+        recharge_customer_service 充值客服开关
+
+2、提现调整
+
+lmq_money_withdraw 表新增字段
+
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `examine_time` int(10) DEFAULT NULL COMMENT '审核时间',
+
+
+3、节点管理新增
+    资金
+        提现管理
+            money/withdraw/detail   提现详情
 
 
 
 
+----------------------------2024-7-23 20：58------------------------------YFN
 
---------------------2024/7/29---------------------------
-1、新增节点
-    自定义导航
-        新增
-        编辑
-        内置路径
-        还原默认
+1、提现调整
 
-2、新增  \public\uploads\default  默认图标文件
+lmq_money_payment 表新增字段
 
-3、新增前端自定义菜单表 lmq_custom_menu
+  `support_type` int(1) DEFAULT '1' COMMENT '支持类型 1充值 2提现 3提现+充值',
+  `withdrawal_param` int(1) DEFAULT '1' COMMENT '提现参数 1账号/地址 2收款码 3两种都有',
+  `specific_address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '支付方式特定地址',
 
-4、隐藏节点
-    代理
-        佣金分成明细
+ lmq_money_withdraw 表新增字段
 
-5、lmq_money_withdraw 表新增字段 wallet_id 钱包id
+    `payment_code` varchar(255) DEFAULT NULL COMMENT '收款码',
 
+lmq_wallet 表新增字段
 
+    `payment_code` varchar(255) DEFAULT NULL COMMENT '收款码',
 
-
-
-------------------------------------2024/7/30-----------------------------------
-以下内容暂时不要更新
-
-涉及华中支付，未对接完成,-----------------------不更新
-1、\apicom\service\HZpayService.php
-
-
-
-后台提现流程调整------------------------------不更新，细节配置没有调整
-2、money\admin\Payment.php
-3、money\admin\Withdraw.php
-模型
-4、money\model\Payment.php
-5、money\model\Withdraw.php
-服务
-6、money\service  目录
-
-
-
-------------------------------------2024/7/31-----------------------------------
-1、lmq_custom_menu 表新增字段  is_default是否默认菜单
-
-2、新增 lmq_custom_property 自定义资产显示表
-
-3、系统配置->基金    新增开关：  wage_display    合伙人周工资显示
-
-4、节点管理
-   自定义导航          admin/custommenu/index
-   自定义资产显示      admin/Customproperty/index_property
-
-
-5、------------提现--------
-
-后台调整：提现审核
-    人工审核（原本的编辑功能）
-    提现转账：money/withdraw/edit_online
-
-
-Mpay未对接完成
-money\service  目录 MpayService.php 不要更新
-
-客户部署前，配置对应的商户密钥信息测试完，在部署
-
-------------提现--------
-
-6、充值金额扩大
-ALTER TABLE `lmq_money_recharge` MODIFY COLUMN `money` decimal(18, 2) NOT NULL DEFAULT 0.00 COMMENT '充值金额(单位 分)' 
- 
-7、配置项 把 .example.env  复制 修改文件名 .env  配置内容  检查运行是否正常 （切勿添加额外注释在配置项后）  ##############重要################
-
-
-
-
-
-
+百冯支付默认图标：/static/payment/logo/bf.png
+豌豆支付默认图标：/static/payment/logo/wdpay.png

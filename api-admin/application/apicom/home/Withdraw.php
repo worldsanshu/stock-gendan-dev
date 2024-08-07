@@ -65,12 +65,21 @@ class Withdraw extends Common
         $data['banks'] = $list;
         $data['wallets'] = $wallets_list;
         $data['default_bank'] = isset($list[0])?$list[0]:[];
-        $money_withdraw_config = Db::name('money_withdraw_config')->field('min_money,ratio')->find();
+        $money_withdraw_config = Db::name('money_withdraw_config')->field('min_money,ratio,is_trading,trading_text')->find();
         if($money_withdraw_config){
             $data['config'] = $money_withdraw_config;
+            $data['config']['is_can_withdraw'] = 1;
+            if($money_withdraw_config['is_trading'] == 1){
+                if (!get_trading_time()) {
+                    $data['config']['is_can_withdraw'] = 0;
+                }
+            }
         }else{
+            $data['config']['is_trading'] = 0;
             $data['config']['ratio'] = 0;
             $data['config']['min_money'] = 100;
+            $data['config']['trading_text'] = '';
+            $data['config']['is_can_withdraw'] = 1;
         }
 //        $data['bankSetting'] = config("web_bank");
         ajaxmsg('线下提现信息', 1, $data, true, ['msgCode' => 'L0002']);
@@ -99,11 +108,20 @@ class Withdraw extends Common
             ajaxmsg('提现金额错误！', 0, '', true, ['msgCode' => 'L0003']);
         }
 
-        $result = Db::name('money_withdraw_config')->where("id", 1)->find();
-        if($result){
-            if ($data['money'] < $result['min_money']) {
-                ajaxmsg('提现金额必须大于'.$result['min_money'].'元', 0, '', true);
+        $withdraw_config = Db::name('money_withdraw_config')->where("id", 1)->find();
+
+        if($withdraw_config){
+            if($withdraw_config['is_trading'] == 1){
+                $datainsert = date("Y-m-d", time());
+                $transaction_date   = Db::name('stock_trade_date')->where("date", $datainsert)->find();
+                if(!$transaction_date){
+                    ajaxmsg('非交易日不可提现', 0, '', true);
+                }
             }
+            if ($data['money'] < $withdraw_config['min_money']) {
+                ajaxmsg('提现金额必须大于'.$withdraw_config['min_money'].'元', 0, '', true);
+            }
+
         }else{
             if ($data['money'] < 100) {
                 ajaxmsg('提现金额必须大于100元', 0, '', true, ['msgCode' => 'L0004']);

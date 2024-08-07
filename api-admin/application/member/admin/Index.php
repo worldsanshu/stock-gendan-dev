@@ -194,7 +194,7 @@ class Index extends Admin
             //['invite', '邀请人姓名/邀请人账号'],
               ['partner_parent', '邀请人账号/邀请人姓名'],
               ['partner_directly_num', '直属人数', 'link', url('partner_directly_num', ['uid' => '__id__']), '', ''],
-              ['partner_team_num', '团队人数', 'link', url('tree', ['uid' => '__id__']), '', ''],
+              ['partner_team_num', '团队人数三级', 'link', url('tree', ['uid' => '__id__']), '', ''],
             ['login', '最后登录设备/最后登录IP'],
             ['time', '注册时间/最后登陆时间'],
             ['status', '登录状态', 'switch'],
@@ -786,6 +786,30 @@ class Index extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $update_data = input();
+            $member = Member::where('id',$update_data['id'])->find();
+            if (empty($member)) {
+                $this->error('用户为空');
+            }
+            if ($member->id == $update_data['partner_parent_id']) {
+                $this->error('自己不能邀请自己'); 
+            }
+ 
+            if ($member->id < (int) $update_data['partner_parent_id']) {
+                $this->error('邀请人必须早于自己注册时间');
+            }
+            if ($member->partner_parent_id != $update_data['partner_parent_id']) {//修改邀请人 
+                $find = Member::where('partner_net_update',1)->find();
+                if (!empty($find)) {
+                    $this->error('图谱更新中，请稍后再修改');
+                }
+                $path = $member->partner_parent_net . ',' . $member->id;
+                $ids = MemberModel::where('1=1')
+                ->where([['partner_parent_net', 'like', $path . '%']]) 
+                ->column('id');
+                if (in_array($update_data['partner_parent_id'], $ids)) { //邀请人不能是自己的下级
+                    $this->error('邀请人不能是自己的下级'); 
+                }
+            }
             $update_data['agent_far'] = $update_data['pid'];
 //            $data_r['id']= $update_data['id'];//被邀请人id
 //            $data_r['mid']= $update_data['pid'];//邀请人id
@@ -1484,8 +1508,9 @@ class Index extends Admin
         Cache::set('stopAjax_update',time(),180);
        (new PartnerSettleService())->netUpdate();
        (new PartnerSettleService())->netWork();
-       (new PartnerSettleService())->netUpdate();
-       (new PartnerSettleService())->netWork();
+       (new PartnerSettleService())->upLevel();
+       //(new PartnerSettleService())->netUpdate(); //限制邀请人必须早于自己注册时间不用更新两次
+       //(new PartnerSettleService())->netWork();
        Cache::rm('stopAjax_update');
        $this->success('更新成功');
     }

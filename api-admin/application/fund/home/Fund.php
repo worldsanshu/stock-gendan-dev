@@ -1933,6 +1933,10 @@ class Fund extends Common
         $row->save();
 
         $setDec_Money_insert = Money::where('mid', $uid)->setDec('account', $money * 100);//减少余额
+        if ($row->status == 0) {  //未审核才增加冻结金额，如果开启自动审核 不增加
+            $up_money_freeze = bcadd($user_balance['freeze'], $money * 100);
+            MoneyModel::money_freeze($uid, $up_money_freeze);
+        }
         if (!$setDec_Money_insert) {
             //ajaxmsg('追加失败', 0);
         }

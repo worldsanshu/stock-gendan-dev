@@ -56,6 +56,7 @@ class Partner extends Common
     $data['fund_rule'] = config('fund_rule');
     $data['fund_rule_img'] = config('fund_rule_img');
     $data['notes_partner_system'] = config('notes_partner_system'); //备注
+    $data['team_division'] = config('team_division'); //备注
     if(!$data['fund_rule_img']){
         $data['fund_rule_img'] = $_SERVER['HTTP_HOST'].'/uploads/default/documentaryRule.jpeg';
     }else{

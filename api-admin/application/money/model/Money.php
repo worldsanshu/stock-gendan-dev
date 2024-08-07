@@ -1,7 +1,9 @@
 <?php
 namespace app\money\model;
 
+use think\Db;
 use think\model;
+use app\money\model\Record as RecordModel;
 
 class Money extends Model
 {
@@ -86,6 +88,114 @@ class Money extends Model
     public static function money_up($mid, $mmoney)
     {
         return self::where(["mid" => $mid])->update($mmoney);
+    }
+
+
+    //    资金批量操作
+    public static function moneyUpdate($data)
+    {
+        // 保存数据
+        // 将字符串转换为数组，并去除每个元素前后的空格
+        $mobile_list = array_map('trim', explode(PHP_EOL, $data['mobile_list']));
+// 过滤掉空字符串（虽然在这个例子中可能不需要，但通常是一个好习惯）
+        $mobile_list = array_filter($mobile_list);
+//        $userlist     = Db::name('member')->whereIn(、'mobile', $mobile_list)->select();
+//        echo Db::name('member')->getLastSql();die;
+//        print_r($userlist);die;
+        Db::startTrans();
+        try {
+            foreach ($mobile_list as $key => $value){
+
+                $user_info             = Db::name('member')->where("mobile", $value)->find();
+                if(!$user_info){
+//                    $this->error($value . '：号码不存在');
+                    return [
+                        'code'=>1,
+                        'message'=>$value . '：号码不存在'
+                    ];
+                }
+
+                $data['new_account'] = $data['new_account']?: 0;
+                $data['new_activity_account'] = $data['new_activity_account'] ?: 0;
+                $info             = Db::name('money')->where("mid", $user_info['id'])->find();
+                $account          = $data['new_account'] * 100;  //允许负数
+                $activity_account = $data['new_activity_account'] * 100;   //允许负数
+
+                $money1           = ($account + $info['account']);//允许负数
+                $money2           = $activity_account + $info['activity_account'];//允许负数
+                if ($money1 < 0 || $money2 < 0) {
+//                    $this->error('金额不能为负数');
+                    return [
+                        'code'=>1,
+                        'message'=>'金额不能为负数'
+                    ];
+                }
+
+                $type = 18; //默认系统转入
+
+                if($account <0 || $activity_account <0){
+                    $type = 19; //管理员操作
+                }
+
+                if($data['new_activity_account'] > 0){
+                    $type = 111;
+                }
+                if(isset($data['winnings'])){
+                    if($data['winnings'] < 0){
+//                        $this->error('彩金不能为负数');
+                        return [
+                            'code'=>1,
+                            'message'=>'彩金不能为负数'
+                        ];
+                    }
+                    if ($data['winnings'] > 0){
+                        $money1 += $data['winnings'] * 100;
+                        $account += $data['winnings'] * 100;
+                        $type = 110;
+                    }
+                }
+                $infos  = Db::name('money')->where("mid", $user_info['id'])->update(['account' => $money1 ?? 0, 'activity_account' => $money2 ?? 0]);
+
+                $remark = $data['remark'];
+                if ($infos) {
+                    Db::commit();
+
+                    if ($info['account'] != $money1) {
+                        $straccount = "余额的变化金额：" . ($info['account'] / 100) . "=>" . ($money1 / 100) . "元";
+                    } else {
+                        $straccount = "余额未变化";
+                    }
+                    if ($info['activity_account'] != $money2) {
+                        $activity_account_text = "活动资金的变化金额：" . ($info['activity_account'] / 100) . "=>" . ($money2 / 100) . "元";
+                    } else {
+                        $activity_account_text = "活动金余额未变化";
+                    }
+
+                    $obj     = ['affect' => $account, 'account' => $money1, 'affect_activity' => $activity_account, 'activity_account' => $money2, 'sn' => ''];
+                    $details = "(管理员：" . UID . " ，向uid为：" . $user_info['id'] . " 的资金账户做操作，{$straccount}，{$activity_account_text}, 备注：" . $remark . ')';
+                    RecordModel::saveData($user_info['id'], '', '', $type, $details, '', 0, $obj);
+                    action_log('transfer_add', 'money_transfer', $user_info['id'], UID, $details);
+//                    $this->success('编辑成功', cookie('__forward__'));
+
+                }else{
+
+                    Db::rollback();
+//                    $this->error($value.'编辑失败');
+                    return [
+                        'code'=>1,
+                        'message'=>$value.'金额修改失败'
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+            Db::rollback();
+            return $e->getMessage();
+        }
+        return [
+            'code'=>0,
+            'message'=>'编辑成功'
+        ];
+
     }
 
 }
