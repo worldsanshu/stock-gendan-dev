@@ -212,7 +212,7 @@ class Withdraw extends Model
             $data['exchange_rate_money'] = 0; //汇率金额
             if($wallet['exchange_rate'] > 0){
                 $data['exchange_rate_number'] = $data['real_money'] / $wallet['exchange_rate'];
-                $data['exchange_rate_number'] = sprintf("%.2f", floor($data['exchange_rate_number'] * 100) / 100); // 保留两位小数，不四舍五入
+                $data['exchange_rate_number'] = sprintf("%.2f", floor($data['exchange_rate_number']) / 100); // 保留两位小数，不四舍五入
             }
         }
         $data['real_money'] = bcsub($data['real_money'], $data['exchange_rate_money']);  //在扣除汇率金额
