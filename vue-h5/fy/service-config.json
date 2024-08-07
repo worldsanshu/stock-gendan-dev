@@ -1,7 +1,7 @@
 {
   "-": "本地域名列表：",
   "localDomains": [
-    "https://gentou1.0p0.cn/"
+    "https://ceshi.apilist.site/"
   ],
   "--": "第三方股票接口的baseURL: ",
   "stockBaseURL": "https://t.jiaoyisuo.xyz/stock/",
