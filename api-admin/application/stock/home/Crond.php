@@ -1335,6 +1335,7 @@ class Crond extends Home
                         $delivery_res = Db::name('stock_delivery_order')->where(['trust_no' => $v['trust_no']])->update($delivery);
                         //   print_r("\r\ndelivery_res:".$delivery_res);
                         if (empty($ptmd)) {
+                            $continue = false;
                             switch (substr($v['gupiao_code'], 0, 1)) {
                                 case '0':
                                     $d = 0;
@@ -1360,7 +1361,11 @@ class Crond extends Home
                                 default:
                                     Db::rollback();
                                     echo "买入确认失败\n\r";
-                                    continue;
+                                    $continue = true;
+                                    break;
+                            }
+                            if ($continue) {
+                                continue;
                             }
                             //盈亏成本价=(股票数量*当前价格+产生交易费用（印花税+交易服务费）)/数量
                             $ck_price                      = round(($v['trust_count'] * $vv['current_price'] + $fee) / $v['trust_count'], 3);

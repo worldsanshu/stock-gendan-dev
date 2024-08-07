@@ -178,6 +178,9 @@ class Withdraw extends Model
         //提现到银行卡
         if ($type == 0) {
             $bank = BankModel::bankInfo($bank_id);
+            if (in_array($bank['city'], ['北京','上海','天津','重庆'])) {
+                $bank['city'] = '';
+            }
             $data['bank'] = $bank['bank'] . "|" . $bank['card'] . '|' . $bank['province'] . $bank['city'] . $bank['branch'] . "|" . $names['name'];
         }
         //提现到数字货币账号
