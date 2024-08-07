@@ -1,10 +1,10 @@
 {
-  "-": "内置域名列表",
-  "builtInDomains": [
-    "https://gentou1.0p0.cn/"
+  "-": "本地域名列表：",
+  "localDomains": [
+    "https://ceshi.apilist.site/"
   ],
-  "--": "第三方股票接口的baseURL",
-  "stockBaseURL": "https://data.001ghsp.com/stock/api/",
-  "---": "第三方股票接口的WebSocket URL",
+  "--": "第三方股票接口的baseURL: ",
+  "stockBaseURL": "https://t.jiaoyisuo.xyz/stock/",
+  "---": "第三方股票接口的WebSocket URL: ",
   "stockWSURL": "wss://t.jiaoyisuo.xyz:9527"
 }
