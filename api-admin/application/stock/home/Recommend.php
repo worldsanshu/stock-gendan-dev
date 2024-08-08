@@ -91,7 +91,7 @@ class Recommend extends Home
             $r = Db::name('stock_task_record')->where(['task_id' => 1, 'mid' => $mid])->find();
             $state[1]['name'] = '实名认证';
             $state[1]['note'] = '真实身份实名信息认证';
-            $state[1]['money'] = '+100佣金抵扣券';
+            $state[1]['money'] = '+3000体验金';
             $state[1]['id'] = 1;
             $state[1]['is_show'] =1;
             if (!empty($r)) {
@@ -274,7 +274,7 @@ class Recommend extends Home
             case 1:
                 $r2 = Db::name('member')->where(['id_auth' => 1, 'id' => $mid])->find();
                 if (!empty($r2)) {
-                    $this->rec_money($mid, 10000, '完成实名认证奖励');
+                    $this->rec_money_balance($mid, 300000, '完成实名认证奖励');
                 } else {
                     ajaxmsg('条件不满足', 0, '', true, ['msgCode' => 'L0101']);
                 }
@@ -372,6 +372,23 @@ class Recommend extends Home
         $obj = ['affect' => 0, 'account' => $money['account'], 'affect_activity' => $fee, 'activity_account' => $affteractivity, 'sn' => ''];
         $record->saveData($mid, 0, $money['account'], 35, $info, '', '', $obj);
     }
+
+    protected function rec_money_balance($mid, $fee, $info)
+    {
+        $money = Db::name('money')->where(array("mid" => $mid))->find();
+        $balancemoney = bcadd($money['account'], $fee);
+
+        //更新资金
+        $money_res = Db::table(config('database.prefix') . 'money')->where('mid', $mid)->update(['account' => $balancemoney]);
+
+
+        // 更新资金日志表信息
+        $record = new RecordModel;
+        $info = "新手任务奖励";
+        $obj = ['affect' => $fee, 'account' =>$balancemoney, 'affect_activity' => 0, 'activity_account' => 0, 'sn' => ''];
+        $record->saveData($mid, 0, $balancemoney, 35, $info, '', '', $obj);
+    }
+
 
     public function active()
     {

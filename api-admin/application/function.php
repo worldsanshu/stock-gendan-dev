@@ -17,7 +17,7 @@ use think\facade\Log;
  *
  * @return false|int
  */
-function printlog($data, $str, $filsename = '')
+function printlog($data, $str= '', $filsename = '')
 {
     if (is_array($data)) {
         $data = var_export($data, true);
@@ -27,7 +27,7 @@ function printlog($data, $str, $filsename = '')
         $data = var_export($data, true);
     }
     $logpath  = App::getRuntimePath() . '/debug';
-    $write    = "\r\n【" . date("Y-m-d H:i:s") . "】-{$str}:{$data}\r\n";
+    $write    = "\r\n【" . date("Y-m-d H:i:s") . "】-{$str}:{$data}";
     $filepath = $logpath . '/printlog_' . $filsename . '_' . date("Y-m-d") . '.log';
     if (!file_exists($logpath)) {
         if (mkdir($logpath, 0777, true)) {

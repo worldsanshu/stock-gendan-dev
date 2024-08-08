@@ -2306,6 +2306,8 @@ function SendSMSCode($mobile, $reg_code = '86', $content = '')
     if ($reg_code != '86') {
         $_CFG = 'AliSMS_internationality';
     }
+    printlog($_CFG,'渠道','smssend');
+    printlog($mobile,'手机号','smssend');
     switch ($_CFG) {
         case "ALISMS":
             $content = '您的验证码为：' . $validate . '，该验证码5分钟内有效，请勿泄漏于他人';
@@ -2360,6 +2362,7 @@ function SendSMSCode($mobile, $reg_code = '86', $content = '')
         'addtime'        => time(),
 
     ];
+    printlog($insert,'入库数据','smssend');
     Db::name("member_smslog")->insertGetId($insert);
     $key = get_code_key($mobile);
     Cache::set($key, $validate, 600);
@@ -3536,7 +3539,9 @@ function orderbalance($K, $table = 'fundDayline')
     printlog($K, '$K', 'jiesuan');
 
     $FundOrderinfo = FundOrderGsModel::where([['id', '=', $K], ['status', 'in', '1,6,7']])->find();
-    printlog($FundOrderinfo, '$FundOrderinfo', 'jiesuan');
+    if(!$FundOrderinfo){
+        return 0;
+    }
     $FundDaylinelist = FundDaylineModel::where([
         ['uid', '=', $FundOrderinfo['uid']],
         ['order_id', '=', $FundOrderinfo['id']],

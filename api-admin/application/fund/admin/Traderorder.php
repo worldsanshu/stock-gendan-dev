@@ -397,6 +397,10 @@ EOF;
 
     public function access_buy($ids = null)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        ini_set('memory_limit','256M');
+
         if ($ids === null) $this->error('缺少参数');
         $info = TraderOrderModel::where('id', $ids)->find();
         if (isset($info['status']) && $info['status'] != 0) {
@@ -412,6 +416,7 @@ EOF;
 
         $n    = 0;
         $date = $info['date'];
+        $insertdata=[];
         #先找到这个讲师下所有可跟买订单   并给他生成跟买记录
         foreach ($list as $v) {
 
@@ -428,7 +433,7 @@ EOF;
                 continue;
             }
 
-            #如果是每日跟单整你生成一次  且不时间只能是规定时间
+            #如果是每日跟单生成一次  且不时间只能是规定时间
             if ($v['order_type'] == 1 || $v['order_type'] == 2) {
                 $where    = [
                     ['uid', '=', $v['uid']],
@@ -465,7 +470,7 @@ EOF;
                 continue;
             }
 
-            $data = [
+            $insertdata[] = [
                 'order_id'            => $v['id'],
                 'commission_ratio'    => $v['commission'],
                 'trader_id'           => $v['trader_id'],
@@ -482,8 +487,10 @@ EOF;
                 'traderorder_id_text' => $info['date'] . '-' . $info['trader_name'] . '方案',
 
             ];
-            $n    += FundDaylineModel::insert($data);
+
         }
+        $n=count($insertdata);
+         FundDaylineModel::insertAll($insertdata);
         if ($n > 0) {
             #更新跟买的仓位比例
             $FundDaylinelist = FundDaylineModel::where('traderorder_id', $info['id'])->select();

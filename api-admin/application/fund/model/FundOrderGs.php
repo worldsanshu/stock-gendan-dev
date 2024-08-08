@@ -604,14 +604,12 @@ class FundOrderGs extends Model
         }
         $fundDayline = [];
         foreach ($list as $v) {
-
             //排查可能用户通过其他方式生成的情况
             $where    = [
                 ['uid', '=', $v['uid']],
                 ['trader_id', '=', $v['trader_id']],
                 ['order_sn', '=', $v['order_sn']],
                 ["date", '=', date("Y-m-d")],
-
             ];
             $infodata = FundDaylineModel::where($where)->find();
             //如果有则跳过
