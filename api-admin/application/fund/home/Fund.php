@@ -1479,7 +1479,9 @@ class Fund extends Common
         $path                     = $us->partner_parent_net . ',' . $us->id;
         $level                    = $us->partner_parent_level + 3; //计算三层团队
         $not_invest_num           = Member::where('1=1')
-            ->where([['partner_parent_net', 'like', $path . '%']])
+        ->where(function ($query) use ($path){
+            $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+        })
             ->where([['partner_parent_level', '<=', $level]])
             ->where([['create_time', '<=', $three_time]])
             ->where('is_buy', 0)->count();
@@ -1717,7 +1719,9 @@ class Fund extends Common
         $level = $us->partner_parent_level + 3; //计算三层团队
         $list  = Member::where('1=1')
             ->field('id,level,name,mobile,create_time,create_time as create_time_text')
-            ->where([['partner_parent_net', 'like', $path . '%']])
+            ->where(function ($query) use ($path){
+                $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+            })
             ->where([['partner_parent_level', '<=', $level]])
             ->where('is_buy', 1)
             ->order('id desc')
@@ -1791,7 +1795,9 @@ class Fund extends Common
         $path         = $us->partner_parent_net . ',' . $us->id;
         $level        = $us->partner_parent_level + 3; //计算三层团队
         $list         = Member::where('1=1')
-            ->where([['partner_parent_net', 'like', $path . '%']])
+        ->where(function ($query) use ($path){
+            $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+        })
             ->where([['partner_parent_level', '<=', $level]])
             ->where([['create_time', '<=', $three_time]])
             ->where('is_buy', 0)
@@ -1846,7 +1852,9 @@ class Fund extends Common
         $path    = $user->partner_parent_net . ',' . $user->id;
         $level   = $user->partner_parent_level + 3; //计算三层团队
         $teamIds = Member::where('1=1')
-            ->where([['partner_parent_net', 'like', $path . '%']])
+        ->where(function ($query) use ($path){
+            $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+        })
             ->where([['partner_parent_level', '<=', $level]])
             ->where('is_buy', 1)
             ->column('id');

@@ -115,9 +115,9 @@ class PartnerSettleService
           $parentIds = array_reverse($parentIds);                               //推荐关系反序
           Member::where('id', $parentIds[0])->setInc('partner_directly_num', 1);//直属加1  需不需要购买过的才计数 需要加上 过滤条件'is_buy'=>1
           
-          $numElements = min(count($parentIds), 3);
+          $numElements = min(count($parentIds), env('partner.tier',3));
           $parentIds   = array_slice($parentIds, 0, $numElements);
-          Member::where([['id', 'in', $parentIds]])->setInc('partner_team_num', 1);//团队大于4个取4个 团队每人加1
+          Member::where([['id', 'in', $parentIds]])->setInc('partner_team_num', 1);//团队大于3个取3个 团队每人加1
           
           $value->partner_count = 2;
           $value->save();

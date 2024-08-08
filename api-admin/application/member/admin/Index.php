@@ -62,6 +62,10 @@ class Index extends Admin
         if ($admin_user['role'] == 2) {
             $map[] = ['agent_far','=',$admin_user['for_user']];
         }
+        if (input('type') == 'remarks') {
+            //有备注的
+            $map[] = ['m.remarks', 'neq', ''];
+        }
 
         empty($order) && $order = 'id desc';
 //        $map['is_del'] = 0;
@@ -101,6 +105,19 @@ class Index extends Admin
             }
             
             $data_list[$key]['partner_num'] = "<p>{$value['partner_directly_num']}</p><p>{$value['partner_team_num']}</p>";
+            
+            //团队用户
+            $path = $value['partner_parent_net'] . ',' . $value['id'];
+            $level = $value['partner_parent_level'] + env('partner.tier',3); //计算三层团队
+            $data_list[$key]['partner_team_num'] = Member::where('1=1')
+            ->where(function ($query) use ($path){
+                $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+            })
+            ->where([['partner_parent_level', '<=', $level]])
+            ->where('is_buy', 1)
+            ->count();
+            //直属人数
+            $data_list[$key]['partner_directly_num'] = Member::where('partner_parent_id',$value['id'])->where(['is_buy'=>1])->count();
         }
         $remarksconfig = config('remarksconfig');
         $remarksconfig = explode("\r\n", $remarksconfig);
@@ -147,7 +164,7 @@ class Index extends Admin
         $btn_update = [
             'title' => '更新会员级别',
             'icon'  => 'fa fa-fw fa-refresh',
-
+            'class' => 'btn btn-warning',
             'href'  => url('net_update')
         ];
 
@@ -158,8 +175,19 @@ class Index extends Admin
             'href'  => url('member/index/privacy'),
         ];
 
+        $btn_remarks = [
+            'title' => '查看已备注用户',
+            'icon'  => 'fa si si-note',
+            'class'  => 'btn btn-success',
+            'href'  => url('/member/index/index') . '?type=remarks'
+        ];
         
         $role_name = array("白名单" => "白名单", "普通会员" => "普通会员");
+        $tier = env('partner.tier',3);
+        $teamTitle = '团队人数/'.$tier.'层';
+        if ($tier>100) {
+            $teamTitle = '团队人数/无限层';
+        }
         return ZBuilder::make('table')
 //            ->setExtraHtmlFile('listu', 'toolbar_top')
             ->setSearchArea([
@@ -171,6 +199,7 @@ class Index extends Admin
                 ['daterange', 'm.create_time', '注册时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
                 ['text:4', 'agent_search', '代理姓名/手机号/用户ID',''],
                 ['text:4', 'partner_search', '合伙人姓名/手机号/用户ID',''],
+                ['text', 'm.remarks', '备注', 'like'],
                 ['select', 'role_name', '白名单', '', '', $role_name],
                 ['select', 'level', '会员级别', '', '', $level_list],
                 ])
@@ -194,7 +223,7 @@ class Index extends Admin
             //['invite', '邀请人姓名/邀请人账号'],
               ['partner_parent', '邀请人账号/邀请人姓名'],
               ['partner_directly_num', '直属人数', 'link', url('partner_directly_num', ['uid' => '__id__']), '', ''],
-              ['partner_team_num', '团队人数三级', 'link', url('tree', ['uid' => '__id__']), '', ''],
+              ['partner_team_num', $teamTitle, 'link', url('tree', ['uid' => '__id__']), '', ''],
             ['login', '最后登录设备/最后登录IP'],
             ['time', '注册时间/最后登陆时间'],
             ['status', '登录状态', 'switch'],
@@ -207,6 +236,7 @@ class Index extends Admin
             ->addTopButton('custom', $btn_access)
             ->addTopButton('custem', $btn_excel)
             ->addTopButton('custem', $btn_update)
+            ->addTopButton('custem', $btn_remarks)
             ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
 //          ->addTopButton('add', [], ['area' => ['800px', '90%'], 'title' => '批量添加']) // 批量添加顶部按钮
 
@@ -216,7 +246,7 @@ class Index extends Admin
           ->setColumnWidth('user_us,user_info', 200)
           ->setColumnWidth('time', 250)
           ->setColumnWidth('right_button,partner_parent,login', 160)
-          ->setPageTips('注意：修改邀请人账户，如需重新计算会员级别 请点击【更新会员级别】按钮！', 'warning')
+          ->setPageTips('注意：修改邀请人推荐关系，如需重新统计团队计算会员级别 请点击【更新会员级别】按钮！更新会员级别是异步计算，结果需等待几分钟！且人少使用时间段为佳！', 'warning')
             ->fixedLeft(2)
             ->fixedRight(1)
           ->fetch(); // 渲染模板
@@ -804,7 +834,9 @@ class Index extends Admin
                 }
                 $path = $member->partner_parent_net . ',' . $member->id;
                 $ids = MemberModel::where('1=1')
-                ->where([['partner_parent_net', 'like', $path . '%']]) 
+                ->where(function ($query) use ($path){
+                    $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+                })
                 ->column('id');
                 if (in_array($update_data['partner_parent_id'], $ids)) { //邀请人不能是自己的下级
                     $this->error('邀请人不能是自己的下级'); 
@@ -883,7 +915,9 @@ class Index extends Admin
                     $path  = $us->partner_parent_net . ',' . $us->id;
                     $list  = Member::where('1=1')
                         ->field('id,name')
-                        ->where([['partner_parent_net', 'like', $path . '%']])
+                        ->where(function ($query) use ($path){
+                            $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+                        })
                         ->select();
                     foreach ($list as $key => $value){
                         Db::name('member')
@@ -1065,7 +1099,9 @@ class Index extends Admin
             $path  = $us->partner_parent_net . ',' . $us->id;
             $list  = Member::where('1=1')
                 ->field('id,name')
-                ->where([['partner_parent_net', 'like', $path . '%']])
+                ->where(function ($query) use ($path){
+                    $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+                })
                 ->select();
             foreach ($list as $key => $v){
                 Db::name('member')
@@ -1231,14 +1267,18 @@ class Index extends Admin
 
             $list = MemberModel::where('1=1')
             ->field('id,partner_parent_id as pid,name as username,mobile as name,mobile,is_buy,level')
-            ->where([['partner_parent_net', 'like', $path . '%']])
+            ->where(function ($query) use ($path){
+                $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+            })
             ->order('partner_parent_id asc')
             ->select()
             ->toArray();
             
             $agent = MemberModel::where('1=1')
             ->field('id,partner_parent_id as pid,name as username,mobile as name,mobile,is_buy,level')
-            ->where([['partner_parent_net', 'like', $path . '%']])
+            ->where(function ($query) use ($path){
+                $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+            })
             ->where((new UserService())->getAgentSql('id'))
             ->order('partner_parent_id asc')
             ->select()
@@ -1432,6 +1472,9 @@ class Index extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = input();
+            if ($data['number'] > 300) {
+                $this->error('每次添加请少于300人');
+            }
 //            $data['create_ip'] = get_client_ip(1);
 //            $data['create_time'] = time();
             if(!$data['password']){
@@ -1502,6 +1545,9 @@ class Index extends Admin
     }
     
     public function net_update(){
+        set_time_limit(0);
+        ignore_user_abort(true);
+        ini_set('memory_limit','256M');
         if (Cache::get('stopAjax_update')) {
             $this->error('过于频繁，请稍后再试，更新进行中剩余时间'.(180-(time()-Cache::get('stopAjax_update'))).'秒');
         }
@@ -1511,7 +1557,7 @@ class Index extends Admin
        (new PartnerSettleService())->upLevel();
        //(new PartnerSettleService())->netUpdate(); //限制邀请人必须早于自己注册时间不用更新两次
        //(new PartnerSettleService())->netWork();
-       Cache::rm('stopAjax_update');
+       //Cache::rm('stopAjax_update');
        $this->success('更新成功');
     }
 

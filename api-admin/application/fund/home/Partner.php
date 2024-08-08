@@ -128,6 +128,7 @@ class Partner extends Common
       $data['my_directly_ordinary'] = Member::where('partner_parent_id',$uid)->where(['is_buy'=>1,'level'=>0])->count(); //普通合伙人数
       $data['my_directly_first']  = Member::where('partner_parent_id',$uid)->where(['is_buy'=>1,'level'=>1])->count(); //一级合伙人数
 
+      $todayStart = strtotime(date('Y-m-d 00:00:00')); //今天的结束时间
       $todayEnd = strtotime(date('Y-m-d 23:59:59')); //今天的结束时间
       $data['my_invest_total']  = FundOrderGs::where($map)
 //          ->where('status', '>', 0)
@@ -136,13 +137,15 @@ class Partner extends Common
       $data['my_invest_today']  = FundOrderGs::where($map)
 //          ->where('status', '>', 0)
           ->whereIn('status', [1, 6, 7])
-          ->where('fundendtime', '>=', $todayEnd)
+          ->where('fundendtime', '>=', $todayStart)
           ->count();//今日优投
       //团队用户
       $path = $user->partner_parent_net . ',' . $user->id;
-      $level = $user->partner_parent_level + 3; //计算三层团队
+      $level = $user->partner_parent_level + env('partner.tier',3); //计算三层团队
       $teamIds = Member::where('1=1')
-      ->where([['partner_parent_net', 'like', $path . '%']])
+      ->where(function ($query) use ($path){
+          $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+      })
       ->where([['partner_parent_level', '<=', $level]])
       ->where('is_buy', 1)
       ->column('id');
@@ -150,7 +153,7 @@ class Partner extends Common
       $data['team_invest_today']  = FundOrderGs::whereIn('uid',$teamIds)
 //          ->where('status', '>', 0)
           ->whereIn('status', [1, 6, 7])
-          ->where('fundendtime', '>=', $todayEnd)
+          ->where('fundendtime', '>=', $todayStart)
 //          ->whereTime('create_time', 'today')
 //          ->group('uid')
           ->count();//今日优投数
@@ -224,9 +227,11 @@ class Partner extends Common
       //团队用户
       $user = Member::where('id', $uid)->find();
       $path = $user->partner_parent_net . ',' . $user->id;
-      $level = $user->partner_parent_level + 3; //计算三层团队
+      $level = $user->partner_parent_level + env('partner.tier',3); //计算三层团队
       $teamIds = Member::where('1=1')
-      ->where([['partner_parent_net', 'like', $path . '%']])
+      ->where(function ($query) use ($path){
+          $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+      })
       ->where([['partner_parent_level', '<=', $level]])
       ->where('is_buy', 1)
       ->column('id');
@@ -249,17 +254,20 @@ class Partner extends Common
       //团队用户
       $user = Member::where('id', $uid)->find();
       $path = $user->partner_parent_net . ',' . $user->id;
-      $level = $user->partner_parent_level + 3; //计算三层团队
+      $level = $user->partner_parent_level + env('partner.tier',3); //计算三层团队
       $teamIds = Member::where('1=1')
-      ->where([['partner_parent_net', 'like', $path . '%']])
+      ->where(function ($query) use ($path){
+          $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+      })
       ->where([['partner_parent_level', '<=', $level]])
       ->where('is_buy', 1)
       ->column('id');
+      $todayStart = strtotime(date('Y-m-d 00:00:00')); //今天的结束时间
       $todayEnd = strtotime(date('Y-m-d 23:59:59')); //今天的结束时间
       $list = FundOrderGs::whereIn('uid',$teamIds)
 //      ->where('status', '>', 0)
           ->whereIn('status', [1, 6, 7])
-      ->where('fundendtime', '>=', $todayEnd)
+      ->where('fundendtime', '>=', $todayStart)
 //      ->whereTime('fundendtime', 'today')
 //      ->group('uid')
       ->order('id desc')
@@ -276,10 +284,12 @@ class Partner extends Common
       //新写三级团队
       $us    = Member::where('id', $uid)->find();
       $path  = $us->partner_parent_net . ',' . $us->id;
-      $level = $us->partner_parent_level + 3; //计算三层团队
+      $level = $us->partner_parent_level + env('partner.tier',3); //计算三层团队
       $list  = Member::where('1=1')
       ->field('id,level,name,mobile,create_time,create_time as create_time_text')
-      ->where([['partner_parent_net', 'like', $path . '%']])
+      ->where(function ($query) use ($path){
+          $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+      })
       ->where([['partner_parent_level', '<=', $level]])
       ->where('is_buy', 1)
       ->order('id desc')

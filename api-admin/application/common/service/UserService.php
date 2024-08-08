@@ -67,7 +67,9 @@ class UserService
                     $path = $user->partner_parent_net . ',' . $user->id;
                     $level = $user->partner_parent_level + 3; //计算三层团队
                     $teamIds = Member::where('1=1')
-                    ->where([['partner_parent_net', 'like', $path . '%']])
+                    ->where(function ($query) use ($path){
+                        $query->where([['partner_parent_net', 'eq', $path]])->whereOr([['partner_parent_net', 'like', $path . ',%']]);
+                    })
                     //->where([['partner_parent_level', '<=', $level]])
                     //->where('is_buy',1)
                     ->column('id');
