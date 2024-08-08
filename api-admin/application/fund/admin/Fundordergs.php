@@ -1658,7 +1658,18 @@ EOF;
                 $this->error('仓位比例不能为0或者操作100');
             }
             $data['date'] = date('Y-m-d', strtotime($data['date']));
-            $mobile_list  = explode(PHP_EOL, $data['mobile_list']);
+//            $mobile_list  = explode(PHP_EOL, $data['mobile_list']);
+            //                --------------------------测试用
+            // 首先，将逗号替换为换行符
+            $mobile_list_str = str_replace(',', PHP_EOL, $data['mobile_list']);
+// 然后，使用换行符分割字符串
+            $mobile_list_array = explode(PHP_EOL, $mobile_list_str);
+// 对每个元素进行 trim 操作，移除可能的前后空格
+            $mobile_list_array = array_map('trim', $mobile_list_array);
+// 过滤掉空字符串
+            $mobile_list = array_filter($mobile_list_array);
+            //               -------------- 测试用
+
             $userlist     = Db::name('member')->whereIn('mobile', $mobile_list)->select();
             $faillist     = $sucesslist = '';
             foreach ($userlist as $value) {
@@ -1747,7 +1758,7 @@ EOF;
         return ZBuilder::make('form')->setPageTitle('特殊会员批量调整仓位') // 设置页面标题
         ->addFormItems([ // 批量添加表单项
                          ['text', 'aa', '使用前提条件', '', '只能设定未卖出的操盘订单的仓位', '', 'disabled style="background: none;border: none;text-align: center;color: red;font-size: 26px;"'],
-                         ['textarea', 'mobile_list', '手机号', '多个手机号请换行'],
+                         ['textarea', 'mobile_list', '手机号', '多个手机号请换行,或者用英文逗号隔开'],
                          ['select', 'trader', '讲师名称', '', $Traderlist],
                          ['date', 'date', '日期', '默认为今天', date('Y-m-d')],
 
