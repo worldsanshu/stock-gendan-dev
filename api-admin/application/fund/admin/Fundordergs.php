@@ -151,7 +151,10 @@ class Fundordergs extends Admin
         $map   = (new UserService())->getAgentMap($map, 'o.uid');
         $order = $this->getOrder();
         $page  = input('page', 1);
-
+        if (input('type') == 'remarks') {
+            //有备注的
+            $map[] = ['m.remarks', 'neq', ''];
+        }
         empty($order) && $order = 'id desc';
         // 数据列表
         //$map[] = ['o.status', 'eq', 6];
@@ -192,6 +195,16 @@ class Fundordergs extends Admin
             'class'  => 'btn btn-info',
             'href'  => url('member/index/privacy'),
         ];
+        $btn_remarks = [
+            'title' => '查看已备注用户',
+            'icon'  => 'fa si si-note',
+            'class'  => 'btn btn-success',
+            'href'  => url('/fund/fundordergs/orderlist') . '?type=remarks'
+        ];
+        $totalsum = FundOrderGsModel::gettotalsum($map);
+        $html = <<<EOF
+            <br><p>总金额为：{$totalsum}元</p>
+EOF;
         return ZBuilder::make('table')
             ->setPageTitle('持仓优投订单（合约）')
             ->setSearchArea([
@@ -207,6 +220,7 @@ class Fundordergs extends Admin
                 ['daterange', 'o.confirm_time', '确认时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
                 ['text:4', 'agent_search', '代理姓名/手机号/用户ID', ''],
                 ['text:4', 'partner_search', '合伙人姓名/手机号/用户ID', ''],
+                ['text', 'm.remarks', '备注', 'like'],
                 ['select', 'role_name', '白名单', '', '', $this->user_role_name],
             ])
             ->addColumns([ // 批量添加数据列
@@ -214,6 +228,7 @@ class Fundordergs extends Admin
                            ['order_sn', '订单号'],
                            ['codetype', '订单类型'],
                            ['user_info', '姓名/手机号码'],
+                ['remarks', '备注', 'text.edit'],
                 ['role_name', '白名单', $this->user_role_name],
                            ['trader_texta', '操盘师'],
                            ['commission', '佣金比'],
@@ -236,6 +251,7 @@ class Fundordergs extends Admin
             ->addRightButton('custom', $btn_detail) // 批量添加顶部按钮
             ->addRightButton('SettlementOrder', $btn_SettlementOrder) // 批量添加顶部按钮
             ->addRightButton('renewal', $btn_renewal) // 批量表格按钮
+            ->addTopButton('custem', $btn_remarks)
             ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addRightButton('addInvestment', $btn_addInvestment) // 批量表格按钮
             ->addRightButton('btn_edit', $btn_edit)
@@ -253,6 +269,7 @@ class Fundordergs extends Admin
             ->fixedLeft(2)
             ->fixedRight(1)
             ->hideCheckbox()
+            ->setExtraHtml($html, 'table_bottom')
             ->fetch(); // 渲染模板
     }
 

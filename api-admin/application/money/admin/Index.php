@@ -169,7 +169,7 @@ class Index extends Admin
                            //            ['operate_account', '操盘总额', 'text.edit'],
                            //            ['bond_account', '保证金总额', 'text.edit'],
                            //            ['bond_account', '保证金总额', 'text.edit'],
-                           ['status', '状态', 'switch'],
+//                           ['status', '状态', 'switch'],
                            ['right_button', '操作', 'btn'],
             ])
             ->hideCheckbox()
@@ -649,11 +649,13 @@ class Index extends Admin
             $value    *= 100;
             $str_info = ",以元为单位";
         }
+
         $mid       = MoneyModel::where('id', $id)->value('mid');
         $old_value = MoneyModel::where('id', $id)->value($field);
         $value1    = $value - $old_value;
         $mobile    = Db('member')->where('id', $mid)->value('mobile');
         $details   = $mobile . ' 字段(' . $field . ')，原值：(' . $old_value . ')新值：(' . $value . ')';
+
         switch ($type) {
             // 日期时间需要转为时间戳
             case 'combodate':
