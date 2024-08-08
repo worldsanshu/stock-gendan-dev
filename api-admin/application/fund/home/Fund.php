@@ -1658,8 +1658,9 @@ class Fund extends Common
             ->where(function ($query) use ($today) {
                 if (!empty($today)) {
 //                    $query->whereTime('create_time', 'today');
+                    $todaystart = strtotime(date('Y-m-d 00:00:00')); //今天的结束时间
                     $todayEnd = strtotime(date('Y-m-d 23:59:59')); //今天的结束时间
-                    $query->where('fundendtime', '>=', $todayEnd);
+                    $query->where('fundendtime', '>=', $todaystart);
 
                 }
             })
