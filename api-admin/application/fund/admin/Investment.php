@@ -164,13 +164,14 @@ class Investment extends Admin
             }
 
         }
+        $get_one['status'] = 1;
         return ZBuilder::make('form')
             ->setPageTitle('追加审核')// 设置页面标题
             ->addFormItems([ // 批量添加表单项
                 ['hidden', 'id'],
                 ['static', 'order_sn', '单号'],
                 ['static', 'money', '金额'],
-                ['radio', 'status', '审核状态', '', [1 => '通过', 2 => '驳回'], 1],
+                ['radio', 'status', '审核状态', '', [1=> '通过', 2=> '驳回'], 1],
             ])
             ->setFormData($get_one)// 设置表单数据
             ->fetch();
