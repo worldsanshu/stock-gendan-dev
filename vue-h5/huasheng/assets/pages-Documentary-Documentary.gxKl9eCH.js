@@ -1,1 +1,0 @@
-import{y as e,z as s,A as a,C as t,H as r,N as o}from"./index-BpNRNyt1.js";import{_ as d}from"./_plugin-vue_export-helper.BCo6x5W8.js";const n=d({data:()=>({})},[["render",function(d,n,u,p,l,_){const c=o,m=t;return e(),s(m,null,{default:a((()=>[r(c,{src:"/assets/documentaryRule-D0AMLb_M.jpg",mode:""})])),_:1})}],["__scopeId","data-v-40ed6553"]]);export{n as default};

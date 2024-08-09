@@ -1,0 +1,1 @@
+import{bl as a,bm as o}from"./index-V1zTiwCe.js";const s=()=>a("apicom/stock/day"),c=()=>a("apicom/stock/week"),p=()=>a("apicom/stock/month"),e=a=>o("apicom/handle/applySave",a),m=a=>o("apicom/handle/applySaveSub",a),t=o=>a("stock_detail",o);export{c as a,p as b,m as c,t as d,s as g,e as h};
