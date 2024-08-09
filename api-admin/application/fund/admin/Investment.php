@@ -115,7 +115,7 @@ class Investment extends Admin
             if(!isset($data['status']) || empty($data['status'])){
                 $this->error('请选择审核状态');
             }
-            if($data['status'] > 0){
+            if($get_one['status'] > 0){
                 $this->error('追加已审核');
             }
             $record = new Record();
