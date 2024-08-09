@@ -112,6 +112,12 @@ class Investment extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = input();
+            if(!isset($data['status']) || empty($data['status'])){
+                $this->error('请选择审核状态');
+            }
+            if($data['status'] > 0){
+                $this->error('追加已审核');
+            }
             $record = new Record();
             $money_info = Db::name('money')->where('mid', $get_one['uid'])->find();
 //            审核通过增加订单金额
@@ -159,14 +165,13 @@ class Investment extends Admin
 
         }
         return ZBuilder::make('form')
-            ->setPageTitle('提盈审核')// 设置页面标题
+            ->setPageTitle('追加审核')// 设置页面标题
             ->addFormItems([ // 批量添加表单项
                 ['hidden', 'id'],
                 ['static', 'order_sn', '单号'],
                 ['static', 'money', '金额'],
-                ['radio', 'status', '审核状态','',['1' => '通过', '2' => '驳回'],'1'],
+                ['radio', 'status', '审核状态', '', [1 => '通过', 2 => '驳回'], 1],
             ])
-//            ->addRadio('status', '审核状态', '', ['1' => '通过', '2' => '驳回'],'1')
             ->setFormData($get_one)// 设置表单数据
             ->fetch();
 
