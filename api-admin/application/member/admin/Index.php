@@ -261,7 +261,7 @@ class Index extends Admin
         $balance = Db::name('money')->where('mid', $id)->where('status', 1)->sum('account');
         $user_data['balance'] = bcdiv($balance, 100, 2);
         //子账户id集合
-        $sub_ids = Db('stock_subaccount')->where('uid', $id)->column('id');
+        $sub_ids = Db::name('stock_subaccount')->where('uid', $id)->column('id');
         $status_arr = ['-1' => '待审核', '0' => '未通过', '1' => '操盘中', '2' => '已结束'];
         $listRows = input('listRows', 10);
         // 排序
@@ -289,7 +289,7 @@ class Index extends Admin
         foreach ($position_data as $v) {
             Db::name('stock_position')->where(['id' => $v['id']])->update($v);
         }
-        $position_list = Db('stock_position')
+        $position_list = Db::name('stock_position')
 	->where('sub_id', 'in', $sub_ids)
 	->where(['buying' => 0])->order('id desc')->paginate($listRows);
         foreach ($position_list as $k => $v) {
@@ -319,7 +319,7 @@ class Index extends Admin
         $res_data['money_record_list2'] = $money_record_list2;
         // 获取排序
         $order = 'trust_date desc';
-        $trust_list = Db('stock_trust t')->where('sub_id', 'in', $sub_ids)->order($order)->paginate($listRows);
+        $trust_list = Db::name('stock_trust t')->where('sub_id', 'in', $sub_ids)->order($order)->paginate($listRows);
         foreach ($trust_list as $key => $value) {
             $value['trust_date'] = date('Y-m-d', $value['trust_date']);
             $trust_list[$key] = $value;
@@ -344,7 +344,7 @@ class Index extends Admin
             $id = input('id');
             $status_arr = ['-1' => '待审核', '0' => '未通过', '1' => '操盘中', '2' => '已结束'];
             //子账户id集合
-            $sub_ids = Db('stock_subaccount')->where('uid', $id)->column('id');
+            $sub_ids = Db::name('stock_subaccount')->where('uid', $id)->column('id');
             // 排序
             $order = $this->getOrder();
             if (empty($order)) {
@@ -373,7 +373,7 @@ class Index extends Admin
             $map = $req::instance()->param('map');
             $id = input('id');
             //子账户id集合
-            $sub_ids = Db('stock_subaccount')->where('uid', $id)->column('id');
+            $sub_ids = Db::name('stock_subaccount')->where('uid', $id)->column('id');
             // 排序
             $order = $this->getOrder();
             if (empty($order)) {
@@ -389,7 +389,7 @@ class Index extends Admin
             foreach ($position_data as $v) {
                 Db::name('stock_position')->where(['id' => $v['id']])->update($v);
             }
-            $position_list = Db('stock_position')->where('sub_id', 'in', $sub_ids)->where(['buying' => 0])->order('id desc')->paginate($listRows);
+            $position_list = Db::name('stock_position')->where('sub_id', 'in', $sub_ids)->where(['buying' => 0])->order('id desc')->paginate($listRows);
             foreach ($position_list as $k => $v) {
                 if (empty($v['ck_price_new'])) {
                     $v['ck_price_new'] = $v['ck_price'];
@@ -415,7 +415,7 @@ class Index extends Admin
             $map = $req::instance()->param('map');
             $id = input('id');
             //子账户id集合
-            $sub_ids = Db('stock_subaccount')->where('uid', $id)->column('id');
+            $sub_ids = Db::name('stock_subaccount')->where('uid', $id)->column('id');
             // 读取数据
             $page = input('page', 1);
             $listRows = input('listRows', 10);
@@ -440,7 +440,7 @@ class Index extends Admin
             $map = $req::instance()->param('map');
             $id = input('id');
             //子账户id集合
-            $sub_ids = Db('stock_subaccount')->where('uid', $id)->column('id');
+            $sub_ids = Db::name('stock_subaccount')->where('uid', $id)->column('id');
             // 读取数据
             $page = input('page', 1);
             $listRows = input('listRows', 10);
@@ -466,10 +466,10 @@ class Index extends Admin
             $map = $req::instance()->param('map');
             $id = input('id');
             $listRows = input('listRows', 10);
-            $sub_ids = Db('stock_subaccount')->where('uid', $id)->column('id');
+            $sub_ids = Db::name('stock_subaccount')->where('uid', $id)->column('id');
             // 获取排序
             $order = 'trust_date desc';
-            $trust_list = Db('stock_trust t')->where('sub_id', 'in', $sub_ids)->order($order)->paginate($listRows);
+            $trust_list = Db::name('stock_trust t')->where('sub_id', 'in', $sub_ids)->order($order)->paginate($listRows);
             foreach ($trust_list as $key => $value) {
                 $value['trust_date'] = date('Y-m-d', $value['trust_date']);
                 $trust_list[$key] = $value;
@@ -780,7 +780,10 @@ class Index extends Admin
         $map = (new UserService())->agentPartnerSearchMap($map,'m.id');
         $order = $this->getOrder();
         empty($order) && $order = 'id desc';
+
+
         $xlsData = MemberModel::getlist($map, $order);
+
 //        $xlsData = MemberModel::where($map)->order($order)->paginate();
         $is_del_arr = [0 => '正常', 1 => '注销/删除'];
         foreach ($xlsData as $k => $v) {
@@ -1043,9 +1046,9 @@ class Index extends Admin
         $ids = (array)$ids;
         $field = input('param.field', 'is_del');
         $member_mobile = MemberModel::where('id', 'in', $ids)->column('mobile');
-        $pk = Db('member')->getPk();
+        $pk = Db::name('member')->getPk();
         $map[]=[$pk,'in', $ids];
-        $result = Db('member')->where($map)->setField($field, 1);
+        $result = Db::name('member')->where($map)->setField($field, 1);
         if (false !== $result) {
             Cache::clear();
             // 记录行为日志
@@ -1471,10 +1474,14 @@ class Index extends Admin
     {
         // 保存数据
         if ($this->request->isPost()) {
+            set_time_limit(0);
+            ignore_user_abort(true);
+            ini_set('memory_limit','256M');
             $data = input();
-            if ($data['number'] > 300) {
-                $this->error('每次添加请少于300人');
+            if ($data['number'] > 1000) {
+                $this->error('每次添加请少于1000人');
             }
+            
 //            $data['create_ip'] = get_client_ip(1);
 //            $data['create_time'] = time();
             if(!$data['password']){
@@ -1549,16 +1556,18 @@ class Index extends Admin
         ignore_user_abort(true);
         ini_set('memory_limit','256M');
         if (Cache::get('stopAjax_update')) {
-            $this->error('过于频繁，请稍后再试，更新进行中剩余时间'.(180-(time()-Cache::get('stopAjax_update'))).'秒');
+            $this->error('过于频繁，请稍后再试，更新进行中剩余时间'.(300-(time()-Cache::get('stopAjax_update'))).'秒');
         }
-        Cache::set('stopAjax_update',time(),180);
+        Cache::set('stopAjax_update',time(),300);
        (new PartnerSettleService())->netUpdate();
        (new PartnerSettleService())->netWork();
+       (new PartnerSettleService())->netWork();
+       (new PartnerSettleService())->netWork();
+       (new PartnerSettleService())->netUpdate(); //限制邀请人必须早于自己注册时间不用更新两次
+       (new PartnerSettleService())->netWork();
        (new PartnerSettleService())->upLevel();
-       //(new PartnerSettleService())->netUpdate(); //限制邀请人必须早于自己注册时间不用更新两次
-       //(new PartnerSettleService())->netWork();
        //Cache::rm('stopAjax_update');
-       $this->success('更新成功');
+       $this->success('操作已提交，全用户统计更新完成预计需要10分钟');
     }
 
 

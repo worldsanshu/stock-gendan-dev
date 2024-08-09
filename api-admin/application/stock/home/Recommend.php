@@ -62,7 +62,7 @@ class Recommend extends Home
     {
 
         $OA = input('OA');
-      $mid = is_member_signin();
+        $mid = is_member_signin();
 
         if (!$mid) {
             $mid = null;

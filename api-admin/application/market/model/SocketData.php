@@ -4,6 +4,7 @@ namespace app\market\model;
 
 use think\Model;
 use util\Logs;
+use think\Db;
 
 class SocketData extends Model
 {
@@ -45,7 +46,7 @@ class SocketData extends Model
     */
     public function get_market($code)
     {
-        $data = db('socket_data')->where(['S' => $code])->find();
+        $data = Db::name('socket_data')->where(['S' => $code])->find();
 //        if (!$data) {
 //
 //            if (config("is_socket_data") != "no") {

@@ -316,6 +316,9 @@ if (!function_exists('getTypeNameForMoney')) {
           '110' => lang('money_type_110'),//'彩金'
           '111' => lang('money_type_111'),//系统存入活动金
           '112' => lang('money_type_112'),//任务领取
+          '113' => lang('money_type_113'),//追加金额退回
+          '114' => lang('money_type_114'),//优投追加金额冻结
+          '115' => lang('money_type_115'),//优投追加金额解冻
         ];
         return $type[$type_id];
     }

@@ -12,9 +12,8 @@ namespace app\money\admin;
 
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
-use app\money\model\Recorddetailnew as RecorddetailnewModel;
-use think\Db;
 use app\common\service\UserService;
+use think\Db;
 
 /**
  * 利息控制器

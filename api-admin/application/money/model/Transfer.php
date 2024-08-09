@@ -58,12 +58,12 @@ class Transfer extends Model
         try {
             $money *= 100;
 
-            $money_info = Db('money')->where('mid', $member_info['id'])->lock(true)->find();
+            $money_info = Db::name('money')->where('mid', $member_info['id'])->lock(true)->find();
             $up_money['account'] = bcadd($money_info['account'], $money);
             $order_no = 'zz' . generate_rand_str(10, 3);
             $info = "转账单号：" . $order_no;
 
-            $res1 = Db('money')->where('mid', $member_info['id'])->update($up_money);
+            $res1 = Db::name('money')->where('mid', $member_info['id'])->update($up_money);
 //                $res3 = $record->saveData($member_info['id'], $money, $up_money['account'], 18, $info);
             $obj = ['affect' => $money, 'account' => $up_money['account'], 'affect_activity' => 0, 'activity_account' => $money_info['activity_account'], 'sn' => ''];
 

@@ -20,6 +20,7 @@ use app\stock\model\Borrow as BorrowModel;
 use app\stock\model\Drawprofit as DrawprofitModel;
 use app\stock\model\Renewal as RenewalModel;
 use app\stock\model\Subaccount as SubaccountModel;
+use app\stock\model\Broker as BrokerModel;
 use app\stock\model\SubaccountMoney;
 use app\stock\model\SubMoneyRecord;
 use app\user\model\User as AdminUserModel;

@@ -161,7 +161,7 @@ class Profit extends Admin
                 $new_money = $get_one['money'] * 100; //钱包以分为单位
                 $up_money['account'] = bcadd($money_info['account'], $new_money); //加本金
 
-                Db('money')->where('mid', $get_one['uid'])->update($up_money);
+                Db::name('money')->where('mid', $get_one['uid'])->update($up_money);
 
                 $info = "提取盈利：" . $get_one['order_sn'];
                 $affect = $get_one['money']  * 100;

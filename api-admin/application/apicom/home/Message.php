@@ -136,7 +136,7 @@ class Message extends Common
         } else {
             $data['messgae'] = [];
         }
-        $msg_num = Db('member_message')->where(['mid' => MID, 'status' => 0])->count();
+        $msg_num = Db::name('member_message')->where(['mid' => MID, 'status' => 0])->count();
         // $data['ggao'] = $gao;
         $data['messgae']['msg_num'] = $msg_num;
         ajaxmsg('获取成功', 1, $data, true, ['msgCode' => 'L0014']);

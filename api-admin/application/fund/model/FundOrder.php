@@ -232,7 +232,7 @@ class FundOrder extends Model
       $money   = $value['money'];
       $name    = $value['name'];
       $money   = $money * 100;//转为分
-      Db('money')->where('mid', $uid)->setInc('account', $money);
+      Db::name('money')->where('mid', $uid)->setInc('account', $money);
       $update_data           = [];
       $update_data['status'] = 1;
       self::where('id', $id)->update($update_data);
@@ -307,7 +307,7 @@ class FundOrder extends Model
 //            $data['type'] = 1;
 //            $data['status'] = 1;
 //            $data['create_time'] = time();
-//            Db('fund_income_log') -> insert($data);
+//            Db::name('fund_income_log') -> insert($data);
       self::appendIncomeLog($money, $value['name'], $value['code'], $uid, $fund_id, 1, 1, $order_type, $id, '', $rebate, $uid);
 //            $user_balance = Money::getMoney($uid);
 //            $account = $user_balance['account'];
@@ -396,7 +396,7 @@ class FundOrder extends Model
     $add_data['username']        = $user_data['name'];
     $add_data['agent_id']        = $agent_id;
     $add_data['create_time']     = time();
-    Db('fund_income_log')->insert($add_data);
+    Db::name('fund_income_log')->insert($add_data);
   }
 
   //合伙人补贴
@@ -429,7 +429,7 @@ class FundOrder extends Model
       $money = $array[4];
       $type  = 5;
     }
-    if (!Db('fund_recommended_award')->where('uid', $re_id)->where('type', $type)->count()) {
+    if (!Db::name('fund_recommended_award')->where('uid', $re_id)->where('type', $type)->count()) {
       if ($money > 0) {
         $data                = [];
         $data['name']        = $name;
@@ -439,7 +439,7 @@ class FundOrder extends Model
         $data['type']        = $type;
         $data['create_time'] = time();
         $user_balance        = Money::getMoney($re_id);
-        Db('fund_recommended_award')->insert($data);
+        Db::name('fund_recommended_award')->insert($data);
 //                $add_data = [];
 //                $add_data['name'] = $name;
 //                $add_data['code'] = $code;
@@ -451,7 +451,7 @@ class FundOrder extends Model
 //                $add_data['create_time'] = time();
 //                $add_data['order_type'] = $order_type;
 //                $add_data['type'] = 3;
-//                Db('fund_income_log') -> insert($add_data);
+//                Db::name('fund_income_log') -> insert($add_data);
         self::appendIncomeLog($money, $name, $code, $re_id, $fund_id, 3, 1, $order_type, $order_id, '', '', $id);
         $info  = '直推：' . $num . '人，合伙补贴：' . $money . '元';
         $money = $money * 100;
@@ -554,7 +554,7 @@ class FundOrder extends Model
 //                $data['type'] = 2; //奖金类型 1=交易日收益，2=周工资，3= 合伙人补贴，4= 分销奖励
 //                $data['status'] = 0;
 //                $data['create_time'] = time();
-//                Db('fund_income_log') -> insert($data);
+//                Db::name('fund_income_log') -> insert($data);
         self::appendIncomeLog($bonus, $name, $code, $re_id, $fund_id, 2, 0, $order_type, $order_id, $level_text, $rebate, $id);
       }
     }

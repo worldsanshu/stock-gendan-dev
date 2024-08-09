@@ -3,6 +3,7 @@ namespace app\money\model;
 
 use app\statistics\model\ProfitLoss as ProfitLossModel;
 use think\model;
+use think\Db;
 
 class Record extends Model
 {
@@ -76,6 +77,9 @@ class Record extends Model
       '110' => '彩金',
       '111' => '系统存入活动金',
       '112' => '任务领取',
+      '113' => '优投追加金额退回',
+      '114' => '优投追加金额冻结',
+      '115' => '优投追加金额解冻',
     ];
 
     public function getTypeAttr($value)
@@ -101,7 +105,7 @@ class Record extends Model
      */
     public static function saveData($mid, $affect, $account, $type, $info = '', $remarks = '', $interest = 0, $obj = [])
     {
-        $for_user = Db('member')->where('id', $mid)->value('agent_far');
+        $for_user = Db::name('member')->where('id', $mid)->value('agent_far');
         if ($obj) {
             #后续开发的功能  后续慢慢取消 $affect和$account参数
             $record['sn'] = $obj['sn'];

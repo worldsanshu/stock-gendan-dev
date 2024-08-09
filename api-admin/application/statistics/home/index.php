@@ -8,7 +8,9 @@
 // +----------------------------------------------------------------------
 // | @author gs101
 // +----------------------------------------------------------------------
-namespace app\agent\home;
+namespace app\statistics\home;
+
+use app\common\controller\Common;
 
 class Index extends Common
 {

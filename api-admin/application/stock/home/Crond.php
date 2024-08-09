@@ -42,6 +42,10 @@ use think\facade\Log;
 
 class Crond extends Home
 {
+    public static function test_crond()
+    {
+        var_dump(11111);
+    }
     public static function test()
     {
         $res = self::aliyun_market('sz600178');
@@ -1890,7 +1894,7 @@ class Crond extends Home
     public static function send_sms($mobile, $template, $info = null)
     {
         // 读取一条短信插件
-        $sms_plugin = Db('admin_plugin')->where("name like '%Sms' and status = 1")->find();
+        $sms_plugin = Db::name('admin_plugin')->where("name like '%Sms' and status = 1")->find();
         //$develop_mode=config('develop_mode');//判断是否开发模式
         if (!$sms_plugin) { // 如果没有开启短信接口则发送默认验证码 0000
             $arr['code'] = md5('000000');
@@ -2123,7 +2127,7 @@ class Crond extends Home
         $where['type']     = array('eq', 1);
         $where['status']   = array('eq', '已委托');
         $where['add_time'] = array('elt', $end_time);
-        Db('stock_trust')->where($where)->delete();
+        Db::name('stock_trust')->where($where)->delete();
         echo "success";
         exit;
     }

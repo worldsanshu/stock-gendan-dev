@@ -2,6 +2,8 @@
 
 namespace util;
 
+use think\Db;
+
 class Logs
 {
     /*
@@ -57,7 +59,7 @@ class Logs
         //监听并记录错误
         if ($post_data && is_array($post_data)) {
             $post_data['ctime'] = time();
-            db('stock_error_log')->insert($post_data);
+            Db::name('stock_error_log')->insert($post_data);
             //转到其它接口
         }
     }

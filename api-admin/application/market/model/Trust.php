@@ -72,8 +72,8 @@ class Trust extends Model
      */
     public function sell_m_trust($stockinfo, $count, $price, $sub_id, $lid, $user, $soure, $Trust_no, $broker, $model)
     {
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $row = array();
         $row[0]['sub_id'] = $sub_id;
         $row[0]['lid'] = $lid;
@@ -161,8 +161,8 @@ class Trust extends Model
      */
     public function add_m_trust($stockinfo, $count, $price, $sub_id, $lid, $user, $soure, $Trust_no, $broker, $model)
     {
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $row = array();
         $row[0]['sub_id'] = $sub_id;
         $row[0]['lid'] = $lid;
@@ -217,8 +217,8 @@ class Trust extends Model
     public function add_cancel_trust($data, $sub_id, $lid, $user, $soure)
     {
         $row = array();
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         foreach ($data as $k => $value) {
             $row[$k]['sub_id'] = $sub_id;
             $row[$k]['lid'] = $lid;

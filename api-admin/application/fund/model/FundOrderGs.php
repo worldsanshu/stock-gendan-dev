@@ -7,6 +7,7 @@ use app\member\model\Member;
 use app\money\model\Money;
 use app\money\model\Record;
 use think\Db;
+use think\Exception;
 use think\model;
 
 class FundOrderGs extends Model
@@ -82,7 +83,7 @@ class FundOrderGs extends Model
                 $data['type']        = $type;
                 $data['create_time'] = time();
                 $user_balance        = Money::getMoney($re_id);
-                $insertdata          = Db('fund_recommended_award')->insert($data);
+                $insertdata          = Db::name('fund_recommended_award')->insert($data);
 
 //                $add_data = [];
 //                $add_data['name'] = $name;
@@ -95,7 +96,7 @@ class FundOrderGs extends Model
 //                $add_data['create_time'] = time();
 //                $add_data['order_type'] = $order_type;
 //                $add_data['type'] = 3;
-//                Db('fund_income_log') -> insert($add_data);
+//                Db::name('fund_income_log') -> insert($add_data);
                 //$appendIncomeLog = self::appendIncomeLog($money, $name = '', $code = '', $re_id, $fund_id = '', 3, 1, $order_type, $order_id, '', '', $id);
                 #echo "insertdata:".$appendIncomeLog;
                 $info        = '直推：' . $num . '人，合伙补贴：' . $money . '元';
@@ -152,7 +153,7 @@ class FundOrderGs extends Model
         $add_data['username']        = $user_data['name'];
         $add_data['agent_id']        = $agent_id;
         $add_data['create_time']     = time();
-        Db('fund_income_log')->insert($add_data);
+        Db::name('fund_income_log')->insert($add_data);
     }
 
     /**
@@ -409,7 +410,7 @@ class FundOrderGs extends Model
                 $data['status']      = 1;
                 $data['create_time'] = time();
                 #第五步 插入收益记录
-                $fund_income_log = Db('fund_income_log')->insert($data);
+                $fund_income_log = Db::name('fund_income_log')->insert($data);
 
                 if ($Variety_activity_account > 0) {
                     #扣除活动金

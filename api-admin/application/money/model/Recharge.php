@@ -67,7 +67,7 @@ class Recharge extends Model
         if (!$id) {
             return ['status' => false, 'msg' => '缺少主键'];
         }
-        $charge              = Db('money_recharge')->where('id', $id)->find();
+        $charge              = Db::name('money_recharge')->where('id', $id)->find();
         if($charge['status'] != 0)return ['status' => false, 'msg' => '订单已审核'];
         $up_charge['status'] = $status;
         $up_charge['remark'] = $remark;
@@ -78,10 +78,10 @@ class Recharge extends Model
 
             if ($status == 1) {
                 $contents                  = "充值审核通过";
-                $account                   = Db('money')->where('mid', $charge['mid'])->lock(true)->value('account');
+                $account                   = Db::name('money')->where('mid', $charge['mid'])->lock(true)->value('account');
                 $up_money['account']       = bcadd($account, $charge['money']);
                 $up_money['recharge_time'] = $charge['create_time'];
-                $res1 = Db('money')->where('mid', $charge['mid'])->update($up_money);
+                $res1 = Db::name('money')->where('mid', $charge['mid'])->update($up_money);
                 self::updateMemberData($charge['mid'], $up_money['account'], $charge['money']);
                 $info   = '充值单号：' . $charge['order_no'];
                 $record = new Record;
@@ -90,10 +90,10 @@ class Recharge extends Model
 
                 $res3 = $record->saveData($charge['mid'], $charge['money'], $up_money['account'], 1, $info, '', '', $obj);
             }
-            $res2 = Db('money_recharge')->update($up_charge);
+            $res2 = Db::name('money_recharge')->update($up_charge);
             if ($res1 && $res2 && $res3) {
                 Db::commit();
-                $user_mobile = $account = Db('member')->where('id', $charge['mid'])->value('mobile');
+                $user_mobile = $account = Db::name('member')->where('id', $charge['mid'])->value('mobile');
                 switch ($status) {
                     case 1:
                         /*$content = \think\Config::get('sms_template')['stock_offline_auditing_success'];
@@ -119,7 +119,7 @@ class Recharge extends Model
 
             return ['status' => false, 'msg' => '数据异常-1'];
         }
-        $mobile  = Db('member')->where('id', $charge['mid'])->value('mobile');
+        $mobile  = Db::name('member')->where('id', $charge['mid'])->value('mobile');
         $details = $mobile . ' 字段(status)，原值：(0)新值：(' . $status . ') 备注：' . $remark;
         action_log('recharge_edit', 'money_recharge', $id, UID, $details);
         return ['status' => true, 'msg' => '数据更新成功'];

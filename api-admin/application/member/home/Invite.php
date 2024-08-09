@@ -266,7 +266,7 @@ class Invite extends Common
             $item['create_time'] = date("Y-m-d", $item['create_time']);
         };
         //总提成
-        $sum_extract = db('agents_back_money')->where(['mid' => $mid])->sum('affect');
+        $sum_extract = Db::name('agents_back_money')->where(['mid' => $mid])->sum('affect');
         if ($data) {
             return json(['status' => 1, 'message' => '获取成功', 'data' => $data, 'sum_extract' => $sum_extract]);
         } else {

@@ -14,6 +14,7 @@ use app\money\service\KdpayService;
 use app\money\service\MpayService;
 use app\money\service\OKpayService;
 use app\money\service\TOpayService;
+use app\money\service\USDTpayService;
 use think\Db;
 use think\Model;
 
@@ -83,9 +84,9 @@ class Withdraw extends Model
         if (!$id) {
             return false;
         }
-        $withdraw = Db('money_withdraw')->where('id', $id)->find();
+        $withdraw = Db::name('money_withdraw')->where('id', $id)->find();
         if($withdraw['status'] != 0)return ['status' => false, 'msg' => '订单已审核'];
-        $user_mobile = Db('member')->where('id', $withdraw['mid'])->value('mobile');
+        $user_mobile = Db::name('member')->where('id', $withdraw['mid'])->value('mobile');
         $up_withdraw['status'] = $status;
         $up_withdraw['id'] = $id;
         $up_withdraw['examine_time'] = time();
@@ -95,7 +96,7 @@ class Withdraw extends Model
 //            $record = new record;
 
             $record = new Record();
-            $money_info = Db('money')->where('mid', $withdraw['mid'])->lock(true)->find();
+            $money_info = Db::name('money')->where('mid', $withdraw['mid'])->lock(true)->find();
             if ($status == 1) {// 提现通过 减去冻结金额
 
                 self::sms_withdraw('stock_withdraw_auditing_success', $user_mobile, $withdraw['money']);
@@ -128,7 +129,7 @@ class Withdraw extends Model
             } else {
                 return '状态有误';
             }
-            $res1 = Db('money')->where('mid', $withdraw['mid'])->update($up_money);
+            $res1 = Db::name('money')->where('mid', $withdraw['mid'])->update($up_money);
 //                $res3 = $record->saveData($withdraw['mid'], $affect, $account, $type, $info);
             $obj = ['affect' => $affect, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $up_money['activity_account'], 'sn' => ''];
             $res3 = $record->saveData($withdraw['mid'], $affect, $account, $type, $info, '', '', $obj);
@@ -147,7 +148,7 @@ class Withdraw extends Model
             Db::rollback();
             return $e->getMessage();
         }
-        $mobile = Db('member')->where('id', $withdraw['mid'])->value('mobile');
+        $mobile = Db::name('member')->where('id', $withdraw['mid'])->value('mobile');
         $details = $mobile . ' 字段(status)，原值：(0)新值：(' . $status . ') 备注：' . $remark . $info;
         action_log('withdraw_edit', 'money_withdraw', $id, UID, $details);
         return true;
@@ -226,7 +227,7 @@ class Withdraw extends Model
 //        $record = new record;
         $record = new Record();
         Db::startTrans();
-        $money_info = Db('money')->where('mid', $data['mid'])->lock(true)->find();
+        $money_info = Db::name('money')->where('mid', $data['mid'])->lock(true)->find();
         $account = bcsub($money_info['account'], $money);
         $up_money['freeze'] = bcadd($money_info['freeze'], $money);
         $up_money['account'] = $account;
@@ -236,7 +237,7 @@ class Withdraw extends Model
 //                $res2 = $record->saveData($data['mid'], -$money, $account, 2, $info);
             $obj = ['affect' => -$money, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $up_money['activity_account'], 'sn' => '','fee'=>$data['fee']];
             $res2 = $record->saveData($data['mid'], -$money, $account, 2, $info, '', '', $obj);
-            $res3 = Db('money')->where('mid', $data['mid'])->update($up_money);
+            $res3 = Db::name('money')->where('mid', $data['mid'])->update($up_money);
             if ($res1 && $res2 && $res3) {
                 Db::commit();
                 return ['status' => 1, 'message' => '提交成功'];
@@ -262,9 +263,9 @@ class Withdraw extends Model
         if (!$id) {
             return false;
         }
-        $withdraw = Db('money_withdraw')->where('id', $id)->find();
+        $withdraw = Db::name('money_withdraw')->where('id', $id)->find();
         if($withdraw['status'] != 0)return ['status' => false, 'msg' => '订单已审核'];
-        $user_mobile = Db('member')->where('id', $withdraw['mid'])->value('mobile');
+        $user_mobile = Db::name('member')->where('id', $withdraw['mid'])->value('mobile');
         $up_withdraw['status'] = 1;
         $up_withdraw['id'] = $id;
         $up_withdraw['examine_time'] = time();
@@ -278,7 +279,7 @@ class Withdraw extends Model
         try {
 
             $record = new Record();
-            $money_info = Db('money')->where('mid', $withdraw['mid'])->lock(true)->find();
+            $money_info = Db::name('money')->where('mid', $withdraw['mid'])->lock(true)->find();
             $rem = self::withdrawRemit($withdraw);
             if($rem['code'] != 200){
                 return $rem['message'];
@@ -292,7 +293,7 @@ class Withdraw extends Model
             $type = 3;
             $account = $money_info['account'];
 
-            $res1 = Db('money')->where('mid', $withdraw['mid'])->update($up_money);
+            $res1 = Db::name('money')->where('mid', $withdraw['mid'])->update($up_money);
 //                $res3 = $record->saveData($withdraw['mid'], $affect, $account, $type, $info);
             $obj = ['affect' => $affect, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $up_money['activity_account'], 'sn' => ''];
             $res3 = $record->saveData($withdraw['mid'], $affect, $account, $type, $info, '', '', $obj);
@@ -311,7 +312,7 @@ class Withdraw extends Model
             Db::rollback();
             return $e->getMessage();
         }
-        $mobile = Db('member')->where('id', $withdraw['mid'])->value('mobile');
+        $mobile = Db::name('member')->where('id', $withdraw['mid'])->value('mobile');
         $details = $mobile . ' 字段(status)，原值：(0)新值：(' . 1 . ') 备注：' . '' . $info;
         action_log('withdraw_edit', 'money_withdraw', $id, UID, $details);
         return true;

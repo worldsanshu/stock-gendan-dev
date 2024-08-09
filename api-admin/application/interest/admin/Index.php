@@ -274,7 +274,7 @@ EOF;
                 $up_money['account'] = bcadd($money_info['account'], $new_money); //加本金
                 $up_money['account'] = bcadd($up_money['account'], $new_interest); //加返利
 
-                Db('money')->where('mid', $get_one['uid'])->update($up_money);
+                Db::name('money')->where('mid', $get_one['uid'])->update($up_money);
 
                 $info = "返还本金：" . $get_one['order_number'];
                 $affect = $get_one['money']  * 100;

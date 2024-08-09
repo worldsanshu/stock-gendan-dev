@@ -27,6 +27,12 @@ class Index extends Admin
         // 分页数据
         $page = $data_list->render();
         // 使用ZBuilder快速创建数据表格
+        $Autotask_last_time = \think\facade\Cache::get('Autotask_last_time');
+        if (empty($Autotask_last_time)) {
+            $Autotask_last_time = '任务未开启';
+        }else{
+            $Autotask_last_time = '最后一次任务时间：'.date('Y-m-d H:i:s',$Autotask_last_time);
+        }
         return ZBuilder::make('table')
           ->setPageTitle('定时任务')// 设置页面标题
           ->setTableName('crontab')// 设置数据表名
@@ -50,6 +56,7 @@ class Index extends Admin
           ->setRowList($data_list)// 设置表格数据
           ->setPages($page)// 设置分页数据
           ->raw('maximums_text,next_time') // 使用原值
+          ->setPageTips('Linux使用SSH远程登录服务器，运行命令：<pre>chmod a+x '. Env::get('root_path').'queue.sh && '.Env::get('root_path').'queue.sh</pre>'.$Autotask_last_time, 'warning')
           ->fetch(); // 渲染页面
     }
 
@@ -122,7 +129,7 @@ EOF;
             ['number', 'weigh', '权重', '多个任务同一时间执行时，按照权重从高到底执行', '0'],
             ['radio', 'status', '状态', '', ['normal' => '正常', 'disable' => '禁用', 'completed' => '完成', 'expired' => '过期'], 'normal'],
           ])
-          ->setExtraJs($js)
+          //->setExtraJs($js)
           ->fetch('add');
     }
 
@@ -201,7 +208,7 @@ EOF;
             ['hidden', 'id'],
           ])
           ->setFormData($info) // 设置表单数据
-          ->setExtraJs($js)
+          //->setExtraJs($js)
           ->fetch('add');
     }
 

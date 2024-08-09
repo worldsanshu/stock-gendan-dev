@@ -19,6 +19,9 @@ use TencentCloud\Common\Profile\HttpProfile;
 use TencentCloud\Sms\V20190711\Models\SendSmsRequest;
 use TencentCloud\Sms\V20190711\SmsClient;
 use think\Db;
+use app\member\model\Member;
+use app\apicom\home\Stock;
+use app\market\model\StockList;
 
 // 导入要请求接口对应的 Request 类
 

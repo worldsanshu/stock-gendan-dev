@@ -14,6 +14,7 @@ use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
 use app\fund\model\Trader as TraderModel;
 use think\Cache;
+use think\Db;
 
 /**
  * 会员管理控制器
@@ -34,7 +35,7 @@ class Fundvip extends Admin
     empty($order) && $order = 'id desc';
     $field = '*';
     // 数据列表
-    $data_list = Db('fund_viptrade')->where($map)->field($field)->order($order)->paginate();
+    $data_list = Db::name('fund_viptrade')->where($map)->field($field)->order($order)->paginate();
     // 分页数据
     $page = $data_list->render();
     if (empty($_SERVER["QUERY_STRING"])) {
@@ -69,7 +70,7 @@ class Fundvip extends Admin
     if ($this->request->isPost()) {
       // 表单数据
       $data = input();
-      if (Db('fund_viptrade')->insert($data)) {
+      if (Db::name('fund_viptrade')->insert($data)) {
         $this->success('新增成功', 'index');
       } else {
         $this->error('新增失败');
@@ -94,13 +95,13 @@ class Fundvip extends Admin
       $update_data = input();
       // 验证
       $data = $update_data;
-      if (Db('fund_viptrade')->update($data)) {
+      if (Db::name('fund_viptrade')->update($data)) {
         $this->success('编辑成功', cookie('__forward__'));
       } else {
         $this->error('编辑失败');
       }
     }
-    $info = Db('fund_viptrade')->where('id', $id)->find();
+    $info = Db::name('fund_viptrade')->where('id', $id)->find();
     return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
     ->addFormItems([ // 批量添加表单项
                      ['hidden', 'id'],
@@ -121,7 +122,7 @@ class Fundvip extends Admin
     $ids        = (array)$ids;
     $field      = input('param.field', 'is_del');
     $map[]      = ['id', 'in', $ids];
-    $result     = Db('fund_viptrade')->where($map)->delete();
+    $result     = Db::name('fund_viptrade')->where($map)->delete();
     if (false !== $result) {
       Cache::clear();
       $this->success('操作成功', cookie('__forward__'));

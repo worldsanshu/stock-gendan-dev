@@ -250,7 +250,7 @@ class Index extends Common
         $data['kfphone'] = config('web_site_telephone');
         $mid = MID;
         if ($mid) {
-            $msg_num = Db('member_message')->where(['mid' => MID, 'status' => 0])->count();
+            $msg_num = Db::name('member_message')->where(['mid' => MID, 'status' => 0])->count();
             $data['msg_num'] = $msg_num;
         } else {
             $data['msg_num'] = 0;

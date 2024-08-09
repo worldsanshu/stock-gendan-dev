@@ -92,7 +92,7 @@ class User extends Model
                     $user['lockstatusEndTime'] = null;
                     $user->save();
                     $data = array("uid" => $user['id']);
-                    $res  = Db('admin_loginfails')->where($data)->delete();
+                    $res  = Db::name('admin_loginfails')->where($data)->delete();
 
                 }
             }
@@ -169,7 +169,7 @@ class User extends Model
         if (UserModel::where('id', $uid)->update(['last_login_time' => request()->time(), 'last_login_ip' => get_client_ip(1)])) {
             Logs::log('secondlogin5', ['uid' => $uid, 'mobile' => $mobile, 'autoLogin' => $user], 'publics');
             $data = array("uid" => $user['id']);
-            Db('admin_loginfails')->where($data)->delete();
+            Db::name('admin_loginfails')->where($data)->delete();
             // 自动登录
             return self::autoLogin($user, true);
         } else {
@@ -206,7 +206,7 @@ class User extends Model
         $sdata['create_ip']   = get_client_ip(1);
         $sdata['create_time'] = time();
         # $result = self::create($sdata);
-        $res = Db('admin_loginfails')->insert($sdata, false, true);
+        $res = Db::name('admin_loginfails')->insert($sdata, false, true);
 
         return $res;
 
@@ -268,7 +268,7 @@ class User extends Model
         $sdata['note']      = $note;
         $sdata['data']      = var_export($data, true);
 
-        $res = Db('admin_login_logs')->insert($sdata);
+        $res = Db::name('admin_login_logs')->insert($sdata);
 
         return $res;
 
@@ -286,7 +286,7 @@ class User extends Model
 
         # $result = self::create($sdata);
         $data = array("uid" => $uid);
-        $res  = Db('admin_loginfails')->where($data)->select();
+        $res  = Db::name('admin_loginfails')->where($data)->select();
         return $res;
 
     }

@@ -311,7 +311,7 @@ class Subaccount extends ThinkModel
     public static function getSubaccountMoneyLog()
     {
         $day_start_time = strtotime(date('Y-m-d'));//当天的起始时间
-        $subaccount_id_array = Db('stock_subaccount_money_log')->where('create_time', $day_start_time)->column('sub_account_id');//子账户id集合
+        $subaccount_id_array = Db::name('stock_subaccount_money_log')->where('create_time', $day_start_time)->column('sub_account_id');//子账户id集合
         $data_list = self::view('stock_subaccount s', true)
           ->view('member m1', 'mobile,email,agent_far,name', 'm1.id=s.uid')
           ->view('stock_subaccount_money m', '*', 'm.stock_subaccount_id=s.id')->select();
@@ -322,14 +322,14 @@ class Subaccount extends ThinkModel
         foreach ($data_list as $value) {
             $profit_loss = tixian($value['id']); //盈亏金额
             if (!in_array($value['id'], $subaccount_id_array)) {
-                $contract_num = Db('stock_borrow')->where('stock_subaccount_id', $value['id'])->count();
-                $agent_name = Db('member')->where('id', $value['agent_far'])->count();
-                $position = Db('stock_position')->where('sub_id', $value['id'])->count();
-                $withdrawal_money = Db('money_withdraw')->where('mid', $value['uid'])->where('status', 1)->sum('money');
+                $contract_num = Db::name('stock_borrow')->where('stock_subaccount_id', $value['id'])->count();
+                $agent_name = Db::name('member')->where('id', $value['agent_far'])->count();
+                $position = Db::name('stock_position')->where('sub_id', $value['id'])->count();
+                $withdrawal_money = Db::name('money_withdraw')->where('mid', $value['uid'])->where('status', 1)->sum('money');
                 $withdrawal = money_convert($withdrawal_money);
-                $recharge = Db('money_recharge')->where('mid', $value['uid'])->where('status', 1)->sum('money');
+                $recharge = Db::name('money_recharge')->where('mid', $value['uid'])->where('status', 1)->sum('money');
                 $recharge = money_convert($recharge);
-                $activity_money = Db('money')->where('mid', $value['uid'])->sum('activity_account');
+                $activity_money = Db::name('money')->where('mid', $value['uid'])->sum('activity_account');
                 $activity_money = money_convert($activity_money);
                 $is_add = 1;
                 $sql .= "('" . $value['uid'] . "','" . $value['id'] . "','" . $value['sub_account'] . "','" . $value['mobile'] . "','" . $value['deposit_money'] . "','" . $value['borrow_money'] . "','" . $profit_loss . "','" . $day_start_time . "','" . $value['email'] . "','" . $value['name'] . "','" . $contract_num . "','" . $agent_name . "','" . $position . "','" . $withdrawal . "','" . $recharge . "','" . $activity_money . "'),";

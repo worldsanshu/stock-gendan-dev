@@ -401,7 +401,7 @@ class Borrow extends ThinkModel
                 $risk['renewal'] = $data['renewal'];
                 $risk['autoclose'] = $data['autoclose'];
                 $risk['update_time'] = time();
-                $risk_res = Db('stock_subaccount_risk')
+                $risk_res = Db::name('stock_subaccount_risk')
                   ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
                   ->update($risk);
                 $subaccount_money['commission_scale'] = $data['commission_scale'];
@@ -412,7 +412,7 @@ class Borrow extends ThinkModel
                 $subaccount_money['borrow_money'] = $data['borrow_money'] * 100;
                 $subaccount_money['avail'] = $data['init_money'] * 100;
                 $subaccount_money['update_time'] = time();
-                $subaccount_money_res = Db('stock_subaccount_money')
+                $subaccount_money_res = Db::name('stock_subaccount_money')
                   ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
                   ->update($subaccount_money);
             }
@@ -438,7 +438,7 @@ class Borrow extends ThinkModel
             $mmoney['account'] = $minfo['account'] + $sumMoney;//资金解冻，增加会员资金账户余额
             $mmoney['activity_account'] = $minfo['activity_account'] + $borrow_interest_activity;//资金解冻，增加会员资金活动金
             $mmoney['freeze_activity'] = $minfo['freeze_activity'] - $borrow_interest_activity;//资金解冻，增加会员资金活动金
-            $money_res = Db('money')->where(['mid' => $data['member_id']])->update($mmoney);
+            $money_res = Db::name('money')->where(['mid' => $data['member_id']])->update($mmoney);
             $hs_sumMoney = $sumMoney / 100;
             $obj = ['affect' => $sumMoney, 'account' => $mmoney['account'], 'affect_activity' => $borrow_interest_activity, 'activity_account' => $mmoney['activity_account'], 'sn' => ''];
             $msg = '配资审核未通过，解冻保证金到余额，余额：' . $hs_sumMoney . '元，活动金：' . $borrow_interest_activity . '元';
@@ -515,7 +515,7 @@ class Borrow extends ThinkModel
 //                        $rebate = $this->sendRebate($recommendor, $data['id'], $memberInfo);
 //                }
             }
-            $subResult = Db('money')->where(['mid' => $data['member_id']])->update($mmoney);
+            $subResult = Db::name('money')->where(['mid' => $data['member_id']])->update($mmoney);
             // 更新资金日志表信息
             $obj = ['affect' => 0, 'account' => $minfo['account'], 'affect_activity' => 0, 'activity_account' => $minfo['activity_account'], 'sn' => ''];
             $msg = '配资审核通过，解冻保证金到配资账户,保证金金额：' . $data['deposit_money'] . "元";
@@ -582,7 +582,7 @@ class Borrow extends ThinkModel
             $risk['renewal'] = $data['renewal'];
             $risk['autoclose'] = $data['autoclose'];
             $risk['update_time'] = time();
-            $risk_res = Db('stock_subaccount_risk')
+            $risk_res = Db::name('stock_subaccount_risk')
               ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
               ->update($risk);
             $subaccount_money['commission_scale'] = $data['commission_scale'];
@@ -593,7 +593,7 @@ class Borrow extends ThinkModel
             $subaccount_money['borrow_money'] = $data['borrow_money'] * 100;
             $subaccount_money['avail'] = $data['init_money'] * 100;
             $subaccount_money['update_time'] = time();
-            $subaccount_money_res = Db('stock_subaccount_money')
+            $subaccount_money_res = Db::name('stock_subaccount_money')
               ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
               ->update($subaccount_money);
             if ($mmRet && $mmLogRet !== false && $ret && $subResult && $risk_res && $subaccount_money_res && $stock_res && $rebate && $insert_res) {
@@ -751,7 +751,7 @@ class Borrow extends ThinkModel
         $data['borrow_interest'] = $interest;
         $need_money = bcadd($interest, $data['deposit_money']);
         Db::startTrans();
-        $member_money = Db('money')->where(['mid' => $data['member_id']])->lock(true)->find();
+        $member_money = Db::name('money')->where(['mid' => $data['member_id']])->lock(true)->find();
         #  INSERT INTO `test-1`.`lmq_money` (`id`, `mid`, `account`, `freeze`, `operate_account`, `bond_account`, `status`, `activity_account`) VALUES ('61', '61', '870720', '10020', '1210000', '110000', '1', '40000');
         if ($member_money['activity_account'] >= $interest) {
             if ($member_money['account'] < $data['deposit_money']) {
@@ -802,13 +802,13 @@ class Borrow extends ThinkModel
 //        echo "account:".$updatamone."\r\n";
 //        die();
         try {
-            $money_res = Db('money')->where(['mid' => $data['member_id']])->update([
+            $money_res = Db::name('money')->where(['mid' => $data['member_id']])->update([
               'account' => $updatamone,
               'freeze' => $freeze,
               'freeze_activity' => $freeze_activity,
               'activity_account' => $activity_account]);
             $record_res = $record->saveData($data['member_id'], -abs($need_money), $updatamone, 33, $str, 'sqlx', $interest, $obj);
-            $data['for_user'] = Db('member')->where('id', $data['member_id'])->value('agent_far');
+            $data['for_user'] = Db::name('member')->where('id', $data['member_id'])->value('agent_far');
             // 验证
             //$result = $this->validate('Borrow.create')->save($data);tp5.1不再支持
             $validate = new \app\apicom\validate\Borrow();

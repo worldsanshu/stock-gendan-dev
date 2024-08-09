@@ -13,6 +13,7 @@ namespace app\fund\admin;
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
 use think\facade\Cache;
+use think\Db;
 
 /**
  * 会员管理控制器
@@ -32,7 +33,7 @@ class Fundcate extends Admin
     $order = $this->getOrder();
     empty($order) && $order = 'id desc';
     // 数据列表
-    $data_list = Db('fund_cate')->where($map)->order($order)->paginate();
+    $data_list = Db::name('fund_cate')->where($map)->order($order)->paginate();
     // 分页数据
     $page = $data_list->render();
     if (empty($_SERVER["QUERY_STRING"])) {
@@ -62,11 +63,11 @@ class Fundcate extends Admin
     if ($this->request->isPost()) {
       // 表单数据
       $data = input();
-        $info = Db('fund_cate')->where('name', $data['name'])->find();
+        $info = Db::name('fund_cate')->where('name', $data['name'])->find();
         if($info){
             $this->error('名称已存在');
         }
-      if (Db('fund_cate')->insert($data)) {
+      if (Db::name('fund_cate')->insert($data)) {
         $this->success('新增成功', 'index');
       } else {
         $this->error('新增失败');
@@ -87,19 +88,19 @@ class Fundcate extends Admin
       $update_data = input();
       // 验证
       $data = $update_data;
-        $info_type = Db('fund_cate')->where('name', $data['name'])->find();
+        $info_type = Db::name('fund_cate')->where('name', $data['name'])->find();
         if ($info_type) {
             if ($info_type['id'] != $data['id']) {
                 $this->error('名称已存在');
             }
         }
-      if (Db('fund_cate')->update($data)) {
+      if (Db::name('fund_cate')->update($data)) {
         $this->success('编辑成功', cookie('__forward__'));
       } else {
         $this->error('编辑失败');
       }
     }
-    $info = Db('fund_cate')->where('id', $id)->find();
+    $info = Db::name('fund_cate')->where('id', $id)->find();
     return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
     ->addFormItems([ // 批量添加表单项
                      ['hidden', 'id'],
@@ -117,7 +118,7 @@ class Fundcate extends Admin
     $field      = input('param.field', 'is_del');
 
     $map[]  = ['id', 'in', $ids];
-    $result = Db('fund_cate')->where($map)->delete();
+    $result = Db::name('fund_cate')->where($map)->delete();
     if (false !== $result) {
       Cache::clear();
       $this->success('操作成功');
@@ -150,7 +151,7 @@ class Fundcate extends Admin
     $table_name    = input('param.table');
     $ids           = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
     $member_id     = is_array($ids) ? '' : $ids;
-    $member_status = Db('fund_cate')->where('id', 'in', $ids)->column('status');
+    $member_status = Db::name('fund_cate')->where('id', 'in', $ids)->column('status');
     return parent::setStatus($type, ['member_' . $type, 'member', $member_id, UID, implode('、', $member_status)]);
   }
 
@@ -160,7 +161,7 @@ class Fundcate extends Admin
     $field  = input('post.name', '');
     $value  = input('post.value', '');
     $table  = input('post.table', '');
-    $status = Db('fund_cate')->where('id', $id)->value($field);
+    $status = Db::name('fund_cate')->where('id', $id)->value($field);
     // $status = Db::name('member')->where('id', $id)->value($field);
     $details = '字段(' . $field . ')，原值(' . $status . ')，新值：(' . $value . ')';
     return parent::quickEdit(['member_edit', 'member', $id, UID, $details]);

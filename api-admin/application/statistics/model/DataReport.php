@@ -87,16 +87,16 @@ class DataReport extends Model
         $borrow_money = Borrow::where($map1)->sum('borrow_money');
         $data['borrow_money'] = $borrow_money / 100;
         $data['effective_user'] = Member::where('create_time', '>=', $day_start_time)->where($map2)->count();
-        $recharge_money = Db('money_recharge')->where($map3)->where('create_time', '>=', $day_start_time)->sum('money');
+        $recharge_money = Db::name('money_recharge')->where($map3)->where('create_time', '>=', $day_start_time)->sum('money');
         $data['day_recharge'] = $recharge_money / 100;
-        $withdraw_money = Db('money_withdraw')->where($map3)->where('create_time', '>=', $day_start_time)->sum('money');
+        $withdraw_money = Db::name('money_withdraw')->where($map3)->where('create_time', '>=', $day_start_time)->sum('money');
         $data['day_withdraw'] = $withdraw_money / 100;
-        $stock_subaccount_ids = Db('stock_subaccount')->where($map4)->column('id');
+        $stock_subaccount_ids = Db::name('stock_subaccount')->where($map4)->column('id');
         $map5['sub_id'] = array('in', $stock_subaccount_ids);
-        $data['stock_position_user_num'] = Db('stock_position')->where($map5)->count();
+        $data['stock_position_user_num'] = Db::name('stock_position')->where($map5)->count();
         $map6['stock_subaccount_id'] = array('in', $stock_subaccount_ids);
-        $data['profit_loss'] = Db('stock_subaccount_money')->where($map6)->sum('return_money');
-        $day_money_transfer = Db('money_transfer')->where($map3)->where('create_time', '>=', $day_start_time)->sum('money');
+        $data['profit_loss'] = Db::name('stock_subaccount_money')->where($map6)->sum('return_money');
+        $day_money_transfer = Db::name('money_transfer')->where($map3)->where('create_time', '>=', $day_start_time)->sum('money');
         $data['day_money_transfer'] = $day_money_transfer / 100;
         return $data;
     }

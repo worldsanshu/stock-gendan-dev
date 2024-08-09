@@ -10,6 +10,8 @@
 // +----------------------------------------------------------------------
 namespace app\market\home;
 
+use think\Exception;
+
 class Heart// extends Common{
 {
     protected $socket;

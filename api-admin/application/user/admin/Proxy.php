@@ -42,7 +42,7 @@ class Proxy extends Admin
         if ($data_list) {
             foreach ($data_list as $k => $v) {
 
-                $userinfo = db('proxy_config')->where(['for_user' => $v['id']])->find();
+                $userinfo = Db::name('proxy_config')->where(['for_user' => $v['id']])->find();
                 $data_list[$k]['host'] = $userinfo['host'];
                 $data_list[$k]['proportion'] = $userinfo['proportion'];
 
@@ -90,11 +90,11 @@ class Proxy extends Admin
         // 获取查询条件
         $map = $this->getMap();
         // 数据列表
-        $data_list = db('proxy_config')->where($map)->where('for_user', '>', 1)->paginate();
+        $data_list = Db::name('proxy_config')->where($map)->where('for_user', '>', 1)->paginate();
         if ($data_list) {
             foreach ($data_list as $k => $v) {
                 $data_list[$k]['ctime'] = date('Y-m-d H:m:s', $v['ctime']);
-                $userinfo = db('admin_user')->where(['id' => $v['for_user']])->find();
+                $userinfo = Db::name('admin_user')->where(['id' => $v['for_user']])->find();
                 $data_list[$k]['username'] = $userinfo['username'];
                 $data_list[$k]['nickname'] = $userinfo['nickname'];
             }
@@ -132,16 +132,16 @@ class Proxy extends Admin
      */
     public function proxySet()
     {
-        //$info = db('proxy_config')->where(['for_user'=> UID])->find();
+        //$info = Db::name('proxy_config')->where(['for_user'=> UID])->find();
         // 保存数据
         if ($this->request->isPost()) {
             $data = input();
-            $num = db('proxy_config')->where('for_user', '>', 1)->count();
+            $num = Db::name('proxy_config')->where('for_user', '>', 1)->count();
             $num = $num + 1;
             $data['host'] == 'daili' . $num . '.ghypz.com';
             $data['name'] == '' && $this->error('网站名称不能为空');
             $data['ctime'] = time();
-            $res = db('proxy_config')->insert($data, '', true);
+            $res = Db::name('proxy_config')->insert($data, '', true);
             action_log('proxySet_add', 'admin_user', UID, UID, get_nickname(UID));
             if ($res) {
 
@@ -182,11 +182,11 @@ class Proxy extends Admin
 
                 Hook::listen('user_add', $user);
                 //添加代理站点
-                $num = db('proxy_config')->where('for_user', '>', 1)->count();
+                $num = Db::name('proxy_config')->where('for_user', '>', 1)->count();
                 $num = $num + 1;
                 $url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
                 $host = 'daili' . $num . '.' . getTopHost($url);
-                db('proxy_config')->insert(['host' => $host, 'for_user' => $user['id'], 'ctime' => time()], '', true);
+                Db::name('proxy_config')->insert(['host' => $host, 'for_user' => $user['id'], 'ctime' => time()], '', true);
                 //end
                 db("admin_user")->where(['id' => $user['id']])->update(['for_user' => $user['id']]);
                 // 记录行为
@@ -467,7 +467,7 @@ class Proxy extends Admin
         $value = input('post.value', '');
         if ($field == 'proportion') {
 
-            db('proxy_config')->where(['for_user' => $id])->update(['proportion' => $value]);
+            Db::name('proxy_config')->where(['for_user' => $id])->update(['proportion' => $value]);
             $this->success('操作成功', 'index');
         } else {
             $config = UserModel::where('id', $id)->value($field);

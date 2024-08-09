@@ -1,7 +1,6 @@
 <?php
 
 use think\facade\Cache;
-use think\Queue;
 use util\Logs;
 
 

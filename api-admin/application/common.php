@@ -35,6 +35,8 @@ use think\facade\Lang;
 use think\facade\Request;
 use think\facade\Session;
 use util\Logs;
+use think\facade\Log;
+use app\member\model\Member;
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE); //太多未定义数组索引错误了
 // 应用公共文件
@@ -2089,7 +2091,7 @@ if (!function_exists('send_sms')) {
     function send_sms($mobile, $template, $info = null)
     {
         // 读取一条短信插件
-        $sms_plugin = Db('admin_plugin')->where("name like '%daoSms' and status = 1")->find();
+        $sms_plugin = Db::name('admin_plugin')->where("name like '%daoSms' and status = 1")->find();
         //$develop_mode=config('develop_mode');//判断是否开发模式
         if (!$sms_plugin) { // 如果没有开启短信接口则发送默认验证码 0000
             $arr['code'] = md5('000000');
@@ -2122,7 +2124,7 @@ if (!function_exists('send_sms_member')) {
     function send_sms_member($msg, $param, $type = 'NULL')
     {
         // 读取一条短信插件
-        $sms_plugin = Db('admin_plugin')->where("name like '%Sms' and status = 1")->find();
+        $sms_plugin = Db::name('admin_plugin')->where("name like '%Sms' and status = 1")->find();
         if ($sms_plugin) {
             $admin_mobile = $avatar = Db::name('admin_user')->where('username', 'admin')->value('mobile');
             $params       = $type == 1000 ? $param : $admin_mobile . ',' . $param;
@@ -3274,7 +3276,7 @@ if (!function_exists('is_member_signin')) {
             if (empty($member)) {
                 // 判断是否记住登录
                 if (cookie('?mid') && cookie('?m_signin_token')) {
-                    $MemberModel = new member();
+                    $MemberModel = new Member();
                     $member      = $MemberModel::get(cookie('mid'));
                     if ($member) {
                         $signin_token = data_auth_sign($member['mobile'] . $member['id'] . $member['last_login_time']);
@@ -3981,7 +3983,7 @@ if (!function_exists('for_user')) {
         Logs::log('for_user', ['UID' => UID], 'common');
         $for_user = 0;
         if ($mid) {
-            $res      = db('member')->where(['id' => $mid])->value('for_user');
+            $res      = Db::name('member')->where(['id' => $mid])->value('for_user');
             $for_user = $res ? $res : 0;
         } else {
             if (Session::has('for_user')) {
@@ -4053,9 +4055,9 @@ if (!function_exists('ProxyInfo')) {
         Logs::log('ProxyInfo', ['ProxyInfo' => $for_user], 'common');
         $siteinfo = [];
         if ($webType == 2) {
-            $siteinfo = db('proxy_config')->where(['for_user' => $for_user])->find();
+            $siteinfo = Db::name('proxy_config')->where(['for_user' => $for_user])->find();
             if ($siteinfo) {
-                $logo             = db('admin_attachment')->where(['id' => $siteinfo['logo']])->value('path');
+                $logo             = Db::name('admin_attachment')->where(['id' => $siteinfo['logo']])->value('path');
                 $siteinfo['logo'] = 'http://' . $siteinfo['host'] . '/' . $logo;
             }
         }

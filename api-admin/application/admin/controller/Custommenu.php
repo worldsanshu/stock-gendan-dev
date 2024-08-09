@@ -382,7 +382,7 @@ class Custommenu extends Admin
     {
         $ids = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
         $ids = (array)$ids;
-        $result = Db('custom_menu')->where('id', 'in', $ids)->delete();
+        $result = Db::name('custom_menu')->where('id', 'in', $ids)->delete();
         if (false !== $result) {
 
             $this->success('操作成功');

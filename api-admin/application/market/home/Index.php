@@ -887,7 +887,7 @@ class Index extends Common
         #涨幅
         if ($top_codes) {
             //获取要推送消息的用户
-            $top_ulist = db('stock_subaccount_self')->field('uid,gupiao_name,gupiao_code')->where(['gupiao_code' => ['in', $top_codes]])->select();
+            $top_ulist = Db::name('stock_subaccount_self')->field('uid,gupiao_name,gupiao_code')->where(['gupiao_code' => ['in', $top_codes]])->select();
             // Logs::log('top_ulist',['top_ulist'=>$top_ulist],'push_myselect');
             if ($top_ulist) {
                 foreach ($top_ulist as $k => $v) {
@@ -901,7 +901,7 @@ class Index extends Common
         if ($bot_codes) {
             Logs::log('bot_ulist', ['bot_ulist' => 0], 'push_myselect');
             //获取要推送消息的用户
-            $bot_ulist = db('stock_subaccount_self')->field('uid,gupiao_name,gupiao_code')->where(['gupiao_code' => ['in', $bot_codes]])->select();
+            $bot_ulist = Db::name('stock_subaccount_self')->field('uid,gupiao_name,gupiao_code')->where(['gupiao_code' => ['in', $bot_codes]])->select();
             Logs::log('bot_ulist', ['bot_ulist' => $bot_ulist], 'push_myselect');
             if ($bot_ulist) {
                 foreach ($bot_ulist as $k => $v) {

@@ -481,7 +481,7 @@ class Financing extends Common
 //                ajaxmsg($msg,1);
 //            }
             // 启动事务
-            $for_user = Db('member')->where('id', $mid)->value('agent_far');
+            $for_user = Db::name('member')->where('id', $mid)->value('agent_far');
             Db::startTrans();
             $nuldata = ['uid' => $mid, 'for_user' => $for_user, 'borrow_id' => $borrow_id, 'money' => 0, 'rate' => 0, 'borrow_interest' => 0, 'last_deposit_money' => 0, 'last_borrow_money' => 0, 'status' => 0, 'add_time' => 0];
             $retsn = Db::name("stock_addfinancing")->insertGetId($nuldata);

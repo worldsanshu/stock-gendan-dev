@@ -36,7 +36,7 @@ class Fundline extends Admin
     $page  = input('page', 1);
     $order = 'fund_date desc';
     // 数据列表
-    $data_list = Db('fund_line')->where('fund_id', $fund_id)->order($order)->paginate();
+    $data_list = Db::name('fund_line')->where('fund_id', $fund_id)->order($order)->paginate();
     $btn_add   = ['title' => '新增', 'icon' => 'fa fa-fw fa-plus', 'href' => url('add', ['fund_id' => $fund_id])];
     $btn_line  = ['title' => 'K线图', 'icon' => 'fa fa-fw fa-line-chart', 'href' => url('line', ['fund_id' => $fund_id])];
     if (empty($_SERVER["QUERY_STRING"])) {
@@ -84,7 +84,7 @@ class Fundline extends Admin
       }
       //批量添加
       if (strpos($data['price'], ',')) {
-        $new_fund_date = Db('fund_line')->where('fund_id', $fund_id)->order('fund_date desc')->value('fund_date');//最新一条的日期
+        $new_fund_date = Db::name('fund_line')->where('fund_id', $fund_id)->order('fund_date desc')->value('fund_date');//最新一条的日期
         if (!$new_fund_date && !$data['fund_date']) {
           $this->error('日期不能为空');
         }
@@ -107,14 +107,14 @@ class Fundline extends Admin
       if (!Db::name('stock_trade_date')->where('date', $data['fund_date'])->count()) {
         $this->error('选择的时间不能是非交易日');
       }
-      if (Db('fund_line')->where($map)->count()) {
+      if (Db::name('fund_line')->where($map)->count()) {
         $this->error('该日期已存在');
       } else {
         $data['fund_id'] = $fund_id;
-        if (Db('fund_line')->insert($data)) {
+        if (Db::name('fund_line')->insert($data)) {
           $update_data              = [];
           $update_data['fund_date'] = $data['fund_date'];
-          Db('fund')->where('id', $fund_id)->update($update_data);
+          Db::name('fund')->where('id', $fund_id)->update($update_data);
           $this->success('新增成功', cookie('__forward__'));
         } else {
           $this->error('新增失败');
@@ -153,16 +153,16 @@ class Fundline extends Admin
       if (!Db::name('stock_trade_date')->where('date', $data['fund_date'])->count()) {
         $this->error('选择的时间不能是非交易日');
       }
-      if (Db('fund_line')->where($map)->count()) {
+      if (Db::name('fund_line')->where($map)->count()) {
         $this->error('该日期已存在');
       } else {
         $data['fund_id'] = $fund_id;
         $data['node']    = 1;
-        $node_data       = Db('fund_line')->where('fund_id', $fund_id)->where('node', 1)->order('fund_date desc')->find();//节点数据
+        $node_data       = Db::name('fund_line')->where('fund_id', $fund_id)->where('node', 1)->order('fund_date desc')->find();//节点数据
         $node_price      = $node_data['price'];                                                                           //节点价格
         $node_date       = $node_data['fund_date'];                                                                       //节点日期
-        if (Db('fund_line')->insert($data)) {
-//                    $list = Db('fund_line')-> where('fund_id',$fund_id) -> order('id asc') -> select();
+        if (Db::name('fund_line')->insert($data)) {
+//                    $list = Db::name('fund_line')-> where('fund_id',$fund_id) -> order('id asc') -> select();
           $count         = FundLineModel::where('fund_id', $fund_id)->count();
           $current_price = $data['price'];     //当前价格
           $current_date  = $data['fund_date']; //当前日期
@@ -188,20 +188,20 @@ class Fundline extends Admin
       $update_data = input();
       // 验证
       $data = $update_data;
-      $info = Db('fund_line')->where('id', $id)->find();
+      $info = Db::name('fund_line')->where('id', $id)->find();
       if ($info['fund_date'] != $data['fund_date']) {
         $this->error('不能更改时间');
       }
 //            if($info['price'] < 1){
 //                $this->error('价格不能小于1');
 //            }
-      if (Db('fund_line')->update($data)) {
+      if (Db::name('fund_line')->update($data)) {
         $this->success('编辑成功', cookie('__forward__'));
       } else {
         $this->error('编辑失败');
       }
     }
-    $info = Db('fund_line')->where('id', $id)->find();
+    $info = Db::name('fund_line')->where('id', $id)->find();
     return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
     ->addFormItems([ // 批量添加表单项
                      ['hidden', 'id'],
@@ -219,7 +219,7 @@ class Fundline extends Admin
     $ids        = (array)$ids;
     $field      = input('param.field', 'is_del');
     $map[]      = ['id', 'in', $ids];
-    $result     = Db('fund_line')->where($map)->delete();
+    $result     = Db::name('fund_line')->where($map)->delete();
     if (false !== $result) {
       $this->success('操作成功', cookie('__forward__'));
     } else {
@@ -235,7 +235,7 @@ class Fundline extends Admin
     $field      = input('param.field', 'is_del');
     $map[]      = ['id', 'in', $ids];
     if (count($ids) == 1) {
-      $node_data = Db('fund_line')->where('id', $ids[0])->find();
+      $node_data = Db::name('fund_line')->where('id', $ids[0])->find();
       $fund_id   = $node_data['fund_id'];
       $today     = date('Y-m-d');
       $fund_date = $node_data['fund_date'];//要删除的节点时间
@@ -243,24 +243,24 @@ class Fundline extends Admin
         $this->error('不能删掉当天及当天以前的数据');
       }
       if ($node_data ['node'] == 1) { //如果删除的是节点则删除节点以下的数据,但是不能删除当天以前的数据
-        $back_node_date = Db('fund_line')->where('fund_id', $fund_id)->where('node', 1)->where('fund_date', '<', $fund_date)->order('fund_date desc')->value('fund_date');
+        $back_node_date = Db::name('fund_line')->where('fund_id', $fund_id)->where('node', 1)->where('fund_date', '<', $fund_date)->order('fund_date desc')->value('fund_date');
         if ($back_node_date >= $today) { //如果上一个节点的时间大于当天时间就把两个节点直接的数据删除，反之删除大于当天的数据
-          $result = Db('fund_line')->where('fund_id', $fund_id)->where("`fund_date`>'" . $back_node_date . "' and `fund_date`<='" . $fund_date . "'")->delete();
+          $result = Db::name('fund_line')->where('fund_id', $fund_id)->where("`fund_date`>'" . $back_node_date . "' and `fund_date`<='" . $fund_date . "'")->delete();
         } else {
-          $result = Db('fund_line')->where('fund_id', $fund_id)->where("`fund_date`>'" . $today . "' and `fund_date`<='" . $fund_date . "'")->delete();
+          $result = Db::name('fund_line')->where('fund_id', $fund_id)->where("`fund_date`>'" . $today . "' and `fund_date`<='" . $fund_date . "'")->delete();
         }
       } else {
-        $result = Db('fund_line')->where($map)->delete();
+        $result = Db::name('fund_line')->where($map)->delete();
       }
     } else {
-      $result = Db('fund_line')->where($map)->delete();
+      $result = Db::name('fund_line')->where($map)->delete();
     }
     if (false !== $result) {
       Cache::clear();
-      $data_id = Db('fund_line')->where('fund_id', $fund_id)->order('fund_date desc')->value('id');//最新一条数据的id;
+      $data_id = Db::name('fund_line')->where('fund_id', $fund_id)->order('fund_date desc')->value('id');//最新一条数据的id;
       //把最新一条作为最新的节点数值
       $update_data['node'] = 1;
-      Db('fund_line')->where('id', $data_id)->update($update_data);
+      Db::name('fund_line')->where('id', $data_id)->update($update_data);
       $this->success('操作成功', cookie('__forward__'));
     } else {
       $this->error('操作失败');

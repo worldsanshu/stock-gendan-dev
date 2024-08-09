@@ -5,6 +5,7 @@ namespace app\fund\admin;
 
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
+use app\fund\model\Fund;
 use app\fund\model\Fund as FundModel;
 use app\fund\model\FundOrder as FundOrderModel;
 use app\money\model\Money;
@@ -185,7 +186,7 @@ class Fundorder extends Admin
 
     $order = 'id desc';
     // 数据列表
-    $data_list = Db('fund_income_log')->where('order_id', $order_id)->order($order)->paginate();
+    $data_list = Db::name('fund_income_log')->where('order_id', $order_id)->order($order)->paginate();
     // 分页数据
     if (empty($_SERVER["QUERY_STRING"])) {
       $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -5) . "_export";
@@ -241,7 +242,7 @@ class Fundorder extends Admin
       $map['agent_id'] = $admin_user['for_user'];
     }
     // 数据列表
-    $data_list = Db('fund_income_log')->where($map)->where('type', 4)->order($order)->paginate();
+    $data_list = Db::name('fund_income_log')->where($map)->where('type', 4)->order($order)->paginate();
     // 分页数据
     if (empty($_SERVER["QUERY_STRING"])) {
       $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -5) . "_export";
@@ -301,7 +302,7 @@ class Fundorder extends Admin
     }
     $order = 'id desc';
     // 数据列表
-    $data_list = Db('fund_income_log')->where($map)->where('type', 3)->order($order)->paginate();
+    $data_list = Db::name('fund_income_log')->where($map)->where('type', 3)->order($order)->paginate();
     // 分页数据
     if (empty($_SERVER["QUERY_STRING"])) {
       $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -5) . "_export";
@@ -354,7 +355,7 @@ class Fundorder extends Admin
   {
     $map       = [];
     $map['id'] = ['in', $ids];
-    $list      = Db('fund_income_log')->where($map)->select();
+    $list      = Db::name('fund_income_log')->where($map)->select();
 
     foreach ($list as $key => $value) {
       if ($value['status'] == 1) {
@@ -377,7 +378,7 @@ class Fundorder extends Admin
     if ($new_ids) {
       $map       = [];
       $map['id'] = ['in', $new_ids];
-      Db('fund_income_log')->where($map)->update(['status' => 1]);
+      Db::name('fund_income_log')->where($map)->update(['status' => 1]);
     }
     return;
   }
@@ -580,7 +581,7 @@ class Fundorder extends Admin
         $this->success('编辑成功', cookie('__forward__'));
 //                    $money = $order_data['money']*100;
 //                    $uid = $order_data['uid'];
-//                    Db('money')->where(['mid' => $uid])->setInc('account',$money);
+//                    Db::name('money')->where(['mid' => $uid])->setInc('account',$money);
 
       } else {
         $this->error('编辑失败');

@@ -598,8 +598,8 @@ EOF;
         $ids    = (array)$ids;
         $result = TraderOrderModel::where('id', 'in', $ids)->delete();
         if (false !== $result) {
-            Db('fund_line')->where('fund_id', 'in', $ids)->delete();
-            Db('fund_viptrade')->where('traderid', 'in', $ids)->delete();
+            Db::name('fund_line')->where('fund_id', 'in', $ids)->delete();
+            Db::name('fund_viptrade')->where('traderid', 'in', $ids)->delete();
             $this->success('操作成功', cookie('__forward__'));
         } else {
             $this->error('操作失败');

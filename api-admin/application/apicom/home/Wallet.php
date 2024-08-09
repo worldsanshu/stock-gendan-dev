@@ -111,7 +111,7 @@ class Wallet extends Common
         if (empty($payment_id)) {
             ajaxmsg('参数错误', 0, '', true, ['msgCode' => 'L0020']);
         }
-        $id_auth = Db('member')->where(['id' => MID])->value('id_auth');
+        $id_auth = Db::name('member')->where(['id' => MID])->value('id_auth');
         if ($id_auth !== 1) {
             ajaxmsg('您还没有实名认证', 0, '', true, ['msgCode' => 'L0074']);
         }

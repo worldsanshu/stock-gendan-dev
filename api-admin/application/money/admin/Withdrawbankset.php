@@ -28,9 +28,9 @@ class withdrawbankset extends Admin
      */
     public function index()
     {
-        $data_list = Db('admin_config')->where('name', 'web_bank')->value('value');
+        $data_list = Db::name('admin_config')->where('name', 'web_bank')->value('value');
         $map = ['name' => 'web_bank'];
-        $data_list = Db('admin_config')
+        $data_list = Db::name('admin_config')
           ->where($map)
           ->value('value');
         //值转数组
@@ -90,7 +90,7 @@ EOF;
             $data['code'] = strtoupper($data['code']);
             $newdata[$data['code']] = $data['name'];
             $newdata['img'] = $data['bank_img'];
-            $data_list = Db('admin_config')->where('name', 'web_bank')->value('value');
+            $data_list = Db::name('admin_config')->where('name', 'web_bank')->value('value');
             //值转数组
             $array = preg_split('/[,;\r\n]+/', trim($data_list, ",;\r\n"));
             if (strpos($data_list, '|')) {
@@ -144,7 +144,7 @@ EOF;
     public function edit($id = null)
     {
         if ($id === null) $this->error('缺少参数', null, '_close_pop');
-        $data_list = Db('admin_config')->where('name', 'web_bank')->value('value');
+        $data_list = Db::name('admin_config')->where('name', 'web_bank')->value('value');
         //值转数组
         $array = preg_split('/[,;\r\n]+/', trim($data_list, ",;\r\n"));
         $id = --$id;
@@ -221,7 +221,7 @@ EOF;
         $id = input('ids');
         if ($id === null) $this->error('缺少参数', null, '_close_pop');
         $id = --$id;
-        $data_list = Db('admin_config')->where('name', 'web_bank')->value('value');
+        $data_list = Db::name('admin_config')->where('name', 'web_bank')->value('value');
         //值转数组
         $array = preg_split('/[,;\r\n]+/', trim($data_list, ",;\r\n"));
         if (strpos($data_list, '|')) {

@@ -16,6 +16,7 @@ use app\money\model\Record as RecordModel;
 use think\Db;
 use think\facade\Lang;
 use think\model;
+use think\Exception;
 
 class Addmoney extends Model
 {

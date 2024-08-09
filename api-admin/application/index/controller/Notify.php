@@ -2,7 +2,7 @@
 
 namespace app\index\controller;
 
-use app\common\controller\NotifyHandler;
+use app\money\model\Money;
 use think\Db;
 
 /**
@@ -36,18 +36,18 @@ class Notify extends NotifyHandler
             $up_charge['id'] = $order['id'];
             $up_charge['remarks'] = json_encode($_POST);
             $contents = "充值成功";
-            $account = Db('money')->where('mid', $order['mid'])->lock(true)->value('account');
+            $account = Db::name('money')->where('mid', $order['mid'])->lock(true)->value('account');
             $up_money['account'] = bcadd($account, $order['money']);
-            $res1 = Db('money')->where('mid', $order['mid'])->update($up_money);
+            $res1 = Db::name('money')->where('mid', $order['mid'])->update($up_money);
             $info = '充值单号：' . $order['order_no'];
             $record = new \app\money\model\Record;
 //            $res3 = $record->saveData($order['mid'],  $order['money'], $up_money['account'], 1, $info);
             $user_balance = Money::getMoney($order['mid']);
             $obj = ['affect' => $order['money'], 'account' => $up_money['account'], 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => ''];//更新成功才充值,避免重复充值
             $res3 = $record->saveData($order['mid'], $order['money'], $up_money['account'], 1, $info, '', '', $obj);
-            $res2 = Db('money_recharge')->update($up_charge);
+            $res2 = Db::name('money_recharge')->update($up_charge);
             if ($res1 && $res2 && $res3) {
-                $mobile = Db('member')->where('id', $order['mid'])->value('mobile');
+                $mobile = Db::name('member')->where('id', $order['mid'])->value('mobile');
                 #送抽奖次数
                 #判断当日是否领取
                 $sql = 'SELECT count(*) as numcount FROM lmq_operate_record WHERE `mid` ="' . $order['mid'] . '" and type=4 AND date_format(from_unixtime(addtime),"%Y-%m-%d") = date_format(now(),"%Y-%m-%d")';

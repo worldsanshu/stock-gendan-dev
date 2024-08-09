@@ -12,6 +12,7 @@ namespace app\member\model;
 
 use think\Model;
 use util\Tree;
+use app\admin\model\Menu as MenuModel;
 
 /**
  * 角色模型

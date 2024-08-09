@@ -292,7 +292,7 @@ class Borrow extends ThinkModel
                 $risk['renewal'] = $data['renewal'];
                 $risk['autoclose'] = $data['autoclose'];
                 $risk['update_time'] = time();
-                $risk_res = Db('stock_subaccount_risk')
+                $risk_res = Db::name('stock_subaccount_risk')
                   ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
                   ->update($risk);
                 $subaccount_money['commission_scale'] = $data['commission_scale'];
@@ -303,7 +303,7 @@ class Borrow extends ThinkModel
                 $subaccount_money['borrow_money'] = $data['borrow_money'] * 100;
                 $subaccount_money['avail'] = $data['init_money'] * 100;
                 $subaccount_money['update_time'] = time();
-                $subaccount_money_res = Db('stock_subaccount_money')
+                $subaccount_money_res = Db::name('stock_subaccount_money')
                   ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
                   ->update($subaccount_money);
             }
@@ -334,7 +334,7 @@ class Borrow extends ThinkModel
             $mmoney['account'] = $minfo['account'] + $sumMoney;//资金解冻，增加会员资金账户余额
             $mmoney['activity_account'] = $minfo['activity_account'] + $borrow_interest_activity;//资金解冻，增加会员资金活动金
             $mmoney['freeze_activity'] = $minfo['freeze_activity'] - $borrow_interest_activity;//资金解冻，增加会员资金活动金
-            $money_res = Db('money')->where(['mid' => $data['member_id']])->update($mmoney);
+            $money_res = Db::name('money')->where(['mid' => $data['member_id']])->update($mmoney);
             $hs_sumMoney = $sumMoney / 100;
             $record_res = $record->saveData($data['member_id'], $sumMoney, $mmoney['account'], 21, '配资审核未通过，解冻保证金到余额，余额：' . $hs_sumMoney . '元，活动金：' . $borrow_interest_activity . '元');
             $res = $this->where(['id' => $data['id']])->update(['status' => 0]);
@@ -408,7 +408,7 @@ class Borrow extends ThinkModel
 //                        $rebate = $this->sendRebate($recommendor, $data['id'], $memberInfo);
 //                }
             }
-            $subResult = Db('money')->where(['mid' => $data['member_id']])->update($mmoney);
+            $subResult = Db::name('money')->where(['mid' => $data['member_id']])->update($mmoney);
             // 更新资金日志表信息
             $mmLogRet = $record->saveData($data['member_id'], $sumMoney, $minfo['account'], 22, '配资审核通过，解冻保证金到配资账户,保证金金额：' . $data['deposit_money']);
             //更新配资表信息
@@ -473,7 +473,7 @@ class Borrow extends ThinkModel
             $risk['renewal'] = $data['renewal'];
             $risk['autoclose'] = $data['autoclose'];
             $risk['update_time'] = time();
-            $risk_res = Db('stock_subaccount_risk')
+            $risk_res = Db::name('stock_subaccount_risk')
               ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
               ->update($risk);
             $subaccount_money['commission_scale'] = $data['commission_scale'];
@@ -484,7 +484,7 @@ class Borrow extends ThinkModel
             $subaccount_money['borrow_money'] = $data['borrow_money'] * 100;
             $subaccount_money['avail'] = $data['init_money'] * 100;
             $subaccount_money['update_time'] = time();
-            $subaccount_money_res = Db('stock_subaccount_money')
+            $subaccount_money_res = Db::name('stock_subaccount_money')
               ->where(['stock_subaccount_id' => $data['stock_subaccount_id']])
               ->update($subaccount_money);
             if ($mmRet && $mmLogRet !== false && $ret && $subResult && $risk_res && $subaccount_money_res && $stock_res && $rebate && $insert_res) {
@@ -640,7 +640,7 @@ class Borrow extends ThinkModel
         $data['borrow_interest'] = $interest;
         $need_money = bcadd($interest, $data['deposit_money']);
         Db::startTrans();
-        $member_money = Db('money')->where(['mid' => $data['member_id']])->lock(true)->find();
+        $member_money = Db::name('money')->where(['mid' => $data['member_id']])->lock(true)->find();
         if ($member_money['account'] < $need_money) {
             return ['status' => 0, 'msg' => '资金不足请充值'];
         }
@@ -684,7 +684,7 @@ class Borrow extends ThinkModel
 //        echo "account:".$updatamone."\r\n";
 //        die();
         try {
-            $money_res = Db('money')->where(['mid' => $data['member_id']])->update(['account' => $updatamone, 'freeze' => $freeze, 'freeze_activity' => $freeze_activity, 'activity_account' => $activity_account]);
+            $money_res = Db::name('money')->where(['mid' => $data['member_id']])->update(['account' => $updatamone, 'freeze' => $freeze, 'freeze_activity' => $freeze_activity, 'activity_account' => $activity_account]);
             $record_res = $record->saveData($data['member_id'], -abs($need_money), $updatamone, 33, $str);
             // 验证
             $result = $this->validate('Borrow.create')->save($data);

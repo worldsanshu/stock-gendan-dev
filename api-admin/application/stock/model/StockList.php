@@ -27,7 +27,7 @@ class StockList extends Model
         if ($stock_list) {
             $sql = "REPLACE INTO `lmq_stock_list` (`title`,`code`,`pinyin`,`add_time`,`target_uid`,`target_name`,`thscode`) values ";
             $is_add = 0;
-            $list_code = Db('stock_list')->column('code');
+            $list_code = Db::name('stock_list')->column('code');
             foreach ($stock_list as $key => $value) {
                 $thscode = $value['thscode'];
                 $title = $value['title'];
@@ -72,7 +72,7 @@ class StockList extends Model
         $res = iApi_curl($act, $post_data);
         $stock_list = $res['tables'][0]['table']['股票代码'] ?? [];
         $stock_list_name = $res['tables'][0]['table']['股票简称'] ?? [];
-        $list = Db('stock_list2')->column('code');
+        $list = Db::name('stock_list2')->column('code');
         dump($list);
         exit;
         //批量更新金额

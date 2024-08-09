@@ -4,7 +4,7 @@ namespace app\fund\model;
 use app\fund\model\FundDayline as FundDaylineModel;
 use think\Db;
 use think\model;
-
+use app\member\model\Member as MemberModel;
 class TraderOrder extends Model
 {
   // 自动写入时间戳
@@ -42,7 +42,7 @@ class TraderOrder extends Model
           ->find();
     }else{
     //获取该用户这个订单的信息余额；
-    $FundDaylineinfo = Db::name('member')->where(['m.id' => $uid])
+    $FundDaylineinfo = MemberModel::where(['m.id' => $uid])
         ->alias('m')
         ->join('fund_userlevel l', 'l.level = m.level')
         ->field('l.max_position_ratio,l.min_position_ratio')

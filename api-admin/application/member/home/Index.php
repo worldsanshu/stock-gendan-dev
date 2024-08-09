@@ -27,7 +27,7 @@ class Index extends Common
     public function index()
     {
         $money = Money::getMoney(MID);
-        //$money = Db('money')->where(['mid'=>MID])->find();
+        //$money = Db::name('money')->where(['mid'=>MID])->find();
         $this->assign('money', $money);
         $this->assign('member_auth', session('member_auth'));
         $borrow = Borrow::getBorrowinfo(MID, 3);

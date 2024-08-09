@@ -31,7 +31,7 @@ class Money extends Model
     public static function getMoney($mid)
     {
 
-        $result = Db('money')->where(['mid' => $mid])->find();
+        $result = Db::name('money')->where(['mid' => $mid])->find();
         if (empty($result)) {
             $result['account'] = 0;
             $result['freeze'] = 0;

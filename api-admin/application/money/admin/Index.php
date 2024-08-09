@@ -360,7 +360,7 @@ class Index extends Admin
         $order      = $this->getOrder();
         empty($order) && $order = 'id desc';
         // 数据列表
-        $data_list = Db('stock_subaccount_money_log')->order('create_time desc')->where($map)->paginate();
+        $data_list = Db::name('stock_subaccount_money_log')->order('create_time desc')->where($map)->paginate();
         foreach ($data_list as $key => &$value) {
             $value['deposit_money'] = money_convert($value['deposit_money']);
             $value['operate_money'] = money_convert($value['operate_money']);
@@ -653,7 +653,7 @@ class Index extends Admin
         $mid       = MoneyModel::where('id', $id)->value('mid');
         $old_value = MoneyModel::where('id', $id)->value($field);
         $value1    = $value - $old_value;
-        $mobile    = Db('member')->where('id', $mid)->value('mobile');
+        $mobile    = Db::name('member')->where('id', $mid)->value('mobile');
         $details   = $mobile . ' 字段(' . $field . ')，原值：(' . $old_value . ')新值：(' . $value . ')';
 
         switch ($type) {
@@ -670,9 +670,9 @@ class Index extends Admin
                 $value = Hash::make((string)$value);
                 break;
         }
-        $pk               = Db('money')->getPk();
-        $result           = Db('money')->where($pk, $id)->setField($field, $value);
-        $result_data      = Db('money')->where('id', $id)->find();
+        $pk               = Db::name('money')->getPk();
+        $result           = Db::name('money')->where($pk, $id)->setField($field, $value);
+        $result_data      = Db::name('money')->where('id', $id)->find();
         $affect           = $affect_activity = 0;
         $account          = $result_data['account'];
         $activity_account = $result_data['activity_account'];

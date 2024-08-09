@@ -3,6 +3,7 @@
 namespace app\market\model;
 
 use think\Model;
+use think\Db;
 
 class StockMarket extends Model
 {
@@ -18,7 +19,7 @@ class StockMarket extends Model
     public function acttion_market($code, $post)
     {
         //Logs::log('market_bat_insert',['data'=>$post],'Market_bat');
-        $code_info = db('stock_market')->where(['code' => $code])->find();
+        $code_info = Db::name('stock_market')->where(['code' => $code])->find();
         if ($post) {
             if (!$code_info) {
                 $this->saveAll($code_info, false);

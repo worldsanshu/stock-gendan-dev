@@ -179,7 +179,7 @@ class Member extends Model
             if ($agent_id) {
                 self::appendInvitationUser($agent_id, $result->id, $data['invite_code']);
             }
-            Db('money')->insert(['mid' => $result->id, 'for_user' => $sdata['agent_far']]);
+            Db::name('money')->insert(['mid' => $result->id, 'for_user' => $sdata['agent_far']]);
             $mid = $sdata['id'] = $result->id;
             if (config('luck_register')) {
                 #新用户注册成功可获得一次注册机会
@@ -205,7 +205,7 @@ class Member extends Model
         $data['invitation_mid'] = $invitation_mid;
         $data['mid'] = $agent_id;
         $data['create_time'] = time();
-        Db('member_invitation_relation')->insert($data);
+        (new MemberInvitationRelation())->insert($data);
         return;
     }
 
@@ -324,7 +324,7 @@ class Member extends Model
         $sdata['terminal'] = $terminal;
         $sdata['email'] = $email;
         $sdata['username'] = $name;
-        Db('member_login_record')->insert($sdata);
+        Db::name('member_login_record')->insert($sdata);
     }
 
 //判断当然是否已赠送抽奖次数

@@ -111,8 +111,8 @@ class Delivery extends Model
      */
     public function sell_m_delivery_order($stockinfo, $count, $price, $buy_average_price, $sub_id, $lid, $user, $soure, $commission, $Transfer, $Trust_no, $stamp, $avail, $amount, $model, $sys = 0, $fees = 0)
     {
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $data = array();
         $data[0]['sub_id'] = $sub_id;
         $data[0]['lid'] = $lid;
@@ -160,8 +160,8 @@ class Delivery extends Model
      */
     public function add_m_delivery_order($stockinfo, $count, $price, $sub_id, $lid, $user, $soure, $commission, $Transfer, $Trust_no, $avail, $amount, $model, $fees = 0)
     {
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $data = array();
         $data[0]['sub_id'] = $sub_id;
         $data[0]['lid'] = $lid;

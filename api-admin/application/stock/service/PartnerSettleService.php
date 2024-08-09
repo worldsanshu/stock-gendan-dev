@@ -87,17 +87,20 @@ class PartnerSettleService
   }
   //更新网体
   public function netUpdate(){
-      Member::where('1=1')->update(['partner_parent_net'=>null,'partner_net_update'=>1, 'partner_count'=>1, 'partner_directly_num'=>0,'partner_team_num'=>0]);
+      Member::where('1=1')->update(['partner_net_update'=>1, 'partner_count'=>1, 'partner_directly_num'=>0,'partner_team_num'=>0]);
   }
   //网体任务
   public function netWork(){
       //更新会员网体
-      $list = Member::where(['partner_net_update' => 1])->order('id asc')->limit(20000)->select();
+      $list = Member::where(['partner_net_update' => 1])->order('id asc')->limit(3000)->select();
       foreach ($list as $value) {
           $parents   = Member::where(['id' => $value->partner_parent_id])->find();
           $parentStr = 0;
           $level     = 0;
           if (!empty($parents)) {
+              if (empty($parents->partner_parent_net)) {
+                  //continue;
+              }
               $parentStr = $parents->partner_parent_net . ',' . $parents->id;
               $level     = $parents->partner_parent_level + 1;
           }
@@ -108,7 +111,7 @@ class PartnerSettleService
       }
       //var_dump(count($list));
       //更新会员团队人数
-      $list = Member::where(['partner_count' => 1, 'is_buy' => 1])->whereNotNull('partner_parent_net')->limit(20000)->select();
+      $list = Member::where(['partner_count' => 1, 'is_buy' => 1, 'partner_net_update'=>2])->limit(3000)->select();
       foreach ($list as $value) {
           $PathNet   = $value->partner_parent_net;
           $parentIds = explode(',', $PathNet);

@@ -364,7 +364,7 @@ class Handle extends Common //Home
         $data['account_type'] = 2;  //暂时是写死的应该是需要通过后台获取
         $data['account_id'] = 2;//暂时是写死的应该是需要通过后台获取
         $uid = MID;
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $data['for_user'] = $for_user;
         //获取证券账户信息
         $commission = AccountModel::getAccountByID($data['account_id']);

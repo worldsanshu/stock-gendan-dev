@@ -25,7 +25,7 @@ class StockMarketBat extends Model
             $save_row = array();
             $update_row = array();
             foreach ($post as $k => $v) {
-                $code_info = db('stock_market_bat')->where(['code' => $v['code']])->find();
+                $code_info = Db::name('stock_market_bat')->where(['code' => $v['code']])->find();
                 if (!$code_info) {
                     $save_row[$k] = $v;
                 } elseif ($code_info) {
@@ -42,7 +42,7 @@ class StockMarketBat extends Model
         } elseif (!$post && $codes) {
             $codes_arr = explode(",", $codes);
             $field = 'code,name,yesterday_price,open_price,national_debt,current_price,buy_one_price,buy_chang_price,buy_two_price,buy_three_price,buy_one_amount,buy_two_amount,buy_three_amount,buy_four_price,buy_four_amount,time,turnover,volume,lowest,highest,info,debt_sign,currency,type,mini_trans,exchange_code,sell_chang_price,sell_five_amount,sell_four_amount,sell_five_price,sell_three_amount,sell_two_amount,sell_one_amount,buy_five_price,buy_five_amount,sell_four_price,sell_one_price,sell_two_price,sell_three_price';
-            $data = db('stock_market_bat')->field($field)->where(['code' => ['in', $codes_arr]])->select();
+            $data = Db::name('stock_market_bat')->field($field)->where(['code' => ['in', $codes_arr]])->select();
             Logs::log('action_market_bat_for_table', ['data' => $data, 'sql' => Db::table('stock_market_bat')->getLastSql()], 'StockMarketBat');
             return $data;
         }
@@ -56,7 +56,7 @@ class StockMarketBat extends Model
     {
         $page_size = 50;
         for ($page = 1; $page <= 64; $page++) {
-            $lists = db('stock_list')
+            $lists = Db::name('stock_list')
               ->field('code')
               ->limit($page, $page_size)
               ->select();

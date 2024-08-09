@@ -15,6 +15,7 @@ use app\user\model\User as UserModel;
 use think\facade\Cache;
 use think\facade\Hook;
 use util\Logs;
+use think\Db;
 
 /**
  * 用户公开控制器，不经过权限认证
@@ -31,10 +32,10 @@ class Publics extends Common
     public function ajaxtotal()
     {
 
-        $auth             = Db('member')->where(['id_auth' => 0])->count('id');
-        $apply            = Db('strategy_apply')->where(['apply_status' => 0])->count('id');
-        $charge           = Db('money_recharge')->where(['status' => 0])->count('id');
-        $withdraw         = Db('money_withdraw')->where(['status' => 0])->count('id');
+        $auth             = Db::name('member')->where(['id_auth' => 0])->count('id');
+        $apply            = Db::name('strategy_apply')->where(['apply_status' => 0])->count('id');
+        $charge           = Db::name('money_recharge')->where(['status' => 0])->count('id');
+        $withdraw         = Db::name('money_withdraw')->where(['status' => 0])->count('id');
         $data             = array();
         $data['status']   = 200;
         $data['auth']     = $auth;

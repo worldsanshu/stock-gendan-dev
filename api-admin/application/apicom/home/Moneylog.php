@@ -131,7 +131,7 @@ class Moneylog extends Common
 //            ->select();
             ->paginate();
         $data_list = $list->toArray();
-        $basic = Db('interest_basic')->find();
+        $basic = Db::name('interest_basic')->find();
         foreach ($data_list['data'] as $k => &$v) {
             $v['happend_time'] = getTimeFormt($v['create_time'], 4);
             $v['happend_date'] = getTimeFormt($v['create_time'], 5);

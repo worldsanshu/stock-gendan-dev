@@ -28,7 +28,7 @@ class Market_bat extends Model
         if ($post) {
             $row = array();
             foreach ($post as $k => $v) {
-                $code_info = db('stock_market_bat')->field('code')->where(['code' => $v['code']])->find();
+                $code_info = Db::name('stock_market_bat')->field('code')->where(['code' => $v['code']])->find();
                 if (!$code_info) {
                     $row[$k] = $v;
                 }

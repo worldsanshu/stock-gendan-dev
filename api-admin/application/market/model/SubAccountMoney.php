@@ -313,8 +313,8 @@ class SubAccountMoney extends Model
 
     public static function record($sub_id, $affect_money, $account, $type, $info, $code = '')
     {
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $record['sub_id'] = $sub_id;
         $record['affect'] = $affect_money;
         $record['account'] = $account;

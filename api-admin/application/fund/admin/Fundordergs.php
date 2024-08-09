@@ -285,7 +285,7 @@ EOF;
         $order_id = input('order_id', '');
         $order    = 'id desc';
         // 数据列表
-        $data_list = Db('fund_income_log')->where('order_id', $order_id)->where('status', 1)->order($order)->paginate();
+        $data_list = Db::name('fund_income_log')->where('order_id', $order_id)->where('status', 1)->order($order)->paginate();
 
         // 分页数据
 
@@ -330,7 +330,7 @@ EOF;
             $map[] = ['agent_id', '=', $admin_user['for_user']];
         }
         // 数据列表
-        $data_list = Db('fund_income_log')->view('fund_income_log f', true)
+        $data_list = Db::name('fund_income_log')->view('fund_income_log f', true)
             ->view('member m', 'mobile,email', 'm.id=f.uid', 'LEFT')
             ->where($map)->order($order)->paginate();
         // 分页数据
@@ -383,7 +383,7 @@ EOF;
                 $this->error('编辑失败');
             }
         }
-        $info = Db('fund_income_log')->where('id', $id)->find();
+        $info = Db::name('fund_income_log')->where('id', $id)->find();
         return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
         ->addFormItems([ // 批量添加表单项
                          ['hidden', 'id'],
@@ -421,7 +421,7 @@ EOF;
     {
         $map     = [];
         $map[]   = ['id', 'in', $ids];
-        $list    = Db('fund_income_log')->where($map)->select();
+        $list    = Db::name('fund_income_log')->where($map)->select();
         $new_ids = [];
         foreach ($list as $key => $value) {
             if ($value['status'] == 1) {
@@ -440,7 +440,7 @@ EOF;
         if ($new_ids) {
 
             $map[] = ['id', 'in', $new_ids];
-            Db('fund_income_log')->where($map)->update(['status' => 1]);
+            Db::name('fund_income_log')->where($map)->update(['status' => 1]);
         }
         return;
     }
@@ -470,7 +470,6 @@ EOF;
 
 
                 $freeze=$user_balance['freeze']-$Orderinfo['money'] * 100<0 ?0:$user_balance['freeze']-$Orderinfo['money']* 100;
-
 
 
                 Money::where('mid', $Orderinfo['uid'])->update(['freeze'=>$freeze]);
@@ -1137,7 +1136,7 @@ EOF;
                 $this->success('编辑成功', cookie('__forward__'));
 //                    $money = $order_data['money']*100;
 //                    $uid = $order_data['uid'];
-//                    Db('money')->where(['mid' => $uid])->setInc('account',$money);
+//                    Db::name('money')->where(['mid' => $uid])->setInc('account',$money);
             } else {
                 $this->error('编辑失败');
             }

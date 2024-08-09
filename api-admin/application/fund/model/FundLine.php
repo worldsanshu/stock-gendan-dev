@@ -39,7 +39,7 @@ class FundLine extends Model
       $array[]           = $data;
     }
     if ($array) {
-      Db('fund_line')->insertAll($array);
+      Db::name('fund_line')->insertAll($array);
     }
   }
 
@@ -55,11 +55,11 @@ class FundLine extends Model
       $array[]           = $data;
     }
     if ($array) {
-      $res                      = Db('fund_line')->insertAll($array);
-      $fund_date                = Db('fund_line')->order('fund_date desc')->value('fund_date');
+      $res                      = Db::name('fund_line')->insertAll($array);
+      $fund_date                = Db::name('fund_line')->order('fund_date desc')->value('fund_date');
       $update_data              = [];
       $update_data['fund_date'] = $fund_date;
-      Db('fund')->where('id', $fund_id)->update($update_data);
+      Db::name('fund')->where('id', $fund_id)->update($update_data);
       return $res;
     }
   }

@@ -11,6 +11,7 @@
 namespace app\member\home;
 
 use app\member\model\Bank as BankModel;
+use think\Db;
 
 /**
  * 前台首页控制器
@@ -42,7 +43,7 @@ class Bank extends Common
 
     public function add()
     {
-        $name = Db('member')->where(['id' => MID])->where(['id_auth' => 1])->value('name');
+        $name = Db::name('member')->where(['id' => MID])->where(['id_auth' => 1])->value('name');
         if ($name === null) {
             $this->error("您还没有实名认证或认证还没通过审核", url("profile/realname"));
         }
@@ -107,7 +108,7 @@ class Bank extends Common
             $this->error("您要编辑的银行卡不在您名下");
         }
         $result = $this->bankres();
-        $name = Db('member')->where(['id' => MID])->value('name');
+        $name = Db::name('member')->where(['id' => MID])->value('name');
         $this->assign('name', $name);
         $this->assign('bank_id', $id);
         $this->assign('web_bank', $result);
@@ -167,7 +168,7 @@ class Bank extends Common
     //前端下拉菜单用到的
     public function bankres($type = '')
     {
-        $data_list = Db('admin_config')->where('name', 'web_bank')->value('value');
+        $data_list = Db::name('admin_config')->where('name', 'web_bank')->value('value');
         //值转数组
         $array = preg_split('/[,;\r\n]+/', trim($data_list, ",;\r\n"));
         if (strpos($data_list, ':')) {

@@ -2,6 +2,7 @@
 namespace app\fund\model;
 
 use think\model;
+use think\Db;
 
 class FundIncome extends Model
 {
@@ -14,7 +15,7 @@ class FundIncome extends Model
     $yesterday_end_time   = $yesterday_start_time + 24 * 3600;
     $uid                  = $data['uid'];
     $where                = 'uid = ' . $uid . ' and fund_id =' . $value . ' and create_time >=' . $yesterday_start_time . ' and create_time<' . $yesterday_end_time;
-    $money                = Db('fund_income_log')->where($where)->sum('money');
+    $money                = Db::name('fund_income_log')->where($where)->sum('money');
     $money                = round($money, 2);
     return $money;
   }

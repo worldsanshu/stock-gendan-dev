@@ -9,6 +9,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use think\Controller;
 use think\Exception;
+use think\facade\Env;
+use think\facade\Log;
+use think\facade\Cache;
 
 /**
  * 定时任务接口
@@ -36,6 +39,8 @@ class Autotask extends Controller
      */
     public function Index()
     {
+        //Log::debug('定时任务---'.date('Ymd H:i:s'));
+        Cache::set('Autotask_last_time',time());
         // 筛选未过期且未完成的任务
         $crontab_list = CrontabModel::where(['status' => 'normal'])->field(true)->order('weigh desc,id desc')->select();
         if (!$crontab_list) {
@@ -83,7 +88,7 @@ class Autotask extends Controller
                 switch ($value['type']) {
                     case 'url':
                         if (substr($crontab['content'], 0, 1) == "/") {// 本地项目URL
-                            $exec = 'php ' . ROOT_PATH . 'public/index.php ' . $crontab['content'] . ' 2>&1';
+                            $exec = 'php ' . Env::get('root_path') . 'public/index.php ' . $crontab['content'] . ' 2>&1';
                             $request = shell_exec($exec);
                             $this->saveLog('url', $value['id'], $value['title'], 1, $request);
                         } else {// 远程URL

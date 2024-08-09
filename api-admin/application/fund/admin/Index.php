@@ -513,7 +513,7 @@ class Index extends Admin
     $ids    = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
     $ids    = (array)$ids;
     $map[]  = ['id', 'in', $ids];
-    $result = Db('invest_type')->where($map)->delete();
+    $result = Db::name('invest_type')->where($map)->delete();
     if (false !== $result) {
       Cache::clear();
       // 记录行为日志
@@ -538,7 +538,7 @@ class Index extends Admin
       if($info){
           $this->error('类型名称已存在');
       }
-      if (Db('invest_type')->insert($data)) {
+      if (Db::name('invest_type')->insert($data)) {
         $this->success('新增成功', 'investlist');
       } else {
         $this->error('新增失败');
@@ -616,7 +616,7 @@ class Index extends Admin
     $ids    = $this->request->isPost() ? input('post.ids/a') : input('param.ids');
     $ids    = (array)$ids;
     $map[]  = ['id', 'in', $ids];
-    $result = Db('index_type')->where($map)->delete();
+    $result = Db::name('index_type')->where($map)->delete();
     if (false !== $result) {
       Cache::clear();
       // 记录行为日志
@@ -641,7 +641,7 @@ class Index extends Admin
         if ($info) {
           $this->error('该名称已存在');
         }
-      if (Db('index_type')->insert($data)) {
+      if (Db::name('index_type')->insert($data)) {
         $this->success('新增成功', 'indexlist');
       } else {
         $this->error('新增失败');
@@ -664,7 +664,7 @@ class Index extends Admin
     $map2[]     = ['fund_id', 'in', $ids];
     if (false !== $result) {
       Cache::clear();
-      Db('fund_line')->where($map2)->delete();
+      Db::name('fund_line')->where($map2)->delete();
       $this->success('操作成功', cookie('__forward__'));
     } else {
       $this->error('操作失败');

@@ -391,8 +391,8 @@ class Position extends Model
      */
     public function add_m_position($stockinfo, $count, $sub_id, $lid, $user, $soure, $ck_price, $model, $Trust_no)
     {
-        $uid = Db('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
-        $for_user = Db('member')->where('id', $uid)->value('agent_far');
+        $uid = Db::name('stock_subaccount')->where('id', $sub_id)->value('uid'); //主账号id
+        $for_user = Db::name('member')->where('id', $uid)->value('agent_far');
         $position_res = $this->get_code_position($sub_id, $stockinfo["code"]);
         if (empty($position_res)) {
             if ($model == 2) {

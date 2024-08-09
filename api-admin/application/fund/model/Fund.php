@@ -41,18 +41,18 @@ class Fund extends Model
     } else {
       $map[] = ['fund_date', 'lt', $today_date];
     }
-    $list_three_days = Db('fund_line')->where($map)->order('fund_date desc')->limit(3)->column('price');
+    $list_three_days = Db::name('fund_line')->where($map)->order('fund_date desc')->limit(3)->column('price');
     $last_three_days = $last_seven_days = $last_month_days = 0;
     foreach ($list_three_days as $v1) {
       $last_three_days += $v1;
     }
     $last_three_days = round($last_three_days, 2);
-    $list_seven_days = Db('fund_line')->where($map)->order('fund_date desc')->limit(7)->column('price');
+    $list_seven_days = Db::name('fund_line')->where($map)->order('fund_date desc')->limit(7)->column('price');
     foreach ($list_seven_days as $v2) {
       $last_seven_days += $v2;
     }
     $last_seven_days = round($last_seven_days, 2);
-    $list_month_days = Db('fund_line')->where($map)->order('fund_date desc')->limit(30)->column('price');
+    $list_month_days = Db::name('fund_line')->where($map)->order('fund_date desc')->limit(30)->column('price');
     foreach ($list_month_days as $v3) {
       $last_month_days += $v3;
     }
@@ -104,10 +104,10 @@ class Fund extends Model
     if (time() >= $end_time) { //超过下午3点才显示当天的收益率,否则显示昨天的收益率
 
       $map[]  = ['fund_date', '=', $today_date];
-      $income = Db('fund_line')->where($map)->value('price');
+      $income = Db::name('fund_line')->where($map)->value('price');
     } else {
       $map[]  = ['fund_date', 'lt', $today_date];
-      $income = Db('fund_line')->where($map)->order('fund_date desc')->value('price');
+      $income = Db::name('fund_line')->where($map)->order('fund_date desc')->value('price');
     }
     $income = round($income, 2);
     return $income ?: 0.00;

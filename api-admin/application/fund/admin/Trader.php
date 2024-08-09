@@ -17,6 +17,7 @@ use app\fund\model\FundUserlevel as FundUserlevelModel;
 use app\fund\model\FundViptrade as FundViptradeModel;
 use app\fund\model\Trader as TraderModel;
 use think\helper\Hash;
+use think\Db;
 
 /**
  * 会员管理控制器
@@ -404,8 +405,8 @@ class Trader extends Admin
         $ids    = (array)$ids;
         $result = TraderModel::where('id', 'in', $ids)->update(['status' => 0]);
         if (false !== $result) {
-            Db('fund_line')->where('fund_id', 'in', $ids)->delete();
-//      Db('fund_viptrade')->where('traderid', 'in', $ids)->delete();
+            Db::name('fund_line')->where('fund_id', 'in', $ids)->delete();
+//      Db::name('fund_viptrade')->where('traderid', 'in', $ids)->delete();
             $this->success('操作成功', cookie('__forward__'));
         } else {
             $this->error('操作失败');

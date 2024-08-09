@@ -63,9 +63,9 @@ class Member extends Common
 
 
         $data['money'] = $money;
-        $msg_num = Db('member_message')->where(['mid' => MID, 'status' => 0])->count();
-        $mobile = Db('member')->alias('m')->field('id,mobile,agent_id,head_img,id_auth,id_card,invite_num')->where(['id' => MID, 'status' => 1])->find();
-        $agent_num = Db('member')->where(['agent_far' => MID, 'status' => 1])->count();
+        $msg_num = Db::name('member_message')->where(['mid' => MID, 'status' => 0])->count();
+        $mobile = Db::name('member')->alias('m')->field('id,mobile,agent_id,head_img,id_auth,id_card,invite_num')->where(['id' => MID, 'status' => 1])->find();
+        $agent_num = Db::name('member')->where(['agent_far' => MID, 'status' => 1])->count();
         $other['msg_num'] = $msg_num;
         $other['mobile'] = $mobile['mobile'];
         $other['agent_id'] = $mobile['agent_id'];
@@ -152,7 +152,7 @@ class Member extends Common
             array_push($rate_val, $arr);
         }
         $data['bank'] = $rate_val;
-        $data['banks'] = Db('member_bank')->where(['mid' => MID])->select();
+        $data['banks'] = Db::name('member_bank')->where(['mid' => MID])->select();
         ajaxmsg('银行卡信息', 1, $data, true, ['msgCode' => 'L0096']);
     }
 
@@ -161,7 +161,7 @@ class Member extends Common
      **/
     public function addBank()
     {
-        $id_auth = Db('member')->where(['id' => MID])->value('id_auth');
+        $id_auth = Db::name('member')->where(['id' => MID])->value('id_auth');
         if ($id_auth !== 1) {
             ajaxmsg('您还没有实名认证', 0, '', true, ['msgCode' => 'L0074']);
         }
@@ -221,7 +221,7 @@ class Member extends Common
         } elseif ($res['mid'] !== MID) {
             ajaxmsg('您要编辑的银行卡不在您名下', 0, '', true, ['msgCode' => 'L0076']);
         }
-        $name = Db('member')->where(['id' => MID])->value('name');
+        $name = Db::name('member')->where(['id' => MID])->value('name');
         $data['name'] = $name;
         $data['bank_id'] = $id;
         $data['web_bank'] = config('web_bank');

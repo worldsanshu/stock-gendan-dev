@@ -12,6 +12,7 @@ namespace app\fund\admin;
 
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
+use app\fund\model\Fund;
 use app\fund\model\FundDayline as FundDaylineModel;
 use app\fund\model\FundOrder as FundOrderModel;
 use app\fund\model\Trader as TraderModel;
@@ -205,7 +206,7 @@ class Fundorder_bak extends Admin
     $order_id = input('order_id', '');
     $order    = 'id desc';
     // 数据列表
-    $data_list = Db('fund_income_log')->where('order_id', $order_id)->where('status', 1)->where('order_type', 1)->order($order)->paginate();
+    $data_list = Db::name('fund_income_log')->where('order_id', $order_id)->where('status', 1)->where('order_type', 1)->order($order)->paginate();
     // 分页数据
     if (empty($_SERVER["QUERY_STRING"])) {
       $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -5) . "_export";
@@ -254,7 +255,7 @@ class Fundorder_bak extends Admin
       $map[] = ['agent_id', '=', $admin_user['for_user']];
     }
     // 数据列表
-    $data_list = Db('fund_income_log')->where($map)->where('type', 4)->order($order)->paginate();
+    $data_list = Db::name('fund_income_log')->where($map)->where('type', 4)->order($order)->paginate();
     // 分页数据
     if (empty($_SERVER["QUERY_STRING"])) {
       $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -5) . "_export";
@@ -307,7 +308,7 @@ class Fundorder_bak extends Admin
     }
     $order = 'id desc';
     // 数据列表
-    $data_list = Db('fund_income_log')->where($map)->where('type', 3)->order($order)->paginate();
+    $data_list = Db::name('fund_income_log')->where($map)->where('type', 3)->order($order)->paginate();
     // 分页数据
     if (empty($_SERVER["QUERY_STRING"])) {
       $excel_url = substr(http() . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"], 0, -5) . "_export";
@@ -355,7 +356,7 @@ class Fundorder_bak extends Admin
     }
 
     // 数据列表
-    $data_list = Db('fund_income_log')->view('fund_income_log f', true)
+    $data_list = Db::name('fund_income_log')->view('fund_income_log f', true)
       ->view('member m', 'mobile,email', 'm.id=f.uid', 'LEFT')
       ->where($map)->order($order)->paginate();
     // 分页数据
@@ -410,7 +411,7 @@ class Fundorder_bak extends Admin
         $this->error('编辑失败');
       }
     }
-    $info = Db('fund_income_log')->where('id', $id)->find();
+    $info = Db::name('fund_income_log')->where('id', $id)->find();
     return ZBuilder::make('form')->setPageTitle('编辑') // 设置页面标题
     ->addFormItems([ // 批量添加表单项
                      ['hidden', 'id'],
@@ -449,7 +450,7 @@ class Fundorder_bak extends Admin
     $map = [];
 
     $map[] = ['id', 'in', $ids];
-    $list  = Db('fund_income_log')->where($map)->select();
+    $list  = Db::name('fund_income_log')->where($map)->select();
     foreach ($list as $key => $value) {
       if ($value['status'] == 1) {
         continue;
@@ -468,7 +469,7 @@ class Fundorder_bak extends Admin
       $map = [];
 
       $map[] = ['id', 'in', $new_ids];
-      Db('fund_income_log')->where($map)->update(['status' => 1]);
+      Db::name('fund_income_log')->where($map)->update(['status' => 1]);
     }
     return;
   }
@@ -986,7 +987,7 @@ EOF;
         $this->success('编辑成功', cookie('__forward__'));
 //                    $money = $order_data['money']*100;
 //                    $uid = $order_data['uid'];
-//                    Db('money')->where(['mid' => $uid])->setInc('account',$money);
+//                    Db::name('money')->where(['mid' => $uid])->setInc('account',$money);
       } else {
         $this->error('编辑失败');
       }

@@ -13,6 +13,7 @@ use app\common\controller\Common;
 use app\fund\model\Fund as FundModel;
 use app\fund\model\FundDayline as FundDaylineModel;
 use app\fund\model\FundIncome;
+use app\fund\model\FundInvestmentRecord as FundInvestmentRecordModel;
 use app\fund\model\FundOrder;
 use app\fund\model\FundOrderGs;
 use app\fund\model\FundSalaryLog;
@@ -84,7 +85,7 @@ class Fund extends Common
         $uid          = MID;
         $map          = [];
         $map['uid']   = $uid;
-        $fund_collect = Db('fund_collect')->where($map)->find();
+        $fund_collect = Db::name('fund_collect')->where($map)->find();
         $data         = [];
         if (!$fund_collect) {
             $data['is_collect'] = 0;
@@ -118,7 +119,7 @@ class Fund extends Common
         $uid          = MID;
         $map          = [];
         $map['uid']   = ['eq', $uid];
-        $fund_collect = Db('fund_collect')->where($map)->find();
+        $fund_collect = Db::name('fund_collect')->where($map)->find();
         $data         = [];
         if (!$fund_collect) {
             $data['is_collect'] = 0;
@@ -162,7 +163,7 @@ class Fund extends Common
         $uid          = MID;
         $map          = [];
         $map['uid']   = $uid;
-        $fund_collect = Db('fund_collect')->where($map)->find();
+        $fund_collect = Db::name('fund_collect')->where($map)->find();
         $data         = [];
         if (!$fund_collect) {
             $data['is_collect'] = 0;
@@ -211,17 +212,17 @@ class Fund extends Common
         if (!FundModel::where('id', $fund_id)->count()) {
             ajaxmsg('基金不存在', 0);
         }
-        if (!Db('fund_collect')->where($map)->count()) {
+        if (!Db::name('fund_collect')->where($map)->count()) {
             $data['fund_ids'] = json_encode([$data['fund_id']]);
-            Db('fund_collect')->insert($data);
+            Db::name('fund_collect')->insert($data);
             ajaxmsg('加入成功', 1);
         } else {
-            $fund_collect   = Db('fund_collect')->where($map)->find();
+            $fund_collect   = Db::name('fund_collect')->where($map)->find();
             $fund_ids_array = json_decode($fund_collect['fund_ids'], true);
             if (!in_array($fund_id, $fund_ids_array)) {
                 $fund_ids_array[]        = $fund_id;
                 $update_data['fund_ids'] = json_encode($fund_ids_array);
-                Db('fund_collect')->where($map)->update($update_data);
+                Db::name('fund_collect')->where($map)->update($update_data);
             }
             ajaxmsg('加入成功', 1);
         }
@@ -234,7 +235,7 @@ class Fund extends Common
         $fund_id      = input('fund_id');//基金id
         $map          = [];
         $map['uid']   = $uid;
-        $fund_collect = Db('fund_collect')->where($map)->find();
+        $fund_collect = Db::name('fund_collect')->where($map)->find();
         if (!$fund_collect) {
             ajaxmsg('无收藏记录', 0);
         }
@@ -247,7 +248,7 @@ class Fund extends Common
         $fund_ids_array          = array_merge($fund_ids_array);
         $fund_ids_json           = json_encode($fund_ids_array);
         $update_data['fund_ids'] = $fund_ids_json;
-        if (Db('fund_collect')->where($map)->update($update_data)) {
+        if (Db::name('fund_collect')->where($map)->update($update_data)) {
             ajaxmsg('取消成功', 1);
         } else {
             ajaxmsg('取消失败', 0);
@@ -260,7 +261,7 @@ class Fund extends Common
         $uid            = MID;
         $map            = [];
         $map['uid']     = $uid;
-        $fund_collect   = Db('fund_collect')->where($map)->find();
+        $fund_collect   = Db::name('fund_collect')->where($map)->find();
         $fund_ids_array = json_decode($fund_collect['fund_ids'], true);
         $list           = [];
         $page           = input('page', 1);
@@ -348,7 +349,7 @@ class Fund extends Common
 //                }
             }
             if ($order_type == 3) { //vip优投
-                $fund_viptrade_list = Db('fund_viptrade')->select();
+                $fund_viptrade_list = Db::name('fund_viptrade')->select();
                 $is_cycle           = 0;
                 foreach ($fund_viptrade_list as $key => $value) {
                     if (intval($cycle) == $value['cycle']) {
@@ -520,7 +521,7 @@ class Fund extends Common
         }
         if ($order_type == 3) { //vip优投
             //获取讲师配置信息
-            $fund_viptrade_list = Db('fund_viptrade')->where('cycle', $cycle)->where('traderid', $trader_id)->find();
+            $fund_viptrade_list = Db::name('fund_viptrade')->where('cycle', $cycle)->where('traderid', $trader_id)->find();
 
             if (!$fund_viptrade_list) {
                 ajaxmsg('请选择周期', 0);
@@ -676,7 +677,7 @@ class Fund extends Common
                     } else {
                         $bonus = $value['balance'];
                     }
-                    Db('money')->where('mid', $uid)->setInc('account', $bonus * 100);
+                    Db::name('money')->where('mid', $uid)->setInc('account', $bonus * 100);
                     $user                          = Member::where('id', $uid)->find();
                     $order_sn                      = $uid . date("YmdHis");
                     $order_data['name']            = $name;
@@ -994,10 +995,10 @@ class Fund extends Common
         $end_time       = $day_start_time + 15 * 3600;
         if (time() >= $end_time) { //超过下午3点才显示当天的收益率,否则显示昨天的收益率
             $map[]  = ['fund_date', '=', $today_date];
-            $income = Db('fund_line')->where($map)->value('price');
+            $income = Db::name('fund_line')->where($map)->value('price');
         } else {
             $map[]  = ['fund_date', 'lt', $today_date];
-            $income = Db('fund_line')->where($map)->order('fund_date desc')->value('price');
+            $income = Db::name('fund_line')->where($map)->order('fund_date desc')->value('price');
         }
         $income = round($income, 2);
         return $income ?: 0.00;
@@ -1429,10 +1430,10 @@ class Fund extends Common
             $invest_day = FundOrderGs::where($map)->whereTime('create_time', 'today')->where('status', '>', 0)->count();//今日优投数
         }
         //总收益
-        //$total_income = Db('fund_income_log')->where($map)->sum('money');
+        //$total_income = Db::name('fund_income_log')->where($map)->sum('money');
         $total_income = FundSalaryLog::where('uid', $uid)->sum('price');
         //今日收益
-        //$day_income = Db('fund_income_log')->whereTime('create_time', 'today')->where($map)->sum('money');
+        //$day_income = Db::name('fund_income_log')->whereTime('create_time', 'today')->where($map)->sum('money');
         $day_income = FundSalaryLog::where('uid', $uid)->whereTime('create_time', 'today')->sum('price');
         //伞下人数
 //        $sql='';
@@ -1497,7 +1498,7 @@ class Fund extends Common
     public function getVipTradeList()
     {
         $traderid    = input('traderid');
-        $list        = Db('fund_viptrade')->where('traderid', $traderid)->select();
+        $list        = Db::name('fund_viptrade')->where('traderid', $traderid)->select();
         $level_array = $this->level_array;
         foreach ($list as $key => $v) {
 //            $v['max_money_text'] = ($v['max_money'] / 10000) . '万';
@@ -1592,7 +1593,7 @@ class Fund extends Common
         $field     = '*';
         $order     = 'id desc';
         $page_size = 15;
-        $list      = Db('fund_income_log')->where($map)->field($field)->order($order)->paginate(['page' => $page, 'list_rows' => $page_size]);
+        $list      = Db::name('fund_income_log')->where($map)->field($field)->order($order)->paginate(['page' => $page, 'list_rows' => $page_size]);
         foreach ($list as $key => $value) {
             $value['create_time_text'] = date('Y-m-d H:i', $value['create_time']);
             $list[$key]                = $value;
@@ -1622,7 +1623,7 @@ class Fund extends Common
         $field     = '*';
         $order     = 'id desc';
         $page_size = 15;
-        $list      = Db('fund_income_log')->where($map)->whereTime('create_time', 'today')->field($field)->order($order)->paginate(['page' => $page, 'list_rows' => $page_size]);
+        $list      = Db::name('fund_income_log')->where($map)->whereTime('create_time', 'today')->field($field)->order($order)->paginate(['page' => $page, 'list_rows' => $page_size]);
         foreach ($list as $key => $value) {
             $value['create_time_text'] = date('Y-m-d H:i', $value['create_time']);
             $list[$key]                = $value;
@@ -1835,7 +1836,7 @@ class Fund extends Common
         $field = 'a.*,m.name,mobile';
         $list  = [];
         if ($ids) {
-            $list = Db('money_recharge')->alias('a')->where($map)->field($field)->join('member m', 'm.id = a.mid')->whereTime('a.create_time', 'today')->select();
+            $list = Db::name('money_recharge')->alias('a')->where($map)->field($field)->join('member m', 'm.id = a.mid')->whereTime('a.create_time', 'today')->select();
         }
         $data['list'] = $list;
         return json(array(
@@ -1864,7 +1865,7 @@ class Fund extends Common
         $map[] = ['a.mid', 'in', $teamIds];
         $map[] = ['a.is_first', '=', 1];
         $field = 'a.*,m.name,mobile';
-        $list  = Db('money_recharge')
+        $list  = Db::name('money_recharge')
             ->alias('a')
             ->where($map)
             ->field($field)

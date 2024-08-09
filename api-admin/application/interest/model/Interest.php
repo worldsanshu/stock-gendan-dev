@@ -83,8 +83,8 @@ class Interest extends Model
 
     Db::startTrans();
 
-    $money_info = Db('money')->where('mid', $data['uid'])->lock(true)->find();
-    $basic = Db('interest_basic')->find();
+    $money_info = Db::name('money')->where('mid', $data['uid'])->lock(true)->find();
+    $basic = Db::name('interest_basic')->find();
 
     $account = bcsub($money_info['account'], $money);
     $up_money['freeze_balance_bao'] = bcadd($money_info['freeze_balance_bao'], $money);
@@ -102,7 +102,7 @@ class Interest extends Model
 //      $res3 = $record->saveData($data['uid'], -$money, $up_money['freeze_balance_bao'], 105, $info, '', '', $obj);
 
 //      更新钱包
-      $result = Db('money')->where('mid', $data['uid'])->update($up_money);
+      $result = Db::name('money')->where('mid', $data['uid'])->update($up_money);
       if ($result) {
         Db::commit();
         return ['status' => 1, 'message' => '提交成功'];
@@ -160,7 +160,7 @@ class Interest extends Model
         $up_money['account'] = bcadd($money_info['account'], $new_money); //加本金
         $up_money['account'] = bcadd($up_money['account'], $new_interest); //加返利
 
-        Db('money')->where('mid', $get_one['uid'])->update($up_money);
+        Db::name('money')->where('mid', $get_one['uid'])->update($up_money);
 
         $info = "返还本金：" . $get_one['order_number'];
         $affect = $get_one['money']  * 100;

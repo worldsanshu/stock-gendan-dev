@@ -67,7 +67,8 @@ class Column extends Common
               ['d.trash', '=', 0],
               ['d.status', '=', 1],
               ['d.cid', 'in', $cid_all],
-              ['d.language', '=', $lang]
+              ['d.language', '=', $lang],
+              ['d.trash', '=', 0]
             ];
             $result = Db::name('cms_document')
               ->alias('d')

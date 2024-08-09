@@ -12,6 +12,7 @@ namespace app\stock\admin;
 
 use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
+use app\market\model\Grid;
 use think\db;
 
 /**
