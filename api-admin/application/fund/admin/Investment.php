@@ -14,64 +14,24 @@ use app\admin\controller\Admin;
 use app\common\builder\ZBuilder;
 
 use app\common\service\UserService;
-use app\fund\model\FundProfitRecord;
+use app\fund\model\FundInvestmentRecord;
 use app\fund\model\FundOrderGs;
+use app\money\model\Money;
 use app\money\model\Record;
 use think\Db;
 
 /**
- * 提取盈利
+ * 追加记录
  * @package app\member\admin
  */
-class Profit extends Admin
+class Investment extends Admin
 {
+
     /**
-     * 提盈配置
+     * 追加记录
      * @return mixed
      */
     public function index()
-    {
-        $get_one = Db::name('fund_profit_config')->find();
-        if ($this->request->isPost()) {
-            $data = input();
-                if($get_one){
-                    $data['update_time'] = time();
-                    $result = Db::name('fund_profit_config')->where('id',1)->update($data);
-                }else{
-                    $data['create_time'] = time();
-                    $result = Db::name('fund_profit_config')->insert($data);
-                }
-
-
-            if ($result) {
-                $this->success('处理成功', null, 'index');
-            } else {
-                $this->error('处理失败');
-            }
-        }
-
-            return ZBuilder::make('form')
-                ->addFormItems([ // 批量添加表单项
-                    ['text', 'min_account', '最低提取金额', '单次提取最低金额'],
-                    ['text', 'buy_num', '每日提取次数', '-1 为不限制'],
-                    ['time', 'profit_start_time', '提取时间-开始'],
-                    ['time', 'profit_end_time', '提取时间-结束'],
-                ])
-                ->setFormData($get_one) // 设置表格数据
-                ->fetch(); // 渲染模板
-
-
-
-    }
-
-
-
-
-    /**
-     * 提盈审核
-     * @return mixed
-     */
-    public function examine()
     {
         cookie('__forward__', $_SERVER['REQUEST_URI']);
         // 获取查询条件
@@ -82,7 +42,7 @@ class Profit extends Admin
 
         empty($order) && $order = 'id desc';
 
-        $res       = FundProfitRecord::getList($page, $map, $order);
+        $res       = FundInvestmentRecord::getList($page, $map, $order);
         $data_list = $res['list'] ?? [];
         foreach ($data_list as &$v) {
             $username       = empty($v['username']) ? '--' : $v['username'];
@@ -111,18 +71,18 @@ class Profit extends Admin
                 ['text', 't.name', '导师姓名', 'like'],
                 ['text', 'm.mobile', '手机号', 'like'],
                 ['select', 'i.status', '状态', '', '', ['0' => '待审核','1' => '审核通过', '2' => '驳回']],
-                ['daterange', 'i.create_time', '提取时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
+                ['daterange', 'i.create_time', '追加时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
                 ['daterange', 'examine_time', '审核时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
                 ['select', 'role_name', '白名单', '', '', $this->user_role_name],
             ])
             ->addColumns([ // 批量添加数据列
                 ['order_sn', '订单号'],
-                ['money', '提取金额'],
+                ['money', '追加金额'],
                 ['user_info', '姓名/手机号'],
                 ['role_name', '白名单', $this->user_role_name],
                 ['trader_name', '导师姓名'],
                 ['new_status', '状态', ],
-                ['create_time', '提取时间', 'datetime'],
+                ['create_time', '追加时间', 'datetime'],
                 ['examine_time', '审核时间', 'datetime'],
                 ['right_button', '操作', 'btn']
             ])
@@ -141,10 +101,10 @@ class Profit extends Admin
     public function edit($id = null)
     {
         if ($id === null) $this->error('缺少参数', null, '_close_pop');
-        $get_one = FundProfitRecord::where('i.id', $id)
+        $get_one = FundInvestmentRecord::where('i.id', $id)
             ->alias('i')
             ->join('fund_order_gs g','g.id = i.order_id')
-            ->field('i.*,g.order_sn')
+            ->field('i.*,g.order_sn,i.order_id')
             ->find();
         if (!$get_one) {
             $this->error('数据异常');
@@ -152,31 +112,45 @@ class Profit extends Admin
         // 保存数据
         if ($this->request->isPost()) {
             $data = input();
-//            Db::startTrans();
-//            try {
-//            审核通过增加余额
+            $record = new Record();
+            $money_info = Db::name('money')->where('mid', $get_one['uid'])->find();
+//            审核通过增加订单金额
             if($data['status'] == 1){
-                $record = new Record();
-                $money_info = Db::name('money')->where('mid', $get_one['uid'])->find();
-                $new_money = $get_one['money'] * 100; //钱包以分为单位
-                $up_money['account'] = bcadd($money_info['account'], $new_money); //加本金
+                $row = FundOrderGs::where('id', $get_one['order_id'])->find();
+                $row->add_money += $get_one['money'];
+                $row->money     += $get_one['money'];
+                $row->save();
 
-                Db::name('money')->where('mid', $get_one['uid'])->update($up_money);
+//                一键优投
+                if($row['order_type'] == 3){
+//                                    解冻追加
+                    $info = "追加金额解冻：" . $get_one['order_sn'];
+                    $affect = $get_one['money']  * 100;
+                    $type = 115;
+                    $account = $money_info['account'];
+                    $freeze=$money_info['freeze']-$get_one['money'] * 100<0 ?0:$money_info['freeze']-$get_one['money']* 100;
+                    Money::where('mid', $get_one['uid'])->update(['freeze'=>$freeze]);
+                    $obj = ['affect' => $affect, 'account' => $account, 'affect_activity' => 0, 'activity_account' => 0, 'sn' => $get_one['order_sn']];
+                    $record->saveData($get_one['uid'], $affect, $account, $type, $info, '', '', $obj);
+                }
 
-                $info = "提取盈利：" . $get_one['order_sn'];
+            }else{
+//                审核驳回返回追加
+                $info = "追加金额退回：" . $get_one['order_sn'];
                 $affect = $get_one['money']  * 100;
-                $type = 109;
+                $type = 113;
                 $account = bcadd($money_info['account'], $affect);
+
+                $freeze=$money_info['freeze']-$get_one['money'] * 100<0 ?0:$money_info['freeze']-$get_one['money']* 100;
+                Money::where('mid', $get_one['uid'])->update(['freeze'=>$freeze,'account'=>$account]);
                 $obj = ['affect' => $affect, 'account' => $account, 'affect_activity' => 0, 'activity_account' => 0, 'sn' => $get_one['order_sn']];
                 $record->saveData($get_one['uid'], $affect, $account, $type, $info, '', '', $obj);
-            }else{
-//                审核驳回返回提盈
-                FundOrderGs::where('id', $get_one['order_id'])->setInc('balance', $get_one['money']);
             }
 
 
 
-            $result = FundProfitRecord::where('id', $id)->update(['status' => $data['status'], 'examine_time' => time()]);
+
+            $result = FundInvestmentRecord::where('id', $id)->update(['status' => $data['status'], 'examine_time' => time()]);
             if ($result) {
                 $this->success('操作成功', null, '_parent_reload');
             } else {

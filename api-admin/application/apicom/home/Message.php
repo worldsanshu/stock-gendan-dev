@@ -113,6 +113,7 @@ class Message extends Common
           ->alias('c')
           ->join('cms_document_news d', 'c.id = d.aid')
           ->where('c.cid', 'eq', 2)
+          ->where('c.trash', 'eq', 0)
           ->where('c.language', 'eq', Lang::range())
           ->order('c.id desc')
           ->find();

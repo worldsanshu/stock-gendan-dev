@@ -256,6 +256,7 @@ EOF;
                 ['text:4', 'partner_search', '合伙人姓名/手机号/用户ID',''],
                 ['select', 'role_name', '白名单', '', '', $this->user_role_name],
                 ['daterange', 'money_recharge.create_time', '充值时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
+                ['daterange', 'money_recharge.pay_time', '到账时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']],
             ])
             ->addColumns([ // 批量添加数据列
                 ['id', 'ID'],
@@ -271,6 +272,7 @@ EOF;
 //            ['type', '充值方式', ['alipay' => "支付宝", "wechatpay" => "微信支付", "bank" => "银联支付", "currency" => "数字货币", "transfer" => "线下支付"]],
                 ['type', '充值方式',$pay_type_list],
                 ['create_time', '充值时间', 'datetime'],
+                ['pay_time', '到账时间', 'datetime'],
                 ['status', '状态'],
                 ['right_button', '操作', 'btn']
             ])

@@ -678,6 +678,12 @@ class Index extends Admin
         $map = $this->getMap();
         $map = (new UserService())->getAgentMap($map,'mid');
         $order = $this->getOrder();
+        foreach ($map as &$value){
+            if ($value[0] == 'login_ip') {
+                $value[2] = ip2long($value[2]);
+//                print_r($value[0][2]);die;
+            }
+        }
         empty($order) && $order = 'id desc';
         if (empty($map['login_time'][1][0])) {
             $beginday = date('Ymd', time() - 2592000);//30天前
@@ -715,6 +721,7 @@ class Index extends Admin
                 ['text', 'username', '姓名', 'like'],
                 ['text', 'mobile', '手机号', 'like'],
                 ['text', 'email', '邮箱', 'like'],
+                ['text', 'login_ip', '登录ip'],
                 ['daterange', 'login_time', '登录时间', '', '', ['format' => 'YYYY-MM-DD HH:mm']]
             ])
         ->addColumns([ // 批量添加数据列

@@ -497,6 +497,17 @@ EOF;
         $info = WithdrawModel::where('id', $id)->find();
         // dump($info);exit;
         $ishides = '';
+        $bank = explode('|', $info->bank);
+        if($info['wallet_type'] == 0){
+            $info->bank_name = $bank[0];
+            $info->bank_number = $bank[2];
+            $info->name = $bank[3];
+
+        }else{
+            $info->paytype = $bank[0];
+            $info->address = $bank[1];
+            $info->name = $bank[2];
+        }
         $info->money = money_convert($info->money);
         $info->fee = money_convert($info->fee);
         $info->real_money = money_convert($info->real_money);
@@ -522,7 +533,12 @@ EOF;
                     ['static', 'money', '提现金额',],
                     ['static', 'real_money', '实际到账',],
                     ['static', 'fee', '手续费',],
-                    ['static', 'bank', '提现银行信息'],
+//                    ['static', 'bank', '提现信息'],
+                    ['static', 'bank_name', '银行名称'],
+                    ['static', 'bank_number', '银行卡号'],
+                    ['static', 'paytype', '提现钱包'],
+                    ['static', 'address', '钱包地址'],
+                    ['static', 'name', '姓名'],
                     ($staticContent ? ['static', 'auth_document', $staticLabel, $staticContent] : []),
 //                ['static', 'auth_document', $staticLabel, $staticContent], // 根据 auth_type 显示身份证或护照
                     ['static', 'status', '状态', '', $status_arr],
@@ -659,7 +675,7 @@ EOF;
         ];
         $btn_getWithdraw = ['title' => '提现记录', 'icon' => 'fa fa-fw fa-paste', 'href' => url('getWithdraw', ['mid' => '__mid__'])];
         $btn_getRecharge = ['title' => '充值记录', 'icon' => 'fa fa-fw fa-dollar', 'href' => url('getRecharge', ['mid' => '__mid__'])];
-        $btn_detail = ['title' => '审核详情', 'icon' => 'fa fa-fw fa-dollar', 'href' => url('detail', ['id' => '__id__'])];
+        $btn_detail = ['title' => '提现详情', 'icon' => 'fa fa-fw fa-dollar', 'href' => url('detail', ['id' => '__id__'])];
         return ZBuilder::make('table')
 //            ->setExtraHtmlFile('search', 'toolbar_top')
 //          ->setSearch(['order_no' => '订单号', 'member.name' => '姓名', 'member.mobile' => '手机号', 'member.email' => '邮箱']) // 设置搜索框

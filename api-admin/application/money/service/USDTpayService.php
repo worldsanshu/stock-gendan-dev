@@ -2,38 +2,34 @@
 // +----------------------------------------------------------------------
 // | 对接文档： https://dev.aa.im
 // +----------------------------------------------------------------------
-namespace app\apicom\service;
+namespace app\money\service;
 
 
-use app\apicom\home\Wallet;
-use app\money\model\Withdraw as WithdrawModel;
-use think\Db;
 use util\HttpClient;
 use app\apicom\model\MoneyRecharge;
 use app\money\model\Payment;
 
 class USDTpayService
 {
-    public function pay($info) {
+    public function Remit($info) {
         $data = [
             "user_id"=> intval($info['app_id']),
-            "currency_money"=>$info['amount'],
+            "user_withdrawal_id"=>$info['order_no'],
+            "user_custom_id"=>"SE001",
+            "withdrawal_address"=>$info['address'],
             "currency_code"=>"CNY",
             "coin_code"=>"USDT.TRC20",
-            "asyn_notice_url"=>env('pay.notify_domain').'/apicom/pay_notify/usdtPay',
-            "sync_jump_url"=>env('pay.notify_domain').'/apicom/pay_notify/usdtPay',
-            "user_order_id"=>$info['order_no'],
-            "language"=>2,
-            "user_custom_id"=>"SE001",
+            "currency_amount"=> (string)$info['real_money'],
+            "asyn_notice_url"=>env('pay.notify_domain').'/apicom/pay_notify/usdtPayWithdrawal',
             "remark"=>""
         ];
-       
         $time = time();
         $dataJson = str_replace("\\", '', json_encode($data));
-        $str = $time . $info['app_id'] . 'POST' . '/api/v1/order/create' . $dataJson;
-        $str = hash_hmac('sha256', $str, $info['app_secret'], true); 
-      
+        $str = $time . $info['app_id'] . 'POST' . '/api/v1/withdrawal/create' . $dataJson;
+        $str = hash_hmac('sha256', $str, $info['app_secret'], true);
+
         $str = base64_encode($str);
+
         $sign = $str;
         $sign = str_replace('/', '_', $sign);
         $sign = str_replace('+','-', $sign);
@@ -45,17 +41,8 @@ class USDTpayService
             'Content-Type' => 'application/json'
         ];
         //        获取支付请求url
-//        $url = 'https://ddh8tpnt.com/api/v1/order/create';
-//        $payment = Payment::where('id',$info['payment_id'])->find();
-//        if ($payment && !empty($payment->specific_address)) {
-//            $url = $payment->specific_address;
-//        }
-        //        获取支付请求url
         $host = $info['specific_address']?:'https://ddh8tpnt.com';
-
-        $res = HttpClient::post($host.'/api/v1/order/create',$dataJson,$header);
-//        $res = HttpClient::post('https://ddh8tpnt.com/api/v1/order/create',$dataJson,$header);
-
+        $res = HttpClient::post($host.'/api/v1/withdrawal/create',$dataJson,$header);
         if (empty($res)) {
             return [
                 'code'=>500,
@@ -65,7 +52,6 @@ class USDTpayService
         if (!empty($res) && $res['code'] == 200) {
             return [
                 'code'=>200,
-                'pay_url'=>$res['data']['pay_address_url']
             ];
         }else{
             return [
@@ -94,23 +80,7 @@ class USDTpayService
         
         return false;
     }
-
-
-    public function checkNotifyWithdrawal($pd) {
-        $charge = WithdrawModel::where('order_no', $pd['data']['user_withdrawal_id'])->find();
-        $Wallet = Db::name('wallet')->where('id', $charge->wallet_id)->find();
-        $payment = Payment::where('id',$Wallet['payment_id'])->find();
-        $str = json_encode($pd['data']);
-        $sign = hash_hmac('sha256', $str, $payment->app_secret, true);
-        $sign = base64_encode($sign);
-        $sign = str_replace('/', '_', $sign);
-        $sign = str_replace('+','-', $sign);
-        if ($sign == $pd['sign'] && $pd['data']['withdrawal_status'] == 3) {
-            return true;
-        }
-
-        return false;
-    }
+    
     
 
 }

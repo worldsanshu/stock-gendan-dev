@@ -114,6 +114,7 @@ class Index extends Admin
         ];
         $btn_money    = ['title' => '客户客损', 'icon' => 'fa fa-fw fa-th', 'href' => url('detail', ['uid' => '__mid__'], '')];
         $btn_edit       = ['title' => '资金批量操作', 'icon' => 'fa fa-fw fa-balance-scale', 'href' => url('moneyUpdate')];
+        $btn_edit_sp       = ['title' => '资金批量特殊操作', 'icon' => 'fa fa-fw fa-balance-scale','class' =>'btn btn-success', 'href' => url('moneyUpdate_special')];
         $btn_wallet       = ['title' => '用户钱包', 'icon' => 'si si-wallet', 'href' => url('wallet', ['uid' => '__mid__'])];
         $statisticsTable   = [];
         $statisticsTable[] = ['可用资金', '冻结金额', '活动资金', '冻结活动金额'];
@@ -179,6 +180,7 @@ class Index extends Admin
             ->addTopButton('custem', $btn_recharge)
             ->addTopButton('custem', $btn_balance)
             ->addTopButton('custem', $btn_edit)
+            ->addTopButton('custem', $btn_edit_sp)
             ->addTopButton('custem', $btn_privacy,['area' => ['500px', '40%']])
             ->addRightButton('custem', $btn_wallet)
             ->setExtraHtml($this->tableHtml($statisticsTable), 'toolbar_bottom')
@@ -394,6 +396,36 @@ class Index extends Admin
     }
 
 
+    public function moneyUpdate_special()
+    {
+        // 保存数据
+        if ($this->request->isPost()) {
+            $data             = input();
+            $moneyUpdate = MoneyModel::moneyUpdateSpecial($data);
+            if($moneyUpdate['code'] == 0){
+                $this->success($moneyUpdate['message'], cookie('__forward__'));
+            }else{
+                $this->error($moneyUpdate['message']);
+            }
+        }
+        $money_type = ['1' => '余额', '2' => '活动金', '3' => '彩金'];
+        // 使用ZBuilder快速创建表单
+        return ZBuilder::make('form')
+            ->setPageTitle('金额操作') // 设置页面标题
+            ->setPageTips('该操作适用于不同会员操作不同的资金类型,并且不支持扣款操作', 'danger')
+            ->addFormItems([ // 批量添加表单项
+                ['dataTable', 'content', '批量特殊操作', '选择并设置资金类型操作数量',
+                    [
+                        'money_type'      => ['type' => 'select', 'title' => '选择操作资金类型', 'options' => $money_type],
+                        'mobile'  => '会员手机号',
+                        'money' => '操作金额/元',
+                        'remark' => '转账说明',
+                    ]
+                ],
+            ])
+            ->fetch();
+    }
+
 //    资金批量操作
     public function moneyUpdate()
     {
@@ -410,11 +442,12 @@ class Index extends Admin
         $money_type = ['1' => '余额', '2' => '活动金', '3' => '彩金'];
         // 使用ZBuilder快速创建表单
         return ZBuilder::make('form')
+            ->setPageTips('该操作仅用于不同会员操作相同的资金类型,并且支持扣款操作', 'danger')
             ->setPageTitle('金额操作') // 设置页面标题
 //            ->addSelect('money_type', '选择操作资金类型', '', $money_type,'1')
             ->addFormItems([ // 批量添加表单项
                 ['select:7', 'money_type', '选择操作资金类型', '',$money_type,'1'],
-                ['textarea:7', 'mobile_list', '扣款手机号', '多个手机号请换行'],
+                ['textarea:7', 'mobile_list', '会员手机号', '多个手机号请换行'],
 //                ['number:6', 'new_account', '需增加金额/元', '负数为扣除，正数为增加'],
                 ['number:7', 'new_account', '余额操作金额/元（负数为扣款，正数为增加余额）', '负数为扣款，正数为增加余额'],
                 ['number:7', 'new_activity_account', '活动金操作金额/元（负数为扣款，正数为增加金额）', '负数为扣款，正数为增加金额'],

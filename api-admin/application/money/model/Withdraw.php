@@ -396,6 +396,9 @@ class Withdraw extends Model
             case 'hzpay':
                 $res = (new HZpayService())->Remit($orderInfo);
                 break;
+            case 'usdtpay':
+                $res = (new USDTpayService())->Remit($orderInfo);
+                break;
             default:;
                 break;
         }

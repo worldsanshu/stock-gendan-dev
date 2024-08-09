@@ -1,3 +1,15 @@
+----------------------------2024-8-9------------------------------YFN
+1、节点新增
+    资金批量特殊操作：money/index/moneyupdate_special
+    追加记录：fund/investment/index
+    追加审核：fund/investment/edit
+
+2、新增追加记录表  lmq_fund_investment_record
+
+3、lmq_admin_config 系统配置新增
+    auto_zj_Audit  追加自动审核开关
+    vip_fund_text  一键优投文案
+    day_fund_text  新手跟投文案
 
 
 ----------------------------2024-8-8------------------------------YFN

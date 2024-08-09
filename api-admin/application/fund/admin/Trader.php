@@ -136,8 +136,8 @@ class Trader extends Admin
                         if($prodctdata['cycle'] == 0){
                             $this->error('交易日内容填写有误!');
                         }
-                        if($prodctdata['cycle'] > 1000){
-                            $this->error('交易日最高不能超过1000!');
+                        if($prodctdata['cycle'] > 300){
+                            $this->error('交易日最高不能超过300!');
                         }
                         $prodctdata['cycle_text'] = $SFDM . '个交易日';
                         $prodctdata['commission'] = $data['project']['commission'][$key];
@@ -269,8 +269,8 @@ class Trader extends Admin
                         if($prodctdata['cycle'] == 0){
                             $this->error('交易日内容填写有误!');
                         }
-                        if($prodctdata['cycle'] > 1000){
-                            $this->error('交易日最高不能超过1000!');
+                        if($prodctdata['cycle'] > 300){
+                            $this->error('交易日最高不能超过300!');
                         }
                         $prodctdata['cycle_text'] = $SFDM . '个交易日';
                         $prodctdata['commission'] = $data['project']['commission'][$key];

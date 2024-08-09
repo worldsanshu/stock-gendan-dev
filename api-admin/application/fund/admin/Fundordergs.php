@@ -15,6 +15,7 @@ use app\common\builder\ZBuilder;
 use app\common\service\UserService;
 use app\fund\model\Fund;
 use app\fund\model\FundDayline as FundDaylineModel;
+use app\fund\model\FundInvestmentRecord as FundInvestmentRecordModel;
 use app\fund\model\FundOrderGs as FundOrderGsModel;
 use app\fund\model\Trader as TraderModel;
 use app\fund\model\TraderOrder as TraderOrderModel;
@@ -265,7 +266,7 @@ EOF;
             ->replaceRightButton(['order_type' => ['in', '1,2']], '', 'renewal')
 //            ->replaceRightButton(['order_type' => ['in', '2']], '', 'addInvestment')
             ->replaceRightButton(['order_type' => 1], '', 'custom,renewal,SettlementOrder')
-            ->setPageTips('订单处在已确认状态、当前时间大于持仓结束时间才可以结算订单，否则无法结算且无提示', 'warning')
+
             ->fixedLeft(2)
             ->fixedRight(1)
             ->hideCheckbox()
@@ -479,15 +480,54 @@ EOF;
                 if ($data['status'] == 1) {
                     $info    = $Orderinfo['order_sn'] . '审核通过,扣除冻结金额' . $Orderinfo['money'] . '元';
                     $account = $user_balance['account'];
+                    //                拆分，订单和追加的
+                    $obj = ['affect' => $Orderinfo['money'] *100, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $Orderinfo['order_sn']];
+                    Record::saveData($Orderinfo['uid'], $Orderinfo['money'] * 100, $account, 99, $info, '', '', $obj);
                 } else {
                     #审核不通过
-                    Money::where('mid', $Orderinfo['uid'])->setInc('account', $Orderinfo['money'] * 100);
-                    $account = $user_balance['account'] + $Orderinfo['money'] * 100;
+//                    Money::where('mid', $Orderinfo['uid'])->setInc('account', $Orderinfo['money'] * 100);
+                    Money::where('mid', $Orderinfo['uid'])->setInc('account', ($Orderinfo['money']-$Orderinfo['add_money']) * 100);
+//                    $account = $user_balance['account'] + $Orderinfo['money'] * 100;
+                    $account = $user_balance['account'] + ($Orderinfo['money']-$Orderinfo['add_money']) *100; //扣掉追加
                     $info    = $Orderinfo['order_sn'] . '跟投审核被拒,返还冻结金额' . $Orderinfo['money'] . '元';
+
+                    //                拆分，订单和追加的
+                    $obj = ['affect' => ($Orderinfo['money']-$Orderinfo['add_money']) *100, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $Orderinfo['order_sn']];
+                    Record::saveData($Orderinfo['uid'], $Orderinfo['money'] * 100, $account, 99, $info, '', '', $obj);
+                    if($Orderinfo['add_money'] > 0){
+                        //                拆分，订单和追加的
+                        $user_balance1 = Money::getMoney($Orderinfo['uid']);
+                        Money::where('mid', $Orderinfo['uid'])->setInc('account', $Orderinfo['add_money'] * 100);
+                        $account1 = $user_balance1['account'] + $Orderinfo['add_money'] *100; //扣掉追加
+                        $info1    = $Orderinfo['order_sn'] . '跟投审核被拒,返还追加冻结金额' . $Orderinfo['add_money'] . '元';
+                        $obj1 = ['affect' => $Orderinfo['add_money'] *100, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $Orderinfo['order_sn']];
+                        Record::saveData($Orderinfo['uid'], $Orderinfo['add_money'] * 100, $account1, 113, $info1, '', '', $obj1);
+
+                    }else{
+                        $get_one = FundInvestmentRecordModel::where('order_id',$K)
+                            ->where('uid',$Orderinfo['uid'])
+                            ->find();
+                        if($get_one){
+                            //                审核驳回返回追加
+                            $info2 = "追加金额退回：" . $Orderinfo['order_sn'];
+                            $affect2 = $get_one['money']  * 100;
+                            $type = 113;
+                            $user_balance2 = Money::getMoney($Orderinfo['uid']);
+                            $account2 = bcadd($user_balance2['account'], $affect2);
+
+                            $freeze=$user_balance2['freeze']-$get_one['money'] * 100<0 ?0:$user_balance2['freeze']-$get_one['money']* 100;
+                            Money::where('mid', $get_one['uid'])->update(['freeze'=>$freeze,'account'=>$account2]);
+                            $obj = ['affect' => $affect2, 'account' => $account2, 'affect_activity' => 0, 'activity_account' => 0, 'sn' => $Orderinfo['order_sn']];
+                            Record::saveData($get_one['uid'], $affect2, $account2, $type, $info2, '', '', $obj);
+                        }
+                    }
+//                    退回待审核追加
+                    FundInvestmentRecordModel::where('order_id',$K)
+                        ->where('uid',$Orderinfo['uid'])
+                        ->update(['status'=>2,'examine_time'=>time()]);
+
                 }
 
-                $obj = ['affect' => $Orderinfo['money'] * 100, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $Orderinfo['order_sn']];
-                Record::saveData($Orderinfo['uid'], $Orderinfo['money'] * 100, $account, 99, $info, '', '', $obj);
 //-------------------------------------------------
                 #如果通过了冻结金额结算后在扣除，驳回直接返回   ------新
 //                if ($data['status'] == 5) {

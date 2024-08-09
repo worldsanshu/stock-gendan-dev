@@ -36,7 +36,8 @@ class System extends Common
         $data_list['web_operation_platform'] = config('web_operation_platform');
         $data_list['serviceUrl'] = config('kefuurl');
         $data_list['appdown'] = config('appdown');
-
+        $data_list['vip_fund_text'] = config('vip_fund_text')?config('vip_fund_text'):'一键优投'; //标题
+        $data_list['day_fund_text'] = config('day_fund_text')?config('day_fund_text'):'新手跟投'; //标题
 
 
 //        每日福利区域

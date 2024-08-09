@@ -60,7 +60,7 @@ class Payment extends Model
     );
     //线上提现的
     public static $online_sithdrawal = array(
-        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay','hzpay'
+        'kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','bdtpay','hzpay','usdtpay'
     );
 
     //钱包-多支付渠道
@@ -76,7 +76,7 @@ class Payment extends Model
 //        二维码和收款账号
         $payment_code = ['alipay','wechatpay'];
 //        钱包地址
-        $payment_address = ['kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay'];
+        $payment_address = ['kdpay', 'jdpay', 'topay', 'okpay','mpay','cbpay','usdtpay'];
 //        银行卡信息
         $payment_bank = ['bdtpay', 'hzpay','bank'];
         // 检查是否在支付方式代码中

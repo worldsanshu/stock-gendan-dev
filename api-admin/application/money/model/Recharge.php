@@ -72,6 +72,7 @@ class Recharge extends Model
         $up_charge['status'] = $status;
         $up_charge['remark'] = $remark;
         $up_charge['id']     = $id;
+        $up_charge['pay_time']     = time();
         $contents            = "充值审核未通过";
         Db::startTrans();
         try {

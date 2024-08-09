@@ -57,7 +57,7 @@ class Moneylog extends Common
                 break;
             case 456:
                 // 冻结
-                $map['r.type'] = ['in', '2','8','33','97'];
+                $map['r.type'] = ['in', '2','8','33','97','114'];
                 break;
             case 20:
                 // 结算

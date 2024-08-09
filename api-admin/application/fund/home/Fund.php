@@ -1886,6 +1886,10 @@ class Fund extends Common
         $id    = input('id');
         $money = input('money');
         $paywd = input('paywd');
+        $get_Investment = FundInvestmentRecordModel::where('order_id', $id)->where('uid', $uid)->where('status',0)->find();
+        if($get_Investment){
+            ajaxmsg('您已提交追加申请，请等待审核', 0);
+        }
         if (!isset($paywd) || !$paywd) {
             ajaxmsg('请输入支付密码', 0);
         }
@@ -1936,30 +1940,56 @@ class Fund extends Common
             ajaxmsg('余额不足', 0);
         }
 //        获取最高金额--目前跟单表只有通过天数去获取周期信息，后期建议调整
-//        $fund_viptrade_list = Db('fund_viptrade')->where('cycle', $row['fund_contract'])->where('traderid', $trader_id)->find();
+//        $fund_viptrade_list = Db::name('fund_viptrade')->where('cycle', $row['fund_contract'])->where('traderid', $trader_id)->find();
 
-        $row->add_money += $money;
-        $row->money     += $money;
-        $row->save();
+        Db::startTrans();
+        try {
+            //        自动审核开启
+            if (config('auto_zj_Audit') == 0) {
+                $status = 0;
+                $time ='';
+                Money::where('mid', $uid)->setDec('account', $money * 100);//减少余额
+                $up_money_freeze = bcadd($user_balance['freeze'], $money * 100);
+                MoneyModel::money_freeze($uid, $up_money_freeze);
+                $type = 114;
+            }else{
+                $status =1;
+                $time =time();
+                $row->add_money += $money;
+                $row->money     += $money;
+                $row->save();
+                $type = 94;
+                Money::where('mid', $uid)->setDec('account', $money * 100);//减少余额
 
-        $setDec_Money_insert = Money::where('mid', $uid)->setDec('account', $money * 100);//减少余额
-        if ($row->status == 0) {  //未审核才增加冻结金额，如果开启自动审核 不增加
-            $up_money_freeze = bcadd($user_balance['freeze'], $money * 100);
-            MoneyModel::money_freeze($uid, $up_money_freeze);
+//                一键优投，不执行冻结
+                if($row['order_type'] == 2){
+                    $up_money_freeze = bcadd($user_balance['freeze'], $money * 100);
+                    MoneyModel::money_freeze($uid, $up_money_freeze);
+                }
+
+            }
+
+            FundInvestmentRecordModel::insert([
+                'uid'          => $uid,
+                'order_id'     => $id,
+                'money'        => $money,
+                'status'        => $status,
+                'create_time'  => time(),
+                'examine_time'  => $time,
+            ]);
+            Db::commit();
+            //记录日志
+            $user_balance    = Money::getMoney($uid);
+            $account         = $user_balance['account'];
+            $info            = '优投追加投资金额：' . $money . '元-[优投号：' . $row->order_sn . ']';
+            $obj             = ['affect' => -($money * 100), 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $row->order_sn];
+            $Record_saveData = Record::saveData($uid, $money * 100, $account, $type, $info, '', '', $obj);
+        } catch (\Exception $e) {
+            Db::rollback();
+//            return $e->getMessage();
+            ajaxmsg('追加失败', 0);
         }
-        if (!$setDec_Money_insert) {
-            //ajaxmsg('追加失败', 0);
-        }
-        //记录日志
-        $user_balance    = Money::getMoney($uid);
-        $account         = $user_balance['account'];
-        $info            = '优投追加投资金额：' . $money . '元-[优投号：' . $row->order_sn . ']';
-        $obj             = ['affect' => $money * 100, 'account' => $account, 'affect_activity' => 0, 'activity_account' => $user_balance['activity_account'], 'sn' => $row->order_sn];
-        $Record_saveData = Record::saveData($uid, $money * 100, $account, 94, $info, '', '', $obj);
-        if (!$Record_saveData) {
-            //ajaxmsg('失败', 0);
-        }
-        ajaxmsg('追加成功');
+        ajaxmsg('追加已提交');
     }
 
     public function getAgreement()
@@ -1970,6 +2000,30 @@ class Fund extends Common
             'data'    => $get_one,
             'status'  => 1,
             'message' => '获取协议'
+        ));
+    }
+
+    //追加记录
+    public function getInvestmentList()
+    {
+        $status = input('status');
+        $map =[];
+        $map[] = ['i.uid', '=', MID];
+        $map[] = ['i.status', '=', $status];
+        $field = 'i.*,m.mobile,m.name as username,o.order_sn,t.name as trader_name,m.role_name,o.order_type';
+        $list  = Db::name('fund_investment_record')
+            ->where($map)
+            ->field($field)
+            ->alias('i')
+            ->join('member m', 'm.id = i.uid')
+            ->join('fund_order_gs o', 'o.id = i.order_id')
+            ->join('trader t', 't.id = o.trader_id')
+            ->order('id desc')
+            ->paginate();
+        return json(array(
+            'data'    => $list,
+            'status'  => 1,
+            'message' => '追加记录'
         ));
     }
 }

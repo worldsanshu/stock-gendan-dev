@@ -198,6 +198,111 @@ class Money extends Model
 
     }
 
+
+    //    资金批量特殊操作
+    public static function moneyUpdateSpecial($content)
+    {
+        Db::startTrans();
+        try {
+            if (!isset($content['content']) || empty($content['content'])) {
+                // 没有新增任何行
+                return [
+                    'code'=>1,
+                    'message'=>'需要设置操作会员和资金'
+                ];
+            }
+
+            foreach ($content['content']['money_type'] as $key => $value){
+                if (!isset($content['content']['mobile'][$key])) {
+                    return [
+                        'code'=>1,
+                        'message'=>'第'.$key . '行手机号不能为空'
+                    ];
+                }
+                $user_info             = Db::name('member')->where("mobile", $content['content']['mobile'][$key])->find();
+                if(!$user_info){
+                    return [
+                        'code'=>1,
+                        'message'=>$content['content']['mobile'][$key] . '：号码不存在'
+                    ];
+                }
+                $info             = Db::name('money')->where("mid", $user_info['id'])->find();
+
+                if (!isset($content['content']['money_type'][$key])) {
+                    return [
+                        'code'=>1,
+                        'message'=>'第'.$key . '行请选择资金类型'
+                    ];
+                }
+                if (!isset($content['content']['money'][$key]) || $content['content']['money'][$key] < 0) {
+                    return [
+                        'code'=>1,
+                        'message'=>'第'.$key . '行资金不能为空并且要大于0'
+                    ];
+                }
+                $account = 0;
+                $activity_account = 0;
+                $money1 = 0;
+                $money2 = 0;
+                switch ($content['content']['money_type'][$key]) {
+                    case '1': //金额
+                        $type = 18; //默认系统转入
+                        $data['new_account'] = $content['content']['money'][$key];
+                        $account          = $data['new_account'] * 100;
+                        $money1           = ($account + $info['account']);
+                    break;
+                    case '2': //活动金
+                        $type = 111; //系统存入活动金
+                        $data['new_activity_account'] = $content['content']['money'][$key];
+                        $activity_account = $data['new_activity_account'] * 100;
+                        $money2           = $activity_account + $info['activity_account'];
+                        break;
+                    case '3': //彩金
+                        $type = 110; //彩金
+                        $data['winnings'] = $content['content']['money'][$key];
+                        $account          = $data['winnings'] * 100;
+                        $money1           = ($account + $info['account']);
+                        break;
+                }
+
+                $infos  = Db::name('money')->where("mid", $user_info['id'])->update(['account' => $money1 ?? 0, 'activity_account' => $money2 ?? 0]);
+                $remark = $data['remark'];
+                if ($infos) {
+                    Db::commit();
+
+                    if ($info['account'] != $money1) {
+                        $straccount = "余额的变化金额：" . ($info['account'] / 100) . "=>" . ($money1 / 100) . "元";
+                    } else {
+                        $straccount = "余额未变化";
+                    }
+                    if ($info['activity_account'] != $money2) {
+                        $activity_account_text = "活动资金的变化金额：" . ($info['activity_account'] / 100) . "=>" . ($money2 / 100) . "元";
+                    } else {
+                        $activity_account_text = "活动金余额未变化";
+                    }
+                    $obj     = ['affect' => $account, 'account' => $money1, 'affect_activity' => $activity_account, 'activity_account' => $money2, 'sn' => ''];
+                    $details = "(管理员：" . UID . " ，向uid为：" . $user_info['id'] . " 的资金账户做操作，{$straccount}，{$activity_account_text}, 备注：" . $remark . ')';
+                    RecordModel::saveData($user_info['id'], '', '', $type, $details, '', 0, $obj);
+                    action_log('transfer_add', 'money_transfer', $user_info['id'], UID, $details);
+                }else{
+                    Db::rollback();
+                    return [
+                        'code'=>1,
+                        'message'=>$value.'金额修改失败'
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+            Db::rollback();
+            return $e->getMessage();
+        }
+        return [
+            'code'=>0,
+            'message'=>'编辑成功'
+        ];
+
+    }
+
 }
 
 ?>

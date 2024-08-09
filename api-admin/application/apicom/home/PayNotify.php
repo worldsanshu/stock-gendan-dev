@@ -158,6 +158,17 @@ class PayNotify extends Controller
             echo 'success';exit();
         };
     }
+
+    public function usdtPayWithdrawal()
+    {
+        $params = request()->param();
+        Log::debug('usdt代付回调' . json_encode($params));
+        $orderNo = (new USDTpayService())->checkNotifyWithdrawal($params);
+
+        if($orderNo){
+            echo 'success';exit();
+        };
+    }
   
     private function handleOrder($orderNo)
     {
